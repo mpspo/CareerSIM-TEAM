@@ -1,0 +1,284 @@
+{
+  "users": [
+    {
+      "id": "1f4f8763-ce20-4990-8030-b5051799af81",
+      "username": "Meno",
+      "password": "$2a$08$NoFMKZD.Ek6kAOtp6gmR3.HuiwlofJibDvL5tebQw1AB/uJu97L5O",
+      "study": "bwl",
+      "target": "Goldman Sachs"
+    },
+    {
+      "id": "f659be85-6b05-4cac-b682-07ee33a92412",
+      "username": "meno",
+      "password": "$2a$08$Xv99DRV9f.3.ISmWmCijCeKSoMWkhQu0eIilFBPafLzx06VYjrt5m",
+      "study": "bwl",
+      "target": "Goldman"
+    }
+  ],
+  "sessions": {
+    "091a2f10-2641-4874-901b-a920378dcd88": {
+      "username": "Meno",
+      "created": 1762817654066
+    },
+    "d745a20e-3cd8-44b9-a9e0-e34bd9bb2d17": {
+      "username": "Meno",
+      "created": 1762817796128
+    },
+    "57968d9f-4e11-43cb-a34e-61816a1cfa9d": {
+      "username": "Meno",
+      "created": 1762819523415
+    },
+    "6083c38d-2e8b-4961-a323-0703dc81597b": {
+      "username": "meno",
+      "created": 1762823020133
+    },
+    "9e746b95-79b0-4682-8b83-dd50e994d7a1": {
+      "username": "meno",
+      "created": 1762852953439
+    },
+    "5d8f300c-6e01-4548-b4a1-4201327a7435": {
+      "username": "meno",
+      "created": 1762856532253
+    },
+    "a0cc68e3-6952-4759-bd7d-4e2991d4b1a4": {
+      "username": "meno",
+      "created": 1762859786660
+    },
+    "b89ef44e-f3af-4251-8f4e-c868dd8a80be": {
+      "username": "meno",
+      "created": 1762865182607
+    },
+    "7fa942c9-ebcc-4452-9af9-dc7906321a33": {
+      "username": "meno",
+      "created": 1762865506510
+    },
+    "d915741e-1add-4423-84a3-571ce0891c2e": {
+      "username": "meno",
+      "created": 1762865563996
+    },
+    "b721192f-e7c7-40cb-8483-543f5f8cb5b9": {
+      "username": "meno",
+      "created": 1762874033473
+    },
+    "7085a3fb-848b-44b7-a575-8d740ec349be": {
+      "username": "meno",
+      "created": 1762874121305
+    },
+    "a61cb7c3-1562-4f79-bc3e-32d1c3d09e2e": {
+      "username": "meno",
+      "created": 1762874187583
+    },
+    "e6233c02-4271-4b17-b6e6-6889d4e30127": {
+      "username": "meno",
+      "created": 1762876571170
+    },
+    "ce7765ab-7a67-4844-b5a1-8e5496d18d2f": {
+      "username": "meno",
+      "created": 1762877120957
+    },
+    "6617b307-77d0-4b4d-a33a-696215e90c3b": {
+      "username": "meno",
+      "created": 1762883028353
+    },
+    "3d0aab8c-fb91-4eb2-905d-e14310f460a1": {
+      "username": "meno",
+      "created": 1762885100801
+    },
+    "7b222974-9e39-4ea9-9b13-7b095854f0e4": {
+      "username": "meno",
+      "created": 1762886157224
+    },
+    "a4c706aa-477c-4c17-91ec-f03c273c1cf2": {
+      "username": "meno",
+      "created": 1762886165326
+    },
+    "19791e51-03e9-4dbd-a96b-e0ebd2d20520": {
+      "username": "meno",
+      "created": 1762886407823
+    },
+    "43495552-ebdd-4b99-b631-c3f6c9193c43": {
+      "username": "meno",
+      "created": 1762887403361
+    }
+  },
+  "interviews": {
+    "91c9aa66-be58-4e07-b319-88411caf1b38": {
+      "username": "Meno",
+      "questions": [
+        "Erzähle mir etwas über dich und deinen Studienhintergrund.",
+        "Warum interessierst du dich für dieses Praktikum bei Goldman Sachs?",
+        "Nenne eine Situation, in der du im Team ein Problem gelöst hast.",
+        "Wie gehst du mit Stress und engen Deadlines um?",
+        "Wie beurteilst du aktuelle Trends in der Finanzbranche und ihre Bedeutung für Goldman Sachs?"
+      ],
+      "index": 2,
+      "history": [
+        {
+          "question": "Erzähle mir etwas über dich und deinen Studienhintergrund.",
+          "answer": "ich studiere Beil",
+          "time": 1762817668960
+        },
+        {
+          "question": "Warum interessierst du dich für dieses Praktikum bei Goldman Sachs?",
+          "answer": "ich studiere bwl an der klügsten und interessiere mich für Wirtschaft",
+          "time": 1762817686652
+        }
+      ]
+    },
+    "b19eea89-82c5-4c58-8808-18b1646abdae": {
+      "username": "Meno",
+      "questions": [
+        "Erzähle mir etwas über dich und deinen Studienhintergrund.",
+        "Warum interessierst du dich für dieses Praktikum bei Goldman Sachs?",
+        "Nenne eine Situation, in der du im Team ein Problem gelöst hast.",
+        "Wie gehst du mit Stress und engen Deadlines um?",
+        "Wie beurteilst du aktuelle Trends in der Finanzbranche und ihre Bedeutung für Goldman Sachs?"
+      ],
+      "index": 2,
+      "history": [
+        {
+          "question": "Erzähle mir etwas über dich und deinen Studienhintergrund.",
+          "answer": "ich habe bereits 3 Praktika gemacht, wie findest du das?",
+          "time": 1762817815704
+        },
+        {
+          "question": "Warum interessierst du dich für dieses Praktikum bei Goldman Sachs?",
+          "answer": "weil ich mich für Wirtschaft interessiere und M&A nehmen sehr interessant finde",
+          "time": 1762817841100
+        }
+      ]
+    },
+    "3bf5bc89-b3cc-424f-b15e-a7a4c0cfd7ed": {
+      "username": "Meno",
+      "questions": [
+        "Erzähle mir etwas über dich und deinen Studienhintergrund.",
+        "Warum interessierst du dich für dieses Praktikum bei Goldman Sachs?",
+        "Nenne eine Situation, in der du im Team ein Problem gelöst hast.",
+        "Wie gehst du mit Stress und engen Deadlines um?",
+        "Wie beurteilst du aktuelle Trends in der Finanzbranche und ihre Bedeutung für Goldman Sachs?"
+      ],
+      "index": 1,
+      "history": [
+        {
+          "question": "Erzähle mir etwas über dich und deinen Studienhintergrund.",
+          "answer": "Hallo hören Sie mich",
+          "time": 1762817943841
+        }
+      ]
+    },
+    "7b3d2605-80fd-4991-a51a-2f7dee097fdb": {
+      "username": "Meno",
+      "questions": [
+        "Erzähle mir etwas über dich und deinen Studienhintergrund.",
+        "Warum interessierst du dich für dieses Praktikum bei Goldman Sachs?",
+        "Nenne eine Situation, in der du im Team ein Problem gelöst hast.",
+        "Wie gehst du mit Stress und engen Deadlines um?",
+        "Wie beurteilst du aktuelle Trends in der Finanzbranche und ihre Bedeutung für Goldman Sachs?"
+      ],
+      "index": 0,
+      "history": []
+    },
+    "4edf23f1-bc8c-40ff-9972-9bf318d1087e": {
+      "username": "Meno",
+      "questions": [
+        "Erzähle mir etwas über dich und deinen Studienhintergrund.",
+        "Warum interessierst du dich für dieses Praktikum bei Goldman Sachs?",
+        "Nenne eine Situation, in der du im Team ein Problem gelöst hast.",
+        "Wie gehst du mit Stress und engen Deadlines um?",
+        "Wie beurteilst du aktuelle Trends in der Finanzbranche und ihre Bedeutung für Goldman Sachs?"
+      ],
+      "index": 1,
+      "history": [
+        {
+          "question": "Erzähle mir etwas über dich und deinen Studienhintergrund.",
+          "answer": "Hallo ich bin Menart wie heist du?",
+          "time": 1762820373734
+        }
+      ]
+    },
+    "6ea7a08b-8de1-4254-8ec9-1946689e4e44": {
+      "username": "Meno",
+      "questions": [
+        "Erzähle mir etwas über dich und deinen Studienhintergrund.",
+        "Warum interessierst du dich für dieses Praktikum bei Goldman Sachs?",
+        "Nenne eine Situation, in der du im Team ein Problem gelöst hast.",
+        "Wie gehst du mit Stress und engen Deadlines um?",
+        "Wie beurteilst du aktuelle Trends in der Finanzbranche und ihre Bedeutung für Goldman Sachs?"
+      ],
+      "index": 0,
+      "history": []
+    },
+    "01eab160-db54-409a-b419-62d09ecf3014": {
+      "username": "Meno",
+      "questions": [
+        "Erzähle mir etwas über dich und deinen Studienhintergrund.",
+        "Warum interessierst du dich für dieses Praktikum bei Goldman Sachs?",
+        "Nenne eine Situation, in der du im Team ein Problem gelöst hast.",
+        "Wie gehst du mit Stress und engen Deadlines um?",
+        "Wie beurteilst du aktuelle Trends in der Finanzbranche und ihre Bedeutung für Goldman Sachs?"
+      ],
+      "index": 0,
+      "history": []
+    },
+    "efe97d8b-616e-45e2-ba18-bc23bb9bb7af": {
+      "username": "meno",
+      "questions": [
+        "Erzähle mir etwas über dich und deinen Studienhintergrund.",
+        "Warum interessierst du dich für dieses Praktikum bei Goldman?",
+        "Nenne eine Situation, in der du im Team ein Problem gelöst hast.",
+        "Wie gehst du mit Stress und engen Deadlines um?",
+        "Wie beurteilst du aktuelle Trends in der Finanzbranche und ihre Bedeutung für Goldman?"
+      ],
+      "index": 0,
+      "history": []
+    },
+    "f2fc7dd3-ba6f-418f-82aa-9b3042f01398": {
+      "username": "meno",
+      "questions": [
+        "Erzähle mir etwas über dich und deinen Studienhintergrund.",
+        "Warum interessierst du dich für dieses Praktikum bei Goldman?",
+        "Nenne eine Situation, in der du im Team ein Problem gelöst hast.",
+        "Wie gehst du mit Stress und engen Deadlines um?",
+        "Wie beurteilst du aktuelle Trends in der Finanzbranche und ihre Bedeutung für Goldman?"
+      ],
+      "index": 1,
+      "history": [
+        {
+          "question": "Erzähle mir etwas über dich und deinen Studienhintergrund.",
+          "answer": "Hallo ich freu mich auf das Interview",
+          "time": 1762859835571
+        }
+      ]
+    },
+    "2936248e-9dcf-47db-b968-fb8666945f39": {
+      "username": "meno",
+      "questions": [
+        "Erzähle mir etwas über dich und deinen Studienhintergrund.",
+        "Warum interessierst du dich für dieses Praktikum bei Goldman?",
+        "Nenne eine Situation, in der du im Team ein Problem gelöst hast.",
+        "Wie gehst du mit Stress und engen Deadlines um?",
+        "Wie beurteilst du aktuelle Trends in der Finanzbranche und ihre Bedeutung für Goldman?"
+      ],
+      "index": 0,
+      "history": []
+    },
+    "2d45163f-79ab-4285-a534-3bbc031bdffb": {
+      "username": "meno",
+      "questions": [
+        "Erzähle mir etwas über dich und deinen Studienhintergrund.",
+        "Warum interessierst du dich für dieses Praktikum bei Goldman?",
+        "Nenne eine Situation, in der du im Team ein Problem gelöst hast.",
+        "Wie gehst du mit Stress und engen Deadlines um?",
+        "Wie beurteilst du aktuelle Trends in der Finanzbranche und ihre Bedeutung für Goldman?"
+      ],
+      "index": 1,
+      "history": [
+        {
+          "question": "Erzähle mir etwas über dich und deinen Studienhintergrund.",
+          "answer": "",
+          "time": 1762886216292
+        }
+      ]
+    }
+  }
+}

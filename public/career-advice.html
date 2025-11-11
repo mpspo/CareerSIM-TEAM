@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>KI-Karriereberatung - CareerSIM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      .career-container {
+        min-height: 100vh;
+        padding: 100px 20px 80px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .career-header {
+        text-align: center;
+        margin-bottom: 60px;
+      }
+      .career-header h1 {
+        font-size: 48px;
+        margin-bottom: 16px;
+      }
+      .career-header p {
+        font-size: 18px;
+        color: var(--text-secondary);
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      .tools-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 32px;
+        margin-bottom: 60px;
+      }
+      .tool-card {
+        background: var(--bg);
+        border: 2px solid var(--border);
+        border-radius: 16px;
+        padding: 32px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 16px var(--shadow);
+      }
+      .tool-card:hover {
+        transform: translateY(-8px);
+        border-color: var(--accent);
+        box-shadow: 0 12px 32px var(--shadow);
+      }
+      .tool-icon {
+        font-size: 40px;
+        margin-bottom: 16px;
+      }
+      .tool-card h3 {
+        font-size: 24px;
+        margin-bottom: 12px;
+      }
+      .tool-card p {
+        color: var(--text-secondary);
+        margin-bottom: 24px;
+        line-height: 1.6;
+      }
+      .tool-btn {
+        display: inline-block;
+        padding: 12px 24px;
+        background: var(--accent);
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+      }
+      .tool-btn:hover {
+        background: var(--accent-hover);
+      }
+      .chat-section {
+        background: var(--bg);
+        border: 2px solid var(--border);
+        border-radius: 16px;
+        padding: 40px;
+        margin-bottom: 60px;
+        box-shadow: 0 4px 16px var(--shadow);
+      }
+      .chat-section h2 {
+        font-size: 32px;
+        margin-bottom: 24px;
+      }
+      .chat-box {
+        background: rgba(0, 0, 0, 0.02);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 24px;
+        min-height: 400px;
+        margin-bottom: 20px;
+        overflow-y: auto;
+      }
+      .message {
+        margin-bottom: 16px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        max-width: 80%;
+      }
+      .message.user {
+        background: var(--accent);
+        color: #ffffff;
+        margin-left: auto;
+        text-align: right;
+      }
+      .message.ai {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+      }
+      .chat-input-container {
+        display: flex;
+        gap: 12px;
+      }
+      .chat-input {
+        flex: 1;
+        padding: 14px 20px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-size: 16px;
+        font-family: inherit;
+      }
+      .chat-input:focus {
+        outline: none;
+        border-color: var(--accent);
+      }
+      .send-btn {
+        padding: 14px 32px;
+        background: var(--accent);
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .send-btn:hover {
+        background: var(--accent-hover);
+      }
+      .upload-section {
+        background: var(--bg-secondary);
+        border: 2px dashed var(--border);
+        border-radius: 12px;
+        padding: 40px;
+        text-align: center;
+        margin-bottom: 24px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .upload-section:hover {
+        border-color: var(--accent);
+        background: rgba(0, 0, 0, 0.02);
+      }
+      .upload-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <nav class="navbar">
+        <div class="navbar-container">
+          <div class="navbar-brand">
+            <a href="/" class="navbar-logo">
+              <img src="/images/logo-icon.svg" alt="CareerSIM Logo" style="width: 40px; height: 40px; border-radius: 10px;" />
+              <span class="navbar-logo-text">CareerSIM</span>
+            </a>
+          </div>
+          <div class="navbar-menu">
+            <div class="navbar-links">
+              <a href="/dashboard.html" class="navbar-link" data-i18n="nav_dashboard">Dashboard</a>
+              <a href="/interview.html" class="navbar-link" data-i18n="nav_start_interview">Interview Simulation</a>
+              <a href="/career-advice.html" class="navbar-link" style="color: var(--accent);">KI Karriereberatung</a>
+              <a href="/cv-rating.html" class="navbar-link">CV Rating</a>
+              <a href="/account-settings.html" class="navbar-link">Account Settings</a>
+            </div>
+          </div>
+          <div class="navbar-cta">
+            <div class="lang-switcher" style="display: flex; gap: 8px; align-items: center; margin-right: 16px;">
+              <button class="lang-switch active" data-lang="de" onclick="i18n.setLanguage('de')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">DE</button>
+              <button class="lang-switch" data-lang="en" onclick="i18n.setLanguage('en')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">EN</button>
+            </div>
+            <button id="logout-btn" class="navbar-btn-login" data-i18n="nav_logout">Logout</button>
+          </div>
+        </div>
+      </nav>
+
+      <div class="career-container">
+        <div class="career-header">
+          <h1>🎓 KI-Karriereberatung</h1>
+          <p>Erhalte personalisierte Karriereempfehlungen und professionelles Feedback durch unsere KI-gestützte Beratung</p>
+        </div>
+
+        <!-- Tools Grid -->
+        <div class="tools-grid">
+          <div class="tool-card">
+            <div class="tool-icon">📄</div>
+            <h3>CV-Analyse</h3>
+            <p>Lade deinen Lebenslauf hoch und erhalte detailliertes Feedback zur Struktur, Inhalt und Optimierungsmöglichkeiten.</p>
+            <button class="tool-btn" onclick="document.getElementById('cv-upload').click()">CV hochladen</button>
+            <input type="file" id="cv-upload" accept=".pdf,.doc,.docx" style="display: none;" onchange="handleCVUpload(event)">
+          </div>
+
+          <div class="tool-card">
+            <div class="tool-icon">💪</div>
+            <h3>Stärken-Schwächen-Analyse</h3>
+            <p>Entdecke deine beruflichen Stärken und arbeite gezielt an Entwicklungsbereichen mit KI-gestützter Analyse.</p>
+            <button class="tool-btn" onclick="startStrengthsAnalysis()">Analyse starten</button>
+          </div>
+
+          <div class="tool-card">
+            <div class="tool-icon">🎯</div>
+            <h3>Karrierepfad-Planung</h3>
+            <p>Erhalte Empfehlungen für deinen optimalen Karriereweg basierend auf deinen Qualifikationen und Zielen.</p>
+            <button class="tool-btn" onclick="startCareerPath()">Pfad erkunden</button>
+          </div>
+        </div>
+
+        <!-- AI Chat Section -->
+        <div class="chat-section">
+          <h2>💬 Karriere-Chat mit KI</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 24px;">Stelle beliebige Fragen zu Karriere, Bewerbung, Studium oder beruflicher Entwicklung</p>
+          
+          <div class="chat-box" id="chat-box">
+            <div class="message ai">
+              Hallo! Ich bin dein KI-Karriereberater. Wie kann ich dir heute helfen? Du kannst mich alles zu Karriereplanung, Bewerbungen, Studium oder beruflicher Entwicklung fragen.
+            </div>
+          </div>
+
+          <div class="chat-input-container">
+            <input type="text" class="chat-input" id="chat-input" placeholder="Stelle deine Frage..." onkeypress="handleKeyPress(event)">
+            <button class="send-btn" onclick="sendMessage()">Senden</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/i18n.js"></script>
+    <script>
+      // Logout functionality
+      document.getElementById('logout-btn')?.addEventListener('click', () => {
+        localStorage.removeItem('token');
+        window.location.href = '/login.html';
+      });
+
+      // Chat functionality
+      async function sendMessage() {
+        const input = document.getElementById('chat-input');
+        const chatBox = document.getElementById('chat-box');
+        const message = input.value.trim();
+        
+        if (!message) return;
+
+        // Add user message
+        const userMsg = document.createElement('div');
+        userMsg.className = 'message user';
+        userMsg.textContent = message;
+        chatBox.appendChild(userMsg);
+        
+        input.value = '';
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        // Call AI API
+        try {
+          const token = localStorage.getItem('token');
+          const response = await fetch('/api/career-advice', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': token
+            },
+            body: JSON.stringify({ message })
+          });
+
+          const data = await response.json();
+          
+          // Add AI response
+          const aiMsg = document.createElement('div');
+          aiMsg.className = 'message ai';
+          aiMsg.textContent = data.response || 'Entschuldigung, es gab einen Fehler. Bitte versuche es erneut.';
+          chatBox.appendChild(aiMsg);
+          chatBox.scrollTop = chatBox.scrollHeight;
+        } catch (error) {
+          console.error('Error:', error);
+          const errorMsg = document.createElement('div');
+          errorMsg.className = 'message ai';
+          errorMsg.textContent = 'Entschuldigung, die Verbindung zur KI ist momentan nicht verfügbar.';
+          chatBox.appendChild(errorMsg);
+        }
+      }
+
+      function handleKeyPress(event) {
+        if (event.key === 'Enter') {
+          sendMessage();
+        }
+      }
+
+      function handleCVUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+          alert('CV-Upload-Funktion wird implementiert. Datei: ' + file.name);
+          // TODO: Implement CV upload and analysis
+        }
+      }
+
+      function startStrengthsAnalysis() {
+        document.getElementById('chat-input').value = 'Ich möchte eine Stärken-Schwächen-Analyse durchführen. Kannst du mir dabei helfen?';
+        sendMessage();
+      }
+
+      function startCareerPath() {
+        document.getElementById('chat-input').value = 'Ich möchte meinen Karrierepfad planen. Was sind meine Möglichkeiten?';
+        sendMessage();
+      }
+
+      // Language switcher
+      document.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('language') || 'de';
+        i18n.setLanguage(savedLang);
+        document.querySelectorAll('.lang-switch').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.lang === savedLang);
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.lang-switch').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+          });
+        });
+      });
+    </script>
+    <style>
+      .lang-switch {
+        background: transparent !important;
+        border: 1.5px solid var(--border) !important;
+        color: var(--text-secondary) !important;
+      }
+      .lang-switch:hover {
+        border-color: var(--accent) !important;
+        color: var(--accent) !important;
+        background: rgba(0, 0, 0, 0.05) !important;
+      }
+      .lang-switch.active {
+        background: transparent !important;
+        border: 1.5px solid var(--accent) !important;
+        color: var(--accent) !important;
+        font-weight: 700 !important;
+      }
+    </style>
+  </body>
+</html>

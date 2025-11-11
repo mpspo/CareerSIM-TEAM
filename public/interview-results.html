@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Interview Analyse - CareerSIM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      .results-container {
+        min-height: 100vh;
+        padding: 100px 20px 80px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+      .results-header {
+        text-align: center;
+        margin-bottom: 48px;
+      }
+      .results-header h1 {
+        font-size: 48px;
+        margin-bottom: 16px;
+      }
+      .overall-score {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 20px;
+        padding: 48px;
+        text-align: center;
+        margin-bottom: 48px;
+        color: white;
+        box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+      }
+      .score-circle {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        margin: 0 auto 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        border: 8px solid rgba(255, 255, 255, 0.4);
+      }
+      .score-number {
+        font-size: 64px;
+        font-weight: 700;
+        line-height: 1;
+      }
+      .score-label {
+        font-size: 16px;
+        opacity: 0.9;
+        margin-top: 8px;
+      }
+      .overall-feedback {
+        font-size: 18px;
+        max-width: 700px;
+        margin: 0 auto;
+        line-height: 1.6;
+        opacity: 0.95;
+      }
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 32px;
+        margin-bottom: 48px;
+      }
+      .metric-card {
+        background: var(--bg);
+        border: 2px solid var(--border);
+        border-radius: 16px;
+        padding: 32px;
+        box-shadow: 0 4px 16px var(--shadow);
+        transition: all 0.3s ease;
+      }
+      .metric-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px var(--shadow);
+      }
+      .metric-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+      .metric-icon {
+        font-size: 36px;
+      }
+      .metric-title {
+        font-size: 20px;
+        font-weight: 700;
+        margin: 0;
+      }
+      .metric-score {
+        font-size: 14px;
+        color: var(--text-secondary);
+        margin-top: 4px;
+      }
+      .progress-bar-container {
+        width: 100%;
+        height: 32px;
+        background: var(--bg-secondary);
+        border-radius: 16px;
+        overflow: hidden;
+        margin-bottom: 16px;
+        position: relative;
+      }
+      .progress-bar {
+        height: 100%;
+        transition: width 1s ease;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 12px;
+        font-weight: 700;
+        font-size: 14px;
+        color: white;
+      }
+      .progress-excellent {
+        background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+      }
+      .progress-good {
+        background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+      }
+      .progress-average {
+        background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
+      }
+      .progress-poor {
+        background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+      }
+      .metric-description {
+        color: var(--text-secondary);
+        line-height: 1.6;
+        font-size: 15px;
+      }
+      .feedback-section {
+        background: var(--bg);
+        border: 2px solid var(--border);
+        border-radius: 16px;
+        padding: 40px;
+        margin-bottom: 48px;
+        box-shadow: 0 4px 16px var(--shadow);
+      }
+      .feedback-section h2 {
+        font-size: 28px;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .strengths-list, .improvements-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .strengths-list li, .improvements-list li {
+        padding: 16px 20px;
+        margin-bottom: 12px;
+        border-radius: 12px;
+        display: flex;
+        align-items: start;
+        gap: 12px;
+        line-height: 1.6;
+      }
+      .strengths-list li {
+        background: rgba(16, 185, 129, 0.1);
+        border-left: 4px solid #10b981;
+      }
+      .improvements-list li {
+        background: rgba(59, 130, 246, 0.1);
+        border-left: 4px solid #3b82f6;
+      }
+      .list-icon {
+        font-size: 20px;
+        flex-shrink: 0;
+      }
+      .interview-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 24px;
+        margin-bottom: 48px;
+      }
+      .detail-card {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 24px;
+        text-align: center;
+      }
+      .detail-label {
+        font-size: 13px;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+        font-weight: 600;
+      }
+      .detail-value {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--accent);
+      }
+      .action-buttons {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .btn-primary {
+        padding: 16px 48px;
+        background: var(--accent);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 32px var(--shadow);
+      }
+      .btn-secondary {
+        padding: 16px 48px;
+        background: transparent;
+        color: var(--accent);
+        border: 2px solid var(--accent);
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .btn-secondary:hover {
+        background: var(--accent);
+        color: white;
+      }
+      .loading-state {
+        text-align: center;
+        padding: 60px 20px;
+      }
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 4px solid var(--border);
+        border-top-color: var(--accent);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 24px;
+      }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      @media (max-width: 768px) {
+        .results-header h1 {
+          font-size: 36px;
+        }
+        .score-circle {
+          width: 140px;
+          height: 140px;
+        }
+        .score-number {
+          font-size: 48px;
+        }
+        .metrics-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!-- Navigation -->
+      <nav class="navbar">
+        <div class="navbar-container">
+          <div class="navbar-brand">
+            <a href="/" class="navbar-logo">
+              <img src="/images/logo-icon.svg" alt="CareerSIM Logo" style="width: 40px; height: 40px; border-radius: 10px;" />
+              <span class="navbar-logo-text">CareerSIM</span>
+            </a>
+          </div>
+          <div class="navbar-menu">
+            <div class="navbar-links">
+              <a href="/dashboard.html" class="navbar-link" data-i18n="nav_dashboard">Dashboard</a>
+              <a href="/interview.html" class="navbar-link" data-i18n="nav_start_interview">Interview Simulation</a>
+              <a href="/career-advice.html" class="navbar-link">KI Karriereberatung</a>
+              <a href="/cv-rating.html" class="navbar-link">CV Rating</a>
+              <a href="/account-settings.html" class="navbar-link">Account Settings</a>
+            </div>
+          </div>
+          <div class="navbar-cta">
+            <div class="lang-switcher" style="display: flex; gap: 8px; align-items: center; margin-right: 16px;">
+              <button class="lang-switch active" data-lang="de" onclick="i18n.setLanguage('de')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">DE</button>
+              <button class="lang-switch" data-lang="en" onclick="i18n.setLanguage('en')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">EN</button>
+            </div>
+            <button id="logout-btn" class="navbar-btn-login" data-i18n="nav_logout">Logout</button>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <div class="results-container">
+        <div id="loading" class="loading-state">
+          <div class="spinner"></div>
+          <h2>Analysiere dein Interview...</h2>
+          <p style="color: var(--text-secondary);">Bitte warte einen Moment, während wir deine Leistung auswerten.</p>
+        </div>
+
+        <div id="results" style="display: none;">
+          <div class="results-header">
+            <h1>🎯 Interview Analyse</h1>
+            <p style="color: var(--text-secondary); font-size: 16px;">Hier ist deine detaillierte Auswertung</p>
+          </div>
+
+          <!-- Interview Details -->
+          <div class="interview-details">
+            <div class="detail-card">
+              <div class="detail-label">Position</div>
+              <div class="detail-value" id="detail-position">Software Engineer</div>
+            </div>
+            <div class="detail-card">
+              <div class="detail-label">Branche</div>
+              <div class="detail-value" id="detail-industry">Technologie</div>
+            </div>
+            <div class="detail-card">
+              <div class="detail-label">Dauer</div>
+              <div class="detail-value" id="detail-duration">45 Min</div>
+            </div>
+            <div class="detail-card">
+              <div class="detail-label">Datum</div>
+              <div class="detail-value" id="detail-date">—</div>
+            </div>
+          </div>
+
+          <!-- Overall Score -->
+          <div class="overall-score">
+            <div class="score-circle">
+              <div class="score-number" id="overall-score">85</div>
+              <div class="score-label">/100</div>
+            </div>
+            <h2 style="font-size: 32px; margin-bottom: 16px;">Hervorragende Leistung!</h2>
+            <p class="overall-feedback" id="overall-feedback">
+              Du hast in diesem Interview sehr gut abgeschnitten. Deine Antworten waren strukturiert, fachlich fundiert und authentisch.
+            </p>
+          </div>
+
+          <!-- Performance Metrics -->
+          <div class="metrics-grid">
+            <!-- Domain Knowledge -->
+            <div class="metric-card">
+              <div class="metric-header">
+                <div class="metric-icon">🧠</div>
+                <div style="flex: 1;">
+                  <h3 class="metric-title">Domänenwissen</h3>
+                  <div class="metric-score"><span id="knowledge-score">85</span>/100</div>
+                </div>
+              </div>
+              <div class="progress-bar-container">
+                <div class="progress-bar progress-excellent" id="knowledge-bar" style="width: 0%;">
+                  <span id="knowledge-percent">85%</span>
+                </div>
+              </div>
+              <p class="metric-description" id="knowledge-desc">
+                Deine fachlichen Kenntnisse sind sehr gut. Du konntest die meisten technischen Fragen präzise beantworten und zeigtest tiefes Verständnis.
+              </p>
+            </div>
+
+            <!-- Body Language -->
+            <div class="metric-card">
+              <div class="metric-header">
+                <div class="metric-icon">👁️</div>
+                <div style="flex: 1;">
+                  <h3 class="metric-title">Körpersprache</h3>
+                  <div class="metric-score"><span id="body-score">78</span>/100</div>
+                </div>
+              </div>
+              <div class="progress-bar-container">
+                <div class="progress-bar progress-good" id="body-bar" style="width: 0%;">
+                  <span id="body-percent">78%</span>
+                </div>
+              </div>
+              <p class="metric-description" id="body-desc">
+                Deine Körpersprache wirkte überwiegend selbstbewusst. Guter Blickkontakt und offene Haltung. Achte darauf, Nervosität besser zu kontrollieren.
+              </p>
+            </div>
+
+            <!-- Speaking -->
+            <div class="metric-card">
+              <div class="metric-header">
+                <div class="metric-icon">🎤</div>
+                <div style="flex: 1;">
+                  <h3 class="metric-title">Sprechgeschwindigkeit</h3>
+                  <div class="metric-score"><span id="speaking-score">82</span>/100</div>
+                </div>
+              </div>
+              <div class="progress-bar-container">
+                <div class="progress-bar progress-excellent" id="speaking-bar" style="width: 0%;">
+                  <span id="speaking-percent">82%</span>
+                </div>
+              </div>
+              <p class="metric-description" id="speaking-desc">
+                Dein Sprechtempo war angenehm und gut verständlich. Du hast dir Zeit genommen für wichtige Punkte und sprachst klar.
+              </p>
+            </div>
+
+            <!-- Structure -->
+            <div class="metric-card">
+              <div class="metric-header">
+                <div class="metric-icon">📋</div>
+                <div style="flex: 1;">
+                  <h3 class="metric-title">Antwortstruktur</h3>
+                  <div class="metric-score"><span id="structure-score">90</span>/100</div>
+                </div>
+              </div>
+              <div class="progress-bar-container">
+                <div class="progress-bar progress-excellent" id="structure-bar" style="width: 0%;">
+                  <span id="structure-percent">90%</span>
+                </div>
+              </div>
+              <p class="metric-description" id="structure-desc">
+                Deine Antworten waren sehr gut strukturiert. Du hast die STAR-Methode effektiv eingesetzt und bist auf den Punkt gekommen.
+              </p>
+            </div>
+          </div>
+
+          <!-- Strengths -->
+          <div class="feedback-section">
+            <h2>✨ Deine Stärken</h2>
+            <ul class="strengths-list" id="strengths-list">
+              <li>
+                <span class="list-icon">✓</span>
+                <span>Sehr gute fachliche Kenntnisse und fundiertes technisches Verständnis</span>
+              </li>
+              <li>
+                <span class="list-icon">✓</span>
+                <span>Strukturierte und präzise Antworten mit konkreten Beispielen</span>
+              </li>
+              <li>
+                <span class="list-icon">✓</span>
+                <span>Selbstbewusstes Auftreten mit gutem Blickkontakt</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Improvements -->
+          <div class="feedback-section">
+            <h2>📈 Verbesserungspotenzial</h2>
+            <ul class="improvements-list" id="improvements-list">
+              <li>
+                <span class="list-icon">→</span>
+                <span>Bei komplexen Fragen noch mehr Zeit zum Nachdenken nehmen</span>
+              </li>
+              <li>
+                <span class="list-icon">→</span>
+                <span>Nervosität zu Beginn besser kontrollieren - vielleicht mit Atemtechniken</span>
+              </li>
+              <li>
+                <span class="list-icon">→</span>
+                <span>Mehr eigene Fragen zum Unternehmen vorbereiten</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-buttons">
+            <a href="/dashboard.html" class="btn-secondary">← Zurück zum Dashboard</a>
+            <a href="/interview-setup.html" class="btn-primary">Neues Interview starten</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Check auth
+      const token = localStorage.getItem('cs_token');
+      if (!token) {
+        window.location.href = '/login.html';
+      }
+
+      // Logout
+      document.getElementById('logout-btn').addEventListener('click', () => {
+        localStorage.removeItem('cs_token');
+        localStorage.removeItem('cs_username');
+        localStorage.removeItem('cs_study');
+        localStorage.removeItem('cs_target');
+        window.location.href = '/';
+      });
+
+      // Get interview ID from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const interviewId = urlParams.get('id');
+
+      // API helper
+      const api = (path, opts = {}) => fetch('/api' + path, opts).then(r => r.json());
+
+      // Load interview results
+      async function loadResults() {
+        try {
+          // Simulate loading time
+          await new Promise(resolve => setTimeout(resolve, 1500));
+
+          let results;
+          if (interviewId) {
+            // Try to fetch from API
+            try {
+              results = await api(`/interview/analyze?id=${interviewId}`, {
+                headers: { 'x-auth-token': token }
+              });
+            } catch (e) {
+              console.warn('API not available, using mock data');
+              results = getMockResults();
+            }
+          } else {
+            results = getMockResults();
+          }
+
+          displayResults(results);
+        } catch (error) {
+          console.error('Failed to load results:', error);
+          document.getElementById('loading').innerHTML = `
+            <h2>❌ Fehler beim Laden</h2>
+            <p style="color: var(--text-secondary);">Die Analyse konnte nicht geladen werden.</p>
+            <a href="/dashboard.html" class="btn-primary" style="margin-top: 24px;">Zurück zum Dashboard</a>
+          `;
+        }
+      }
+
+      function getMockResults() {
+        return {
+          position: localStorage.getItem('interviewPosition') || 'Software Engineer',
+          industry: localStorage.getItem('interviewIndustry') || 'Technologie',
+          duration: 45,
+          date: new Date().toLocaleDateString('de-DE'),
+          overallScore: 85,
+          overallFeedback: 'Du hast in diesem Interview sehr gut abgeschnitten. Deine Antworten waren strukturiert, fachlich fundiert und authentisch. Besonders beeindruckend war deine Fähigkeit, komplexe technische Konzepte verständlich zu erklären.',
+          metrics: {
+            knowledge: { score: 85, description: 'Deine fachlichen Kenntnisse sind sehr gut. Du konntest die meisten technischen Fragen präzise beantworten und zeigtest tiefes Verständnis für Best Practices und moderne Technologien.' },
+            body: { score: 78, description: 'Deine Körpersprache wirkte überwiegend selbstbewusst. Guter Blickkontakt und offene Haltung. Achte darauf, Nervosität zu Beginn besser zu kontrollieren - vielleicht mit kurzen Atemübungen vorher.' },
+            speaking: { score: 82, description: 'Dein Sprechtempo war angenehm und gut verständlich. Du hast dir Zeit genommen für wichtige Punkte und sprachst klar. Manchmal etwas zu schnell bei Nervosität, aber insgesamt sehr gut.' },
+            structure: { score: 90, description: 'Deine Antworten waren sehr gut strukturiert. Du hast die STAR-Methode effektiv eingesetzt und bist auf den Punkt gekommen. Besonders positiv: konkrete Beispiele aus deiner Praxis.' }
+          },
+          strengths: [
+            'Sehr gute fachliche Kenntnisse und fundiertes technisches Verständnis',
+            'Strukturierte und präzise Antworten mit konkreten Beispielen aus der Praxis',
+            'Selbstbewusstes Auftreten mit gutem Blickkontakt und offener Körperhaltung',
+            'Effektive Nutzung der STAR-Methode bei verhaltensorientierten Fragen',
+            'Authentisches und sympathisches Auftreten'
+          ],
+          improvements: [
+            'Bei komplexen Fragen noch mehr Zeit zum Nachdenken nehmen - es ist völlig okay, kurz zu pausieren',
+            'Nervosität zu Beginn besser kontrollieren - vielleicht mit Atemtechniken oder kurzer Meditation vorher',
+            'Mehr eigene Fragen zum Unternehmen und zur Position vorbereiten',
+            'Bei technischen Erklärungen noch mehr auf das Gegenüber eingehen und Verständnisfragen stellen',
+            'Erfolge selbstbewusster kommunizieren ohne dabei arrogant zu wirken'
+          ]
+        };
+      }
+
+      function displayResults(results) {
+        // Update details
+        document.getElementById('detail-position').textContent = results.position;
+        document.getElementById('detail-industry').textContent = results.industry;
+        document.getElementById('detail-duration').textContent = results.duration + ' Min';
+        document.getElementById('detail-date').textContent = results.date;
+
+        // Overall score
+        document.getElementById('overall-score').textContent = results.overallScore;
+        document.getElementById('overall-feedback').textContent = results.overallFeedback;
+
+        // Metrics
+        updateMetric('knowledge', results.metrics.knowledge);
+        updateMetric('body', results.metrics.body);
+        updateMetric('speaking', results.metrics.speaking);
+        updateMetric('structure', results.metrics.structure);
+
+        // Strengths
+        const strengthsList = document.getElementById('strengths-list');
+        strengthsList.innerHTML = results.strengths.map(s => `
+          <li><span class="list-icon">✓</span><span>${s}</span></li>
+        `).join('');
+
+        // Improvements
+        const improvementsList = document.getElementById('improvements-list');
+        improvementsList.innerHTML = results.improvements.map(i => `
+          <li><span class="list-icon">→</span><span>${i}</span></li>
+        `).join('');
+
+        // Show results, hide loading
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('results').style.display = 'block';
+
+        // Animate progress bars
+        setTimeout(() => {
+          document.getElementById('knowledge-bar').style.width = results.metrics.knowledge.score + '%';
+          document.getElementById('body-bar').style.width = results.metrics.body.score + '%';
+          document.getElementById('speaking-bar').style.width = results.metrics.speaking.score + '%';
+          document.getElementById('structure-bar').style.width = results.metrics.structure.score + '%';
+        }, 100);
+      }
+
+      function updateMetric(name, data) {
+        document.getElementById(`${name}-score`).textContent = data.score;
+        document.getElementById(`${name}-percent`).textContent = data.score + '%';
+        document.getElementById(`${name}-desc`).textContent = data.description;
+        
+        // Update color class
+        const bar = document.getElementById(`${name}-bar`);
+        bar.className = 'progress-bar';
+        if (data.score >= 80) bar.classList.add('progress-excellent');
+        else if (data.score >= 60) bar.classList.add('progress-good');
+        else if (data.score >= 40) bar.classList.add('progress-average');
+        else bar.classList.add('progress-poor');
+      }
+
+      // Load on page load
+      loadResults();
+    </script>
+    <script src="/js/i18n.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('language') || 'de';
+        i18n.setLanguage(savedLang);
+        document.querySelectorAll('.lang-switch').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.lang === savedLang);
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.lang-switch').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+          });
+        });
+      });
+    </script>
+    <style>
+      .lang-switch {
+        background: transparent !important;
+        border: 1.5px solid var(--border) !important;
+        color: var(--text-secondary) !important;
+      }
+      .lang-switch:hover {
+        border-color: var(--accent) !important;
+        color: var(--accent) !important;
+        background: rgba(0, 0, 0, 0.05) !important;
+      }
+      .lang-switch.active {
+        background: transparent !important;
+        border: 1.5px solid var(--accent) !important;
+        color: var(--accent) !important;
+        font-weight: 700 !important;
+      }
+    </style>
+  </body>
+</html>

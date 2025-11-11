@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Interview Vorbereitung - CareerSIM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      .prep-container {
+        min-height: 100vh;
+        padding: 100px 20px 80px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .prep-header {
+        text-align: center;
+        margin-bottom: 60px;
+      }
+      .prep-header h1 {
+        font-size: 48px;
+        margin-bottom: 16px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .prep-header p {
+        font-size: 18px;
+        color: var(--text-secondary);
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+      .interview-info {
+        background: var(--bg);
+        border: 2px solid var(--border);
+        border-radius: 16px;
+        padding: 32px;
+        margin-bottom: 48px;
+        box-shadow: 0 4px 16px var(--shadow);
+      }
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 24px;
+      }
+      .info-item {
+        text-align: center;
+      }
+      .info-label {
+        font-size: 13px;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+        font-weight: 600;
+      }
+      .info-value {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--accent);
+      }
+      .phases-section h2 {
+        font-size: 32px;
+        margin-bottom: 32px;
+        text-align: center;
+      }
+      .phase-card {
+        background: var(--bg);
+        border: 2px solid var(--border);
+        border-radius: 16px;
+        padding: 32px;
+        margin-bottom: 24px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px var(--shadow);
+        position: relative;
+        overflow: hidden;
+      }
+      .phase-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--accent);
+        box-shadow: 0 12px 32px var(--shadow);
+      }
+      .phase-number {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        font-weight: 700;
+      }
+      .phase-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+      .phase-icon {
+        font-size: 36px;
+      }
+      .phase-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 0;
+      }
+      .phase-duration {
+        font-size: 14px;
+        color: var(--text-secondary);
+        margin-top: 4px;
+      }
+      .phase-description {
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+      .phase-topics {
+        background: var(--bg-secondary);
+        border-radius: 12px;
+        padding: 20px;
+      }
+      .phase-topics h4 {
+        font-size: 16px;
+        margin-bottom: 12px;
+        color: var(--accent);
+      }
+      .phase-topics ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .phase-topics li {
+        padding: 8px 0;
+        padding-left: 24px;
+        position: relative;
+        color: var(--text-secondary);
+      }
+      .phase-topics li:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #10b981;
+        font-weight: 700;
+      }
+      .tips-section {
+        background: #eff6ff;
+        border: 2px solid #3b82f6;
+        border-radius: 16px;
+        padding: 32px;
+        margin: 48px 0;
+      }
+      .tips-section h3 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #3b82f6;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .tips-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+      }
+      .tip-item {
+        display: flex;
+        gap: 12px;
+        align-items: start;
+      }
+      .tip-icon {
+        font-size: 24px;
+        flex-shrink: 0;
+      }
+      .tip-text {
+        color: #1e40af;
+        line-height: 1.5;
+      }
+      .action-buttons {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        margin-top: 48px;
+        flex-wrap: wrap;
+      }
+      .btn-primary {
+        padding: 16px 48px;
+        background: var(--accent);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 32px var(--shadow);
+      }
+      .btn-secondary {
+        padding: 16px 48px;
+        background: transparent;
+        color: var(--accent);
+        border: 2px solid var(--accent);
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .btn-secondary:hover {
+        background: var(--accent);
+        color: white;
+      }
+      @media (max-width: 768px) {
+        .prep-header h1 {
+          font-size: 36px;
+        }
+        .phase-number {
+          width: 40px;
+          height: 40px;
+          font-size: 16px;
+        }
+        .phase-title {
+          font-size: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!-- Navigation -->
+      <nav class="navbar">
+        <div class="navbar-container">
+          <div class="navbar-brand">
+            <a href="/" class="navbar-logo">
+              <img src="/images/logo-icon.svg" alt="CareerSIM Logo" style="width: 40px; height: 40px; border-radius: 10px;" />
+              <span class="navbar-logo-text">CareerSIM</span>
+            </a>
+          </div>
+          <div class="navbar-menu">
+            <div class="navbar-links">
+              <a href="/dashboard.html" class="navbar-link" data-i18n="nav_dashboard">Dashboard</a>
+              <a href="/interview.html" class="navbar-link" data-i18n="nav_start_interview">Interview Simulation</a>
+              <a href="/career-advice.html" class="navbar-link">KI Karriereberatung</a>
+              <a href="/cv-rating.html" class="navbar-link">CV Rating</a>
+              <a href="/account-settings.html" class="navbar-link">Account Settings</a>
+            </div>
+          </div>
+          <div class="navbar-cta">
+            <div class="lang-switcher" style="display: flex; gap: 8px; align-items: center; margin-right: 16px;">
+              <button class="lang-switch active" data-lang="de" onclick="i18n.setLanguage('de')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">DE</button>
+              <button class="lang-switch" data-lang="en" onclick="i18n.setLanguage('en')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">EN</button>
+            </div>
+            <button id="logout-btn" class="navbar-btn-login" data-i18n="nav_logout">Logout</button>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <div class="prep-container">
+        <div class="prep-header">
+          <h1>📋 Interview Vorbereitung</h1>
+          <p>Bereite dich optimal auf dein bevorstehendes Interview vor. Hier ist die Struktur und der Ablauf deines Gesprächs.</p>
+        </div>
+
+        <!-- Interview Info -->
+        <div class="interview-info">
+          <div class="info-grid">
+            <div class="info-item">
+              <div class="info-label">Branche</div>
+              <div class="info-value" id="interview-industry">Technologie</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Position</div>
+              <div class="info-value" id="interview-position">Software Engineer</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Geschätzte Dauer</div>
+              <div class="info-value">45-60 Min</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Anzahl Phasen</div>
+              <div class="info-value">5 Phasen</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interview Phases -->
+        <div class="phases-section">
+          <h2>📝 Interview-Struktur</h2>
+
+          <!-- Phase 1 -->
+          <div class="phase-card">
+            <div class="phase-number">1</div>
+            <div class="phase-header">
+              <div class="phase-icon">👋</div>
+              <div>
+                <h3 class="phase-title">Begrüßung & Kennenlernen</h3>
+                <div class="phase-duration">⏱️ ca. 5-7 Minuten</div>
+              </div>
+            </div>
+            <p class="phase-description">
+              Der Interviewer stellt sich vor und gibt einen Überblick über den Ablauf. Du hast die Möglichkeit, dich kurz vorzustellen und einen ersten positiven Eindruck zu hinterlassen.
+            </p>
+            <div class="phase-topics">
+              <h4>Typische Themen:</h4>
+              <ul>
+                <li>Persönliche Vorstellung</li>
+                <li>Motivation für die Position</li>
+                <li>Erste Fragen zum Unternehmen</li>
+                <li>Einordnung deines Werdegangs</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Phase 2 -->
+          <div class="phase-card">
+            <div class="phase-number">2</div>
+            <div class="phase-header">
+              <div class="phase-icon">💼</div>
+              <div>
+                <h3 class="phase-title">Fachliche Kompetenzen</h3>
+                <div class="phase-duration">⏱️ ca. 15-20 Minuten</div>
+              </div>
+            </div>
+            <p class="phase-description">
+              Hier werden deine fachlichen Kenntnisse und Erfahrungen detailliert abgefragt. Bereite konkrete Beispiele aus deiner bisherigen Arbeit vor.
+            </p>
+            <div class="phase-topics">
+              <h4>Typische Themen:</h4>
+              <ul>
+                <li>Technische Fähigkeiten und Tools</li>
+                <li>Projektbeispiele und Erfolge</li>
+                <li>Problemlösungsansätze</li>
+                <li>Branchenspezifisches Wissen</li>
+                <li>Methoden und Best Practices</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Phase 3 -->
+          <div class="phase-card">
+            <div class="phase-number">3</div>
+            <div class="phase-header">
+              <div class="phase-icon">🧠</div>
+              <div>
+                <h3 class="phase-title">Verhaltensorientierte Fragen</h3>
+                <div class="phase-duration">⏱️ ca. 10-15 Minuten</div>
+              </div>
+            </div>
+            <p class="phase-description">
+              Diese Fragen zielen auf deine Soft Skills ab. Nutze die STAR-Methode (Situation, Task, Action, Result) für strukturierte Antworten.
+            </p>
+            <div class="phase-topics">
+              <h4>Typische Themen:</h4>
+              <ul>
+                <li>Teamarbeit und Konfliktlösung</li>
+                <li>Führungserfahrung und Initiative</li>
+                <li>Umgang mit Stress und Deadlines</li>
+                <li>Anpassungsfähigkeit und Lernen</li>
+                <li>Kommunikationsfähigkeiten</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Phase 4 -->
+          <div class="phase-card">
+            <div class="phase-number">4</div>
+            <div class="phase-header">
+              <div class="phase-icon">🎯</div>
+              <div>
+                <h3 class="phase-title">Fallstudie / Praktische Aufgabe</h3>
+                <div class="phase-duration">⏱️ ca. 10-15 Minuten</div>
+              </div>
+            </div>
+            <p class="phase-description">
+              Eine praxisnahe Aufgabe oder Fallstudie testet deine analytischen Fähigkeiten und deinen Lösungsansatz unter realistischen Bedingungen.
+            </p>
+            <div class="phase-topics">
+              <h4>Typische Themen:</h4>
+              <ul>
+                <li>Business Cases analysieren</li>
+                <li>Technische Problemstellung lösen</li>
+                <li>Strategische Entscheidungen treffen</li>
+                <li>Denkprozess laut erklären</li>
+                <li>Alternative Lösungen diskutieren</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Phase 5 -->
+          <div class="phase-card">
+            <div class="phase-number">5</div>
+            <div class="phase-header">
+              <div class="phase-icon">❓</div>
+              <div>
+                <h3 class="phase-title">Deine Fragen & Abschluss</h3>
+                <div class="phase-duration">⏱️ ca. 5-10 Minuten</div>
+              </div>
+            </div>
+            <p class="phase-description">
+              Jetzt kannst du eigene Fragen stellen. Dies zeigt dein Interesse und gibt dir wichtige Informationen über die Position und das Unternehmen.
+            </p>
+            <div class="phase-topics">
+              <h4>Gute Fragen:</h4>
+              <ul>
+                <li>Wie sieht ein typischer Arbeitstag aus?</li>
+                <li>Welche Entwicklungsmöglichkeiten gibt es?</li>
+                <li>Wie ist das Team strukturiert?</li>
+                <li>Was sind die nächsten Schritte?</li>
+                <li>Unternehmenskultur und Werte</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="tips-section">
+          <h3>💡 Wichtige Tipps für dein Interview</h3>
+          <div class="tips-grid">
+            <div class="tip-item">
+              <div class="tip-icon">🎤</div>
+              <div class="tip-text">
+                <strong>Sprich klar und deutlich:</strong> Achte auf eine angemessene Lautstärke und Sprechgeschwindigkeit.
+              </div>
+            </div>
+            <div class="tip-item">
+              <div class="tip-icon">👁️</div>
+              <div class="tip-text">
+                <strong>Halte Blickkontakt:</strong> Zeige Selbstbewusstsein durch direkten Augenkontakt.
+              </div>
+            </div>
+            <div class="tip-item">
+              <div class="tip-icon">😊</div>
+              <div class="tip-text">
+                <strong>Sei authentisch:</strong> Bleib du selbst und verstelle dich nicht.
+              </div>
+            </div>
+            <div class="tip-item">
+              <div class="tip-icon">⏰</div>
+              <div class="tip-text">
+                <strong>Nimm dir Zeit:</strong> Es ist okay, kurz nachzudenken bevor du antwortest.
+              </div>
+            </div>
+            <div class="tip-item">
+              <div class="tip-icon">📖</div>
+              <div class="tip-text">
+                <strong>STAR-Methode:</strong> Strukturiere deine Antworten: Situation, Task, Action, Result.
+              </div>
+            </div>
+            <div class="tip-item">
+              <div class="tip-icon">✅</div>
+              <div class="tip-text">
+                <strong>Sei positiv:</strong> Vermeide negative Aussagen über frühere Arbeitgeber.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <a href="/dashboard.html" class="btn-secondary">← Zurück zum Dashboard</a>
+          <a href="/interview.html" class="btn-primary">Interview starten →</a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Check auth
+      const token = localStorage.getItem('cs_token');
+      if (!token) {
+        window.location.href = '/login.html';
+      }
+
+      // Logout
+      document.getElementById('logout-btn').addEventListener('click', () => {
+        localStorage.removeItem('cs_token');
+        localStorage.removeItem('cs_username');
+        localStorage.removeItem('cs_study');
+        localStorage.removeItem('cs_target');
+        window.location.href = '/';
+      });
+
+      // Load interview preferences
+      const industry = localStorage.getItem('interviewIndustry') || 'Technologie';
+      const position = localStorage.getItem('interviewPosition') || 'Software Engineer';
+      
+      document.getElementById('interview-industry').textContent = industry;
+      document.getElementById('interview-position').textContent = position;
+    </script>
+    <script src="/js/i18n.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('language') || 'de';
+        i18n.setLanguage(savedLang);
+        document.querySelectorAll('.lang-switch').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.lang === savedLang);
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.lang-switch').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+          });
+        });
+      });
+    </script>
+    <style>
+      .lang-switch {
+        background: transparent !important;
+        border: 1.5px solid var(--border) !important;
+        color: var(--text-secondary) !important;
+      }
+      .lang-switch:hover {
+        border-color: var(--accent) !important;
+        color: var(--accent) !important;
+        background: rgba(0, 0, 0, 0.05) !important;
+      }
+      .lang-switch.active {
+        background: transparent !important;
+        border: 1.5px solid var(--accent) !important;
+        color: var(--accent) !important;
+        font-weight: 700 !important;
+      }
+    </style>
+  </body>
+</html>

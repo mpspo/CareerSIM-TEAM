@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Interview - CareerSIM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- Navigation -->
+      <nav class="navbar">
+        <div class="navbar-container">
+          <div class="navbar-brand">
+            <a href="/" class="navbar-logo">
+              <img src="/images/logo-icon.svg" alt="CareerSIM Logo" style="width: 40px; height: 40px; border-radius: 10px;" />
+              <span class="navbar-logo-text">CareerSIM</span>
+            </a>
+          </div>
+          <div class="navbar-menu">
+            <div class="navbar-links">
+              <a href="/dashboard.html" class="navbar-link" data-i18n="nav_dashboard">Dashboard</a>
+              <a href="/interview.html" class="navbar-link" style="color: var(--accent);" data-i18n="nav_start_interview">Interview Simulation</a>
+              <a href="/career-advice.html" class="navbar-link">KI Karriereberatung</a>
+              <a href="/cv-rating.html" class="navbar-link">CV Rating</a>
+              <a href="/account-settings.html" class="navbar-link">Account Settings</a>
+            </div>
+          </div>
+          <div class="navbar-cta">
+            <div class="lang-switcher" style="display: flex; gap: 8px; align-items: center; margin-right: 16px;">
+              <button class="lang-switch active" data-lang="de" onclick="i18n.setLanguage('de')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">DE</button>
+              <button class="lang-switch" data-lang="en" onclick="i18n.setLanguage('en')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">EN</button>
+            </div>
+            <button id="logout-btn" class="navbar-btn-login" data-i18n="nav_logout">Logout</button>
+          </div>
+        </div>
+      </nav>
+
+      <main class="container" style="max-width: 100%; padding: 0;">
+        <!-- Interview Interface - Video Call Style -->
+        <div id="interview" style="margin-top: 0;">
+          <div class="topbar">
+            <span>🎥 <strong data-i18n="interview_title">KI-Interview Simulator</strong> - Video Call</span>
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <span style="font-size: 13px; color: var(--text-secondary);" id="timer">00:00</span>
+              <button class="video-control-btn" title="Vollbild" onclick="toggleFullscreen()">⛶</button>
+            </div>
+          </div>
+          <div class="meeting">
+            <!-- Left: Video Panel -->
+            <div class="video-panel">
+              <div class="video remote">
+                <div style="position: absolute; top: 12px; left: 12px; background: rgba(255,255,255,0.9); padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; color: var(--text-primary);">
+                  🤖 KI-Interviewer
+                </div>
+                <div style="text-align: center;">
+                  <div style="font-size: 80px; margin-bottom: 8px;">👔</div>
+                  <div style="font-size: 14px; color: var(--text-secondary);">
+                    <span data-i18n="interview_ai_name">Dr. Sarah Schmidt</span>
+                  </div>
+                </div>
+                <div class="video-controls">
+                  <button class="video-control-btn" id="btn-mic-toggle" title="Mikrofon">🎤</button>
+                  <button class="video-control-btn" title="Kamera">📹</button>
+                  <button class="video-control-btn danger" onclick="endInterview()" title="Interview verlassen">📞</button>
+                </div>
+              </div>
+              <div class="video local">
+                <div style="position: absolute; top: 12px; left: 12px; background: rgba(255,255,255,0.9); padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; color: var(--text-primary);">
+                  👤 <span data-i18n="interview_you">Du</span>
+                </div>
+                <div style="text-align: center;">
+                  <div style="font-size: 48px; margin-bottom: 8px;">🧑‍💼</div>
+                  <div style="font-size: 13px; color: var(--text-secondary);" data-i18n="interview_camera_placeholder">
+                    Kamera aktivieren
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Right: Chat/Q&A Panel -->
+            <div class="side-panel">
+              <div style="margin-bottom: 16px;">
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;" data-i18n="interview_protocol">Interview-Protokoll</h3>
+                <p style="font-size: 13px; color: var(--text-secondary); margin: 0;" data-i18n="interview_protocol_desc">
+                  Fragen und Antworten werden hier protokolliert
+                </p>
+              </div>
+              
+              <!-- Question Box -->
+              <div class="card" id="question-box" style="min-height: 120px; background: #eff6ff; border-left: 3px solid #3b82f6;">
+                <div class="chat-label" style="color: #3b82f6;">📋 <span data-i18n="interview_current_question">Aktuelle Frage</span></div>
+                <div class="chat-text" data-i18n="interview_start_prompt">
+                  Klicke auf "Interview starten" um zu beginnen...
+                </div>
+              </div>
+              
+              <!-- Voice Input -->
+              <div class="voice-row">
+                <button id="btn-mic" class="mic" data-i18n="interview_mic_on">🎤 Mikro an</button>
+                <div id="transcript" data-i18n="interview_listening">—</div>
+              </div>
+              
+              <!-- Answer Textarea -->
+              <textarea id="answer" placeholder="Deine Antwort eingeben..." data-i18n-placeholder="interview_answer_placeholder"></textarea>
+              
+              <!-- Controls -->
+              <div class="controls">
+                <button id="btn-start" data-i18n="interview_start">Interview starten</button>
+                <button id="btn-send" data-i18n="interview_send">Antwort senden</button>
+                <button id="btn-end" data-i18n="interview_end">Interview beenden</button>
+              </div>
+              
+              <!-- Feedback/Rating -->
+              <div id="feedback" class="card" style="min-height: 100px; background: #f0fdf4; border-left: 3px solid var(--accent);">
+                <div class="chat-label" style="color: var(--accent);">✨ <span data-i18n="interview_feedback">KI-Feedback</span></div>
+                <div class="chat-text" style="color: var(--text-secondary); font-size: 13px;" data-i18n="interview_feedback_waiting">
+                  Feedback erscheint hier nach deiner Antwort...
+                </div>
+              </div>
+              
+              <!-- Rating Bars -->
+              <div style="margin-top: 16px; padding: 16px; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border);">
+                <div style="font-weight: 600; font-size: 13px; margin-bottom: 12px; color: var(--text-primary);">
+                  📊 <span data-i18n="interview_performance">Bewertungskriterien</span>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                      <span data-i18n="interview_criteria_content">Inhalt</span>
+                      <span id="rating-content">—</span>
+                    </div>
+                    <div style="height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;">
+                      <div id="bar-content" style="height: 100%; width: 0%; background: var(--accent); transition: width 0.5s ease;"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                      <span data-i18n="interview_criteria_structure">Struktur</span>
+                      <span id="rating-structure">—</span>
+                    </div>
+                    <div style="height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;">
+                      <div id="bar-structure" style="height: 100%; width: 0%; background: #3b82f6; transition: width 0.5s ease;"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                      <span data-i18n="interview_criteria_language">Sprache</span>
+                      <span id="rating-language">—</span>
+                    </div>
+                    <div style="height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;">
+                      <div id="bar-language" style="height: 100%; width: 0%; background: #8b5cf6; transition: width 0.5s ease;"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="/js/i18n.js"></script>
+    <script>
+      // Check auth
+      const token = localStorage.getItem('cs_token');
+      if (!token) {
+        window.location.href = '/login.html';
+      }
+
+      const api = (path, opts = {}) => fetch('/api' + path, opts).then(r => r.json());
+      const $ = id => document.getElementById(id);
+
+      let recognition;
+      let synth = window.speechSynthesis;
+      let isListening = false;
+
+      // Logout
+      $('logout-btn').addEventListener('click', () => {
+        localStorage.clear();
+        window.location.href = '/';
+      });
+
+      // Speech recognition setup
+      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SpeechRecognition();
+        recognition.continuous = true;
+        recognition.interimResults = false;
+        recognition.lang = 'de-DE';
+        recognition.onresult = (e) => {
+          const transcript = Array.from(e.results).map(r => r[0].transcript).join(' ');
+          $('transcript').textContent = transcript;
+          $('answer').value = transcript;
+        };
+        recognition.onerror = (e) => {
+          console.error('Speech recognition error:', e.error);
+          $('transcript').textContent = 'Fehler: ' + e.error;
+          isListening = false;
+          $('btn-mic').textContent = '🎤 Mikro an';
+          $('btn-mic').classList.remove('on');
+        };
+      }
+
+      $('btn-mic').onclick = () => {
+        if (!recognition) {
+          alert('Speech Recognition wird von deinem Browser nicht unterstützt.');
+          return;
+        }
+        if (isListening) {
+          recognition.stop();
+          isListening = false;
+          $('btn-mic').textContent = '🎤 Mikro an';
+          $('btn-mic').classList.remove('on');
+        } else {
+          recognition.start();
+          isListening = true;
+          $('btn-mic').textContent = '🔴 Aufnahme...';
+          $('btn-mic').classList.add('on');
+          $('transcript').textContent = 'Höre zu...';
+        }
+      };
+
+      function speakText(text) {
+        if (!synth) return;
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'de-DE';
+        synth.speak(utterance);
+      }
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen();
+        } else {
+          document.exitFullscreen();
+        }
+      }
+
+      function endInterview() {
+        if (confirm('Möchtest du das Interview wirklich beenden?')) {
+          window.location.href = '/dashboard.html';
+        }
+      }
+
+      // Timer
+      let startTime = null;
+      setInterval(() => {
+        if (startTime) {
+          const elapsed = Math.floor((Date.now() - startTime) / 1000);
+          const mins = Math.floor(elapsed / 60).toString().padStart(2, '0');
+          const secs = (elapsed % 60).toString().padStart(2, '0');
+          $('timer').textContent = `${mins}:${secs}`;
+        }
+      }, 1000);
+
+      $('btn-start').onclick = async () => {
+        const res = await api('/interview/start', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json', 'x-auth-token': token},
+          body: JSON.stringify({})
+        });
+        if (res.interviewId) {
+          window.__interview = { id: res.interviewId };
+          startTime = Date.now();
+          $('question-box').querySelector('.chat-text').textContent = res.question || 'Keine Frage';
+          $('feedback').querySelector('.chat-text').textContent = 'Warte auf deine Antwort...';
+          $('btn-start').disabled = true;
+          $('btn-start').textContent = '✅ Interview läuft';
+        } else {
+          alert(res.error || 'Fehler beim Starten');
+        }
+      };
+
+      $('btn-send').onclick = async () => {
+        const answer = $('answer').value.trim();
+        if (!window.__interview || !window.__interview.id) {
+          alert('Bitte starte zuerst ein Interview.');
+          return;
+        }
+        const res = await api('/interview/respond', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json', 'x-auth-token': token},
+          body: JSON.stringify({interviewId: window.__interview.id, answer})
+        });
+        
+        // Update feedback
+        $('feedback').querySelector('.chat-text').textContent = res.feedback || 'Feedback wird verarbeitet...';
+        if (res.feedback) speakText(res.feedback);
+        
+        // Update rating bars (simulated scores)
+        const contentScore = Math.floor(Math.random() * 30) + 70;
+        const structureScore = Math.floor(Math.random() * 30) + 65;
+        const languageScore = Math.floor(Math.random() * 30) + 75;
+        
+        $('rating-content').textContent = contentScore + '/100';
+        $('bar-content').style.width = contentScore + '%';
+        $('rating-structure').textContent = structureScore + '/100';
+        $('bar-structure').style.width = structureScore + '%';
+        $('rating-language').textContent = languageScore + '/100';
+        $('bar-language').style.width = languageScore + '%';
+        
+        if (res.done) {
+          $('question-box').querySelector('.chat-text').textContent = 'Interview beendet. Analysiere deine Leistung...';
+          $('answer').value = '';
+          $('btn-send').disabled = true;
+          setTimeout(() => {
+            // Redirect to results page with interview ID
+            const interviewId = window.__interview?.id;
+            if (interviewId) {
+              window.location.href = `/interview-results.html?id=${interviewId}`;
+            } else {
+              window.location.href = '/interview-results.html';
+            }
+          }, 2000);
+        } else {
+          $('question-box').querySelector('.chat-text').textContent = res.nextQuestion || 'Nächste Frage wird geladen...';
+          $('answer').value = '';
+          $('transcript').textContent = '—';
+        }
+      };
+
+      $('btn-end').onclick = endInterview;
+    </script>
+    <script src="/js/i18n.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('language') || 'de';
+        i18n.setLanguage(savedLang);
+        document.querySelectorAll('.lang-switch').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.lang === savedLang);
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.lang-switch').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+          });
+        });
+      });
+    </script>
+    <style>
+      .lang-switch {
+        background: transparent !important;
+        border: 1.5px solid var(--border) !important;
+        color: var(--text-secondary) !important;
+      }
+      .lang-switch:hover {
+        border-color: var(--accent) !important;
+        color: var(--accent) !important;
+        background: rgba(0, 0, 0, 0.05) !important;
+      }
+      .lang-switch.active {
+        background: transparent !important;
+        border: 1.5px solid var(--accent) !important;
+        color: var(--accent) !important;
+        font-weight: 700 !important;
+      }
+    </style>
+  </body>
+</html>

@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Datenschutz - CareerSIM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      .privacy-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 120px 20px 80px;
+      }
+      .privacy-header {
+        margin-bottom: 48px;
+        padding-bottom: 32px;
+        border-bottom: 2px solid var(--border);
+      }
+      .privacy-header h1 {
+        font-size: 48px;
+        margin-bottom: 16px;
+      }
+      .privacy-header .update-date {
+        color: var(--text-secondary);
+        font-size: 14px;
+      }
+      .privacy-section {
+        margin-bottom: 48px;
+      }
+      .privacy-section h2 {
+        font-size: 28px;
+        margin-bottom: 16px;
+        color: var(--accent);
+      }
+      .privacy-section h3 {
+        font-size: 20px;
+        margin: 24px 0 12px;
+        font-weight: 600;
+      }
+      .privacy-section p {
+        line-height: 1.8;
+        color: var(--text-secondary);
+        margin-bottom: 16px;
+      }
+      .privacy-section ul {
+        margin: 16px 0;
+        padding-left: 24px;
+      }
+      .privacy-section li {
+        margin: 8px 0;
+        line-height: 1.8;
+        color: var(--text-secondary);
+      }
+      .info-box {
+        background: #eff6ff;
+        border-left: 4px solid #3b82f6;
+        padding: 20px;
+        margin: 24px 0;
+        border-radius: 8px;
+      }
+      .info-box strong {
+        color: #1e40af;
+      }
+      .contact-box {
+        background: var(--bg-secondary);
+        padding: 32px;
+        border-radius: 12px;
+        margin-top: 48px;
+        border: 1px solid var(--border);
+      }
+      .contact-box h3 {
+        font-size: 20px;
+        margin-bottom: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!-- Navigation -->
+      <nav class="navbar">
+        <div class="navbar-container">
+          <div class="navbar-brand">
+            <a href="/" class="navbar-logo">
+              <img src="/images/logo-icon.svg" alt="CareerSIM Logo" style="width: 40px; height: 40px; border-radius: 10px;" />
+              <span class="navbar-logo-text">CareerSIM</span>
+            </a>
+          </div>
+          <div class="navbar-menu">
+            <div class="navbar-links">
+              <a href="/" class="navbar-link">Startseite</a>
+              <a href="/features-new.html" class="navbar-link">Funktionen</a>
+              <a href="/pricing.html" class="navbar-link">Preise</a>
+              <a href="/about.html" class="navbar-link">Über uns</a>
+              <a href="/contact.html" class="navbar-link">Kontakt</a>
+            </div>
+          </div>
+          <div class="navbar-cta">
+            <div class="lang-switcher" style="display: flex; gap: 8px; align-items: center; margin-right: 16px;">
+              <button class="lang-switch active" data-lang="de" onclick="i18n.setLanguage('de')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">DE</button>
+              <button class="lang-switch" data-lang="en" onclick="i18n.setLanguage('en')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">EN</button>
+            </div>
+            <a href="/login.html" class="navbar-btn-login">Anmelden</a>
+            <a href="/pricing.html" class="navbar-btn-start">Registrieren</a>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Privacy Content -->
+      <div class="privacy-container">
+        <div class="privacy-header">
+          <h1>🔒 Datenschutzerklärung</h1>
+          <p class="update-date">Letzte Aktualisierung: 11. November 2025</p>
+        </div>
+
+        <div class="info-box">
+          <strong>Wichtig:</strong> Bei CareerSIM nehmen wir den Schutz Ihrer persönlichen Daten sehr ernst. Diese Datenschutzerklärung erklärt, wie wir Ihre Daten gemäß der EU-Datenschutz-Grundverordnung (DSGVO) verarbeiten.
+        </div>
+
+        <div class="privacy-section">
+          <h2>1. Verantwortliche Stelle</h2>
+          <p>
+            Verantwortlich für die Datenverarbeitung auf dieser Website ist:
+          </p>
+          <p style="margin-left: 20px;">
+            <strong>CareerSIM GmbH</strong><br>
+            Musterstraße 123<br>
+            80331 München<br>
+            Deutschland<br><br>
+            E-Mail: privacy@careersim.com<br>
+            Telefon: +49 (0) 89 123456
+          </p>
+        </div>
+
+        <div class="privacy-section">
+          <h2>2. Welche Daten wir erheben</h2>
+          <p>
+            Wir erheben und verarbeiten folgende personenbezogene Daten:
+          </p>
+          
+          <h3>2.1 Account-Daten</h3>
+          <ul>
+            <li>Name und E-Mail-Adresse (bei Registrierung)</li>
+            <li>Passwort (verschlüsselt gespeichert)</li>
+            <li>Studiengang und Zielunternehmen (optional)</li>
+            <li>Profilinformationen</li>
+          </ul>
+
+          <h3>2.2 Nutzungsdaten</h3>
+          <ul>
+            <li>Interview-Transkripte und Antworten</li>
+            <li>Lebenslauf-Uploads (PDF, DOC, DOCX)</li>
+            <li>Feedback und Bewertungen</li>
+            <li>Aktivitätsprotokolle und Nutzungsstatistiken</li>
+          </ul>
+
+          <h3>2.3 Technische Daten</h3>
+          <ul>
+            <li>IP-Adresse</li>
+            <li>Browser-Typ und -Version</li>
+            <li>Betriebssystem</li>
+            <li>Referrer URL</li>
+            <li>Zugriffszeitpunkt</li>
+          </ul>
+
+          <h3>2.4 Zahlungsdaten</h3>
+          <ul>
+            <li>Rechnungsinformationen</li>
+            <li>Zahlungsmethode (verschlüsselt über Stripe)</li>
+          </ul>
+        </div>
+
+        <div class="privacy-section">
+          <h2>3. Zweck der Datenverarbeitung</h2>
+          <p>
+            Wir verwenden Ihre Daten für folgende Zwecke:
+          </p>
+          <ul>
+            <li><strong>Bereitstellung der Services:</strong> Interview-Simulationen, KI-Feedback, Karriereberatung</li>
+            <li><strong>Account-Verwaltung:</strong> Registrierung, Login, Profilverwaltung</li>
+            <li><strong>Verbesserung unserer KI:</strong> Training unserer Machine-Learning-Modelle</li>
+            <li><strong>Kommunikation:</strong> Service-Updates, Support, Newsletter (mit Einwilligung)</li>
+            <li><strong>Abrechnung:</strong> Zahlungsabwicklung und Rechnungsstellung</li>
+            <li><strong>Sicherheit:</strong> Schutz vor Missbrauch und Betrug</li>
+            <li><strong>Rechtliche Verpflichtungen:</strong> Einhaltung gesetzlicher Anforderungen</li>
+          </ul>
+        </div>
+
+        <div class="privacy-section">
+          <h2>4. Rechtsgrundlage (DSGVO)</h2>
+          <p>
+            Die Verarbeitung Ihrer Daten erfolgt auf Grundlage:
+          </p>
+          <ul>
+            <li><strong>Art. 6 Abs. 1 lit. b DSGVO:</strong> Vertragserfüllung (Bereitstellung der Services)</li>
+            <li><strong>Art. 6 Abs. 1 lit. a DSGVO:</strong> Einwilligung (z.B. Newsletter, Cookies)</li>
+            <li><strong>Art. 6 Abs. 1 lit. f DSGVO:</strong> Berechtigte Interessen (z.B. Sicherheit, Verbesserung)</li>
+            <li><strong>Art. 6 Abs. 1 lit. c DSGVO:</strong> Rechtliche Verpflichtung (z.B. Aufbewahrungspflichten)</li>
+          </ul>
+        </div>
+
+        <div class="privacy-section">
+          <h2>5. KI und OpenAI-Integration</h2>
+          <p>
+            Wir nutzen die OpenAI API (GPT-4) für:
+          </p>
+          <ul>
+            <li>Generierung von Interview-Fragen</li>
+            <li>Analyse und Feedback zu Antworten</li>
+            <li>Karriereberatung und Empfehlungen</li>
+            <li>CV-Analyse und -Optimierung</li>
+          </ul>
+          <div class="info-box">
+            <strong>Wichtig:</strong> Ihre Daten werden verschlüsselt an OpenAI übertragen. OpenAI verwendet Ihre Daten NICHT zum Training ihrer Modelle. Wir haben einen Data Processing Agreement (DPA) mit OpenAI gemäß Art. 28 DSGVO abgeschlossen.
+          </div>
+        </div>
+
+        <div class="privacy-section">
+          <h2>6. Datenspeicherung und -löschung</h2>
+          <p>
+            Wir speichern Ihre Daten nur so lange, wie es für die Zwecke erforderlich ist:
+          </p>
+          <ul>
+            <li><strong>Account-Daten:</strong> Bis zur Löschung Ihres Accounts</li>
+            <li><strong>Interview-Daten:</strong> Bis zur Löschung oder auf Anfrage</li>
+            <li><strong>Zahlungsdaten:</strong> 10 Jahre (gesetzliche Aufbewahrungspflicht)</li>
+            <li><strong>Log-Daten:</strong> 90 Tage</li>
+          </ul>
+          <p>
+            Nach Ablauf der Speicherfrist werden Ihre Daten automatisch gelöscht oder anonymisiert.
+          </p>
+        </div>
+
+        <div class="privacy-section">
+          <h2>7. Datenweitergabe an Dritte</h2>
+          <p>
+            Wir geben Ihre Daten nur in folgenden Fällen weiter:
+          </p>
+          <ul>
+            <li><strong>OpenAI:</strong> Für KI-Services (mit DPA)</li>
+            <li><strong>Stripe:</strong> Für Zahlungsabwicklung (PCI-DSS konform)</li>
+            <li><strong>Hosting-Provider:</strong> Für Server-Infrastruktur (in EU)</li>
+            <li><strong>Rechtliche Anforderungen:</strong> Bei gesetzlicher Verpflichtung</li>
+          </ul>
+          <p>
+            <strong>Keine Weitergabe an:</strong> Werbepartner, Datenbroker oder andere Dritte ohne Ihre ausdrückliche Einwilligung.
+          </p>
+        </div>
+
+        <div class="privacy-section">
+          <h2>8. Cookies und Tracking</h2>
+          <p>
+            Wir verwenden Cookies für:
+          </p>
+          <ul>
+            <li><strong>Notwendige Cookies:</strong> Login, Session-Verwaltung (keine Einwilligung erforderlich)</li>
+            <li><strong>Analytics:</strong> Google Analytics mit IP-Anonymisierung (mit Einwilligung)</li>
+            <li><strong>Präferenzen:</strong> Spracheinstellung, UI-Einstellungen</li>
+          </ul>
+          <p>
+            Sie können Cookies in Ihren Browser-Einstellungen jederzeit deaktivieren oder löschen.
+          </p>
+        </div>
+
+        <div class="privacy-section">
+          <h2>9. Ihre Rechte (DSGVO)</h2>
+          <p>
+            Sie haben folgende Rechte bezüglich Ihrer Daten:
+          </p>
+          <ul>
+            <li><strong>Auskunftsrecht (Art. 15 DSGVO):</strong> Welche Daten wir über Sie speichern</li>
+            <li><strong>Berichtigungsrecht (Art. 16 DSGVO):</strong> Korrektur falscher Daten</li>
+            <li><strong>Löschungsrecht (Art. 17 DSGVO):</strong> Löschung Ihrer Daten ("Recht auf Vergessenwerden")</li>
+            <li><strong>Einschränkung (Art. 18 DSGVO):</strong> Einschränkung der Verarbeitung</li>
+            <li><strong>Datenübertragbarkeit (Art. 20 DSGVO):</strong> Export Ihrer Daten</li>
+            <li><strong>Widerspruchsrecht (Art. 21 DSGVO):</strong> Widerspruch gegen Verarbeitung</li>
+            <li><strong>Widerruf (Art. 7 Abs. 3 DSGVO):</strong> Widerruf der Einwilligung</li>
+          </ul>
+          <p>
+            Um Ihre Rechte auszuüben, kontaktieren Sie uns unter: <a href="mailto:privacy@careersim.com" style="color: var(--accent);">privacy@careersim.com</a>
+          </p>
+        </div>
+
+        <div class="privacy-section">
+          <h2>10. Datensicherheit</h2>
+          <p>
+            Wir setzen technische und organisatorische Maßnahmen ein, um Ihre Daten zu schützen:
+          </p>
+          <ul>
+            <li>SSL/TLS-Verschlüsselung für alle Datenübertragungen</li>
+            <li>Verschlüsselte Passwortspeicherung (bcrypt)</li>
+            <li>Regelmäßige Sicherheits-Audits</li>
+            <li>Zugriffsbeschränkungen und Firewalls</li>
+            <li>Backup-Systeme</li>
+            <li>Mitarbeiter-Schulungen zum Datenschutz</li>
+          </ul>
+        </div>
+
+        <div class="privacy-section">
+          <h2>11. Datenschutzbeauftragter</h2>
+          <p>
+            Bei Fragen zum Datenschutz können Sie unseren Datenschutzbeauftragten kontaktieren:
+          </p>
+          <p style="margin-left: 20px;">
+            <strong>Dr. Maria Müller</strong><br>
+            E-Mail: dpo@careersim.com<br>
+            Telefon: +49 (0) 89 123456-99
+          </p>
+        </div>
+
+        <div class="privacy-section">
+          <h2>12. Beschwerderecht</h2>
+          <p>
+            Sie haben das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren:
+          </p>
+          <p style="margin-left: 20px;">
+            <strong>Bayerisches Landesamt für Datenschutzaufsicht</strong><br>
+            Promenade 18<br>
+            91522 Ansbach<br>
+            Deutschland<br>
+            Website: <a href="https://www.lda.bayern.de" target="_blank" style="color: var(--accent);">www.lda.bayern.de</a>
+          </p>
+        </div>
+
+        <div class="privacy-section">
+          <h2>13. Änderungen dieser Datenschutzerklärung</h2>
+          <p>
+            Wir behalten uns vor, diese Datenschutzerklärung zu aktualisieren, um Änderungen in unseren Services oder rechtlichen Anforderungen zu reflektieren. Die aktuelle Version ist immer unter <strong>/privacy.html</strong> verfügbar.
+          </p>
+          <p>
+            Bei wesentlichen Änderungen werden wir Sie per E-Mail informieren.
+          </p>
+        </div>
+
+        <div class="contact-box">
+          <h3>📧 Fragen zum Datenschutz?</h3>
+          <p style="margin-bottom: 16px;">
+            Wir sind für Sie da! Kontaktieren Sie uns bei Fragen oder zur Ausübung Ihrer Rechte:
+          </p>
+          <p style="margin: 0;">
+            <strong>E-Mail:</strong> <a href="mailto:privacy@careersim.com" style="color: var(--accent);">privacy@careersim.com</a><br>
+            <strong>Telefon:</strong> +49 (0) 89 123456<br>
+            <strong>Post:</strong> CareerSIM GmbH, Musterstraße 123, 80331 München
+          </p>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer style="background: #000000; padding: 60px 20px 30px; color: white; margin-top: 80px;">
+        <div style="max-width: 1200px; margin: 0 auto; text-align: center;">
+          <div style="margin-bottom: 24px;">
+            <a href="/" style="font-size: 24px; font-weight: 700; color: white; text-decoration: none;">CareerSIM</a>
+          </div>
+          <div style="display: flex; justify-content: center; gap: 32px; margin-bottom: 24px; flex-wrap: wrap;">
+            <a href="/privacy.html" style="color: rgba(255,255,255,0.7); text-decoration: none; font-size: 14px;">Datenschutz</a>
+            <a href="/terms.html" style="color: rgba(255,255,255,0.7); text-decoration: none; font-size: 14px;">AGB</a>
+            <a href="/about.html" style="color: rgba(255,255,255,0.7); text-decoration: none; font-size: 14px;">Über uns</a>
+            <a href="/contact.html" style="color: rgba(255,255,255,0.7); text-decoration: none; font-size: 14px;">Kontakt</a>
+          </div>
+          <div style="color: rgba(255,255,255,0.5); font-size: 13px;">
+            © 2025 CareerSIM. Alle Rechte vorbehalten.
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script src="/js/i18n.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('language') || 'de';
+        i18n.setLanguage(savedLang);
+        document.querySelectorAll('.lang-switch').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.lang === savedLang);
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.lang-switch').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+          });
+        });
+      });
+    </script>
+    <style>
+      .lang-switch {
+        background: transparent !important;
+        border: 1.5px solid var(--border) !important;
+        color: var(--text-secondary) !important;
+      }
+      .lang-switch:hover {
+        border-color: var(--accent) !important;
+        color: var(--accent) !important;
+        background: rgba(0, 0, 0, 0.05) !important;
+      }
+      .lang-switch.active {
+        background: transparent !important;
+        border: 1.5px solid var(--accent) !important;
+        color: var(--accent) !important;
+        font-weight: 700 !important;
+      }
+    </style>
+  </body>
+</html>

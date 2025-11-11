@@ -1,0 +1,1357 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CareerSIM - KI-gestützte Interview-Vorbereitung</title>
+    <meta name="description" content="Meistere deine Bewerbungsgespräche mit KI-gestützter Interview-Vorbereitung. Realistische Szenarien, sofortiges Feedback und personalisiertes Coaching." />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      /* Jost Pop-up Overlay */
+      .jost-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.85);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        animation: fadeIn 0.3s ease;
+      }
+      .jost-overlay.hidden {
+        display: none;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      @keyframes fadeOut {
+        from { opacity: 1; }
+        to { opacity: 0; }
+      }
+      .jost-popup {
+        background: white;
+        border-radius: 20px;
+        padding: 48px;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        animation: slideUp 0.4s ease;
+      }
+      @keyframes slideUp {
+        from { 
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to { 
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .jost-popup h2 {
+        font-size: 32px;
+        font-weight: 800;
+        color: #000;
+        margin-bottom: 32px;
+        line-height: 1.3;
+      }
+      .jost-buttons {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+      }
+      .jost-btn {
+        padding: 16px 48px;
+        background: #000;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .jost-btn:hover {
+        background: #333;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      }
+      .jost-emoji {
+        font-size: 80px;
+        margin-bottom: 24px;
+      }
+
+      /* Enhanced Hero Styles - ChatGPT White Theme */
+      .hero-new {
+        position: relative;
+        background: var(--bg);
+        padding: 100px 20px 60px;
+        overflow: hidden;
+      }
+      .hero-new::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at 30% 20%, rgba(0, 0, 0, 0.02), transparent 50%),
+                    radial-gradient(circle at 70% 80%, rgba(0, 0, 0, 0.02), transparent 50%);
+        pointer-events: none;
+      }
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 1100px;
+        margin: 0 auto;
+        text-align: center;
+      }
+      .hero-badge {
+        display: inline-block;
+        background: rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        padding: 8px 20px;
+        border-radius: 30px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 24px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .hero-title {
+        font-size: 64px;
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 24px;
+        color: var(--text-primary);
+      }
+      .hero-subtitle {
+        font-size: 22px;
+        line-height: 1.6;
+        color: var(--text-secondary);
+        max-width: 750px;
+        margin: 0 auto 40px;
+        font-weight: 400;
+      }
+      .hero-ctas {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 40px;
+      }
+      .cta-primary {
+        padding: 16px 32px;
+        background: var(--accent);
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        display: inline-block;
+        box-shadow: 0 2px 8px var(--shadow-md);
+      }
+      .cta-primary:hover {
+        background: var(--accent-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px var(--shadow-lg);
+      }
+      .cta-secondary {
+        padding: 16px 32px;
+        background: transparent;
+        color: var(--text-primary);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .cta-secondary:hover {
+        border-color: var(--text-primary);
+        background: var(--bg-secondary);
+      }
+      .hero-trust {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        color: var(--text-secondary);
+        font-size: 14px;
+      }
+      .trust-icons {
+        display: flex;
+        gap: 4px;
+        color: #fbbf24;
+      }
+      
+      /* Stats Section */
+      .stats-section {
+        background: var(--bg-secondary);
+        padding: 60px 20px;
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+      .stats-grid {
+        max-width: 1000px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 40px;
+        text-align: center;
+      }
+      .stat-item {
+        padding: 20px;
+      }
+      .stat-number {
+        font-size: 48px;
+        font-weight: 800;
+        color: var(--accent);
+        margin-bottom: 8px;
+        line-height: 1;
+      }
+      .stat-label {
+        font-size: 16px;
+        color: var(--text-secondary);
+        font-weight: 500;
+      }
+      
+      /* Features Section */
+      .features-section {
+        padding: 80px 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+        background: var(--bg);
+      }
+      .section-header {
+        text-align: center;
+        margin-bottom: 60px;
+      }
+      .section-title {
+        font-size: 42px;
+        font-weight: 700;
+        margin-bottom: 16px;
+        color: var(--text-primary);
+      }
+      .section-subtitle {
+        font-size: 18px;
+        color: var(--text-secondary);
+        max-width: 700px;
+        margin: 0 auto;
+        line-height: 1.6;
+      }
+      .features-grid-new {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 24px;
+      }
+      .feature-card-new {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 32px;
+        transition: all 0.2s ease;
+        position: relative;
+      }
+      .feature-card-new:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px var(--shadow);
+        border-color: var(--text-secondary);
+      }
+      .feature-icon {
+        width: 56px;
+        height: 56px;
+        background: var(--accent);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        margin-bottom: 20px;
+      }
+      .feature-title {
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: var(--text-primary);
+      }
+      .feature-desc {
+        font-size: 15px;
+        line-height: 1.6;
+        color: var(--text-secondary);
+      }
+      
+      /* Target Audience Section */
+      .audience-section {
+        padding: 80px 20px;
+        background: var(--bg-secondary);
+      }
+      .audience-grid {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 24px;
+        margin-top: 48px;
+      }
+      .audience-card {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 36px;
+        text-align: center;
+        transition: all 0.2s ease;
+      }
+      .audience-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px var(--shadow);
+        border-color: var(--accent);
+      }
+      .audience-icon {
+        font-size: 56px;
+        margin-bottom: 20px;
+      }
+      .audience-title {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: var(--text-primary);
+      }
+      .audience-desc {
+        font-size: 15px;
+        color: var(--text-secondary);
+        margin-bottom: 24px;
+        line-height: 1.6;
+      }
+
+      /* CTA Section - Clean White Style */
+      .cta-section {
+        padding: 80px 40px;
+        background: var(--bg);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        position: relative;
+        overflow: hidden;
+      }
+      .cta-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: 
+          radial-gradient(circle at 20% 50%, rgba(0, 0, 0, 0.02) 0%, transparent 50%),
+          radial-gradient(circle at 80% 80%, rgba(0, 0, 0, 0.02) 0%, transparent 50%);
+        pointer-events: none;
+      }
+      .cta-container {
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+        padding: 0 24px;
+        position: relative;
+        z-index: 1;
+      }
+      .cta-title {
+        font-size: 42px;
+        font-weight: 700;
+        margin-bottom: 16px;
+        color: var(--text-primary);
+        line-height: 1.2;
+      }
+      .cta-desc {
+        font-size: 18px;
+        color: var(--text-secondary);
+        margin-bottom: 32px;
+        line-height: 1.6;
+      }
+      .cta-button {
+        display: inline-block;
+        padding: 16px 40px;
+        background: var(--accent);
+        color: #ffffff;
+        font-weight: 600;
+        font-size: 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 8px var(--shadow-md);
+      }
+      .cta-button:hover {
+        background: var(--accent-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px var(--shadow-lg);
+      }
+
+      /* Footer */
+      .footer {
+        background: #000000;
+        padding: 80px 0 30px;
+        border-top: 1px solid var(--border);
+      }
+      .footer-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 40px;
+      }
+      .footer-top {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
+        gap: 60px;
+        margin-bottom: 60px;
+        padding-bottom: 60px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .footer-brand {
+        max-width: 300px;
+      }
+      .footer-logo {
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--accent);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+      .footer-tagline {
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 1.6;
+        font-size: 14px;
+        margin-bottom: 20px;
+      }
+      .footer-social {
+        display: flex;
+        gap: 12px;
+      }
+      .footer-social-link {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: rgba(255, 255, 255, 0.6);
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+      .footer-social-link:hover {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #000;
+      }
+      .footer-col h4 {
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .footer-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .footer-links li {
+        margin-bottom: 12px;
+      }
+      .footer-links a {
+        color: rgba(255, 255, 255, 0.6);
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.2s;
+      }
+      .footer-links a:hover {
+        color: var(--accent);
+      }
+      .footer-newsletter h4 {
+        margin-bottom: 12px;
+      }
+      .footer-newsletter p {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 13px;
+        margin-bottom: 16px;
+        line-height: 1.5;
+      }
+      .newsletter-form {
+        display: flex;
+        gap: 8px;
+      }
+      .newsletter-input {
+        flex: 1;
+        padding: 12px 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: #fff;
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
+      .newsletter-input:focus {
+        outline: none;
+        border-color: var(--accent);
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .newsletter-input::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .newsletter-btn {
+        padding: 12px 24px;
+        background: var(--accent);
+        color: #000;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+      }
+      .newsletter-btn:hover {
+        background: #333333;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px var(--shadow);
+      }
+      .footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 30px;
+      }
+      .footer-bottom-left {
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 13px;
+      }
+      .footer-bottom-links {
+        display: flex;
+        gap: 24px;
+      }
+      .footer-bottom-links a {
+        color: rgba(255, 255, 255, 0.4);
+        text-decoration: none;
+        font-size: 13px;
+        transition: color 0.2s;
+      }
+      .footer-bottom-links a:hover {
+        color: var(--accent);
+      }
+      
+      /* Dropdown Menu */
+      .navbar-link-with-dropdown {
+        position: relative;
+        display: inline-block;
+      }
+      .dropdown-content {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: white;
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        min-width: 280px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        z-index: 1000;
+        margin-top: 8px;
+        padding: 8px;
+      }
+      .navbar-link-with-dropdown:hover .dropdown-content {
+        display: block;
+      }
+      .dropdown-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        color: var(--text-primary);
+      }
+      .dropdown-item:hover {
+        background: var(--bg-secondary);
+      }
+      .dropdown-icon {
+        font-size: 24px;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+      .dropdown-text h4 {
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 4px;
+        color: var(--text-primary);
+      }
+      .dropdown-text p {
+        font-size: 12px;
+        color: var(--text-secondary);
+        margin: 0;
+        line-height: 1.4;
+      }
+      .dropdown-divider {
+        height: 1px;
+        background: var(--border);
+        margin: 8px 0;
+      }
+      
+      /* Language Switcher */
+      .lang-switcher {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .lang-switch {
+        padding: 6px 12px;
+        background: transparent;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 13px;
+        font-weight: 600;
+      }
+      .lang-switch:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        background: rgba(0, 0, 0, 0.05);
+      }
+      .lang-switch.active {
+        background: transparent;
+        border: 1.5px solid var(--accent);
+        color: var(--accent);
+        font-weight: 700;
+      }
+      
+      @media (max-width: 768px) {
+        .hero-title {
+          font-size: 40px;
+        }
+        .hero-subtitle {
+          font-size: 16px;
+        }
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .features-grid-new {
+          grid-template-columns: 1fr;
+        }
+        .audience-grid {
+          grid-template-columns: 1fr;
+        }
+        .footer-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .cta-title {
+          font-size: 32px;
+        }
+        .cta-section {
+          padding: 80px 24px;
+        }
+        .cta-button {
+          width: 100%;
+          padding: 16px 32px;
+        }
+        .navbar-links {
+          display: none;
+        }
+        .footer-top {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
+        .footer-brand {
+          max-width: 100%;
+        }
+        .footer-bottom {
+          flex-direction: column;
+          gap: 20px;
+          text-align: center;
+        }
+        .footer-bottom-links {
+          flex-direction: column;
+          gap: 12px;
+        }
+        .newsletter-form {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Jost Pop-up -->
+    <div class="jost-overlay" id="jostOverlay">
+      <div class="jost-popup">
+        <div class="jost-emoji">🐕</div>
+        <h2>Ist Jost ein Hund?</h2>
+        <div class="jost-buttons">
+          <button class="jost-btn" onclick="closeJostPopup()">Ja</button>
+          <button class="jost-btn" onclick="closeJostPopup()">Ja</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="app">
+      <!-- Enhanced Navigation with Language Switcher -->
+      <nav class="navbar">
+        <div class="navbar-container">
+          <div class="navbar-brand">
+            <a href="/" class="navbar-logo">
+              <img src="/images/logo-icon.svg" alt="CareerSIM Logo" style="width: 40px; height: 40px; border-radius: 10px;" />
+              <span class="navbar-logo-text">CareerSIM</span>
+            </a>
+          </div>
+
+          <div class="navbar-menu">
+            <div class="navbar-links">
+              <a href="/" class="navbar-link" data-i18n="nav_home">Startseite</a>
+              
+              <!-- Features Dropdown -->
+              <div class="navbar-link-with-dropdown">
+                <a href="/features-new.html" class="navbar-link" data-i18n="nav_features">Funktionen ▾</a>
+                <div class="dropdown-content">
+                  <a href="/features-new.html" class="dropdown-item">
+                    <span class="dropdown-icon">🤖</span>
+                    <div class="dropdown-text">
+                      <h4>KI-Interview Simulator</h4>
+                      <p>Realistische Interview-Szenarien mit KI</p>
+                    </div>
+                  </a>
+                  <a href="/features-new.html#karriereberatung" class="dropdown-item">
+                    <span class="dropdown-icon">🎯</span>
+                    <div class="dropdown-text">
+                      <h4>KI-Karriereberatung</h4>
+                      <p>Personalisierte Karriereempfehlungen</p>
+                    </div>
+                  </a>
+                  <div class="dropdown-divider"></div>
+                  <a href="/students.html" class="dropdown-item">
+                    <span class="dropdown-icon">🎓</span>
+                    <div class="dropdown-text">
+                      <h4>Für Studierende</h4>
+                      <p>Optimal auf Bewerbungen vorbereiten</p>
+                    </div>
+                  </a>
+                  <a href="/universities.html" class="dropdown-item">
+                    <span class="dropdown-icon">🏫</span>
+                    <div class="dropdown-text">
+                      <h4>Für Hochschulen</h4>
+                      <p>Integration in Career Services</p>
+                    </div>
+                  </a>
+                  <a href="/companies.html" class="dropdown-item">
+                    <span class="dropdown-icon">💼</span>
+                    <div class="dropdown-text">
+                      <h4>Für Unternehmen</h4>
+                      <p>Enterprise Recruiting-Lösungen</p>
+                    </div>
+                  </a>
+                </div>
+              </div>
+              
+              <a href="/pricing.html" class="navbar-link" data-i18n="nav_pricing">Preise</a>
+              <a href="/about.html" class="navbar-link" data-i18n="nav_about">Über uns</a>
+              <a href="/contact.html" class="navbar-link" data-i18n="nav_contact">Kontakt</a>
+            </div>
+          </div>
+
+          <div class="navbar-cta">
+            <div class="lang-switcher">
+              <button class="lang-switch active" data-lang="de" onclick="i18n.setLanguage('de')">DE</button>
+              <button class="lang-switch" data-lang="en" onclick="i18n.setLanguage('en')">EN</button>
+            </div>
+            <a href="/login.html" class="navbar-btn-login" data-i18n="nav_login">Anmelden</a>
+            <a href="/pricing.html" class="navbar-btn-start" data-i18n="nav_signup">Registrieren</a>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Hero Section with AI Focus -->
+      <section class="hero-new">
+        <div class="hero-content">
+          <div class="hero-badge">🤖 Powered by Advanced AI Technology</div>
+          <h1 class="hero-title" data-i18n="home_hero_title">
+            <strong style="color: var(--accent);">KI-gestützte</strong> Interview-Vorbereitung für deinen Karriere-Erfolg
+          </h1>
+          <p class="hero-subtitle" data-i18n="home_hero_subtitle">
+            Meistere Bewerbungsgespräche mit unserer fortschrittlichen <strong>KI-Technologie</strong>. Übe realistische Interviews, erhalte sofortiges <strong>Feedback</strong> und steigere deine Performance.
+          </p>
+          <div class="hero-ctas">
+            <a href="/pricing.html" class="cta-primary" data-i18n="cta_start_practice">
+              Jetzt üben
+            </a>
+            <a href="/features-new.html" class="cta-secondary" data-i18n="cta_learn_more">
+              Mehr erfahren
+            </a>
+          </div>
+          <div class="hero-trust">
+            <div class="trust-icons">⭐⭐⭐⭐⭐</div>
+            <span data-i18n="home_trusted">Vertraut von 10.000+ Studierenden</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stats Section -->
+      <section class="stats-section">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-number">10,000+</div>
+            <div class="stat-label">Studierende</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">500+</div>
+            <div class="stat-label">Unternehmen</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">50,000+</div>
+            <div class="stat-label">Interviews</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">4.9/5</div>
+            <div class="stat-label">Bewertung</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features Section with AI Emphasis -->
+      <section class="features-section">
+        <div class="section-header">
+          <h2 class="section-title"><strong style="color: var(--accent);">KI-gestützte</strong> Features für deinen Erfolg</h2>
+          <p class="section-subtitle">
+            Nutze die Kraft künstlicher Intelligenz für deine <strong>Interview-Vorbereitung</strong>
+          </p>
+        </div>
+        <div class="features-grid-new">
+          <div class="feature-card-new">
+            <div class="feature-icon">🤖</div>
+            <h3 class="feature-title" data-i18n="feature_ai_interview"><strong>KI-Interview</strong> Simulator</h3>
+            <p class="feature-desc" data-i18n="feature_ai_interview_desc">
+              Realistische Interview-Szenarien powered by künstlicher Intelligenz
+            </p>
+          </div>
+          <div class="feature-card-new">
+            <div class="feature-icon">🎯</div>
+            <h3 class="feature-title" data-i18n="feature_ai_coaching">KI-Karriereberatung</h3>
+            <p class="feature-desc" data-i18n="feature_ai_coaching_desc">
+              Personalisierte Karriereempfehlungen basierend auf deinen Stärken
+            </p>
+          </div>
+          <div class="feature-card-new">
+            <div class="feature-icon">🎤</div>
+            <h3 class="feature-title" data-i18n="feature_speech">Speech Recognition</h3>
+            <p class="feature-desc" data-i18n="feature_speech_desc">
+              Antworte mündlich und erhalte Echtzeit-Transkription
+            </p>
+          </div>
+          <div class="feature-card-new">
+            <div class="feature-icon">⚡</div>
+            <h3 class="feature-title" data-i18n="feature_feedback">Sofortiges KI-Feedback</h3>
+            <p class="feature-desc" data-i18n="feature_feedback_desc">
+              Detaillierte Analyse deiner Antworten mit Verbesserungsvorschlägen
+            </p>
+          </div>
+          <div class="feature-card-new">
+            <div class="feature-icon">📊</div>
+            <h3 class="feature-title" data-i18n="feature_analytics">Performance Analytics</h3>
+            <p class="feature-desc" data-i18n="feature_analytics_desc">
+              Verfolge deinen Fortschritt mit detaillierten Statistiken
+            </p>
+          </div>
+          <div class="feature-card-new">
+            <div class="feature-icon">🏢</div>
+            <h3 class="feature-title" data-i18n="feature_companies">Unternehmens-Spezifisch</h3>
+            <p class="feature-desc" data-i18n="feature_companies_desc">
+              Trainiere für über 500 Top-Unternehmen weltweit
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Target Groups Section -->
+      <section style="padding: 100px 20px; background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);">
+        <div style="max-width: 1200px; margin: 0 auto;">
+          <div class="section-header" style="text-align: center; margin-bottom: 64px;">
+            <h2 class="section-title" style="font-size: 42px; margin-bottom: 16px;">
+              <strong>Für jeden die richtige <span style="color: var(--accent);">Lösung</span></strong>
+            </h2>
+            <p class="section-subtitle" style="font-size: 18px; color: var(--text-secondary); max-width: 700px; margin: 0 auto;">
+              CareerSIM unterstützt Studierende, Hochschulen und Unternehmen auf ihrem Weg zum Erfolg
+            </p>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 32px;">
+            <!-- Students -->
+            <a href="/students.html" style="text-decoration: none; color: inherit;">
+              <div style="background: white; border: 2px solid var(--border); border-radius: 16px; padding: 40px; transition: all 0.3s ease; box-shadow: 0 4px 16px rgba(0,0,0,0.05); height: 100%; cursor: pointer;">
+                <div style="font-size: 64px; margin-bottom: 20px;">🎓</div>
+                <h3 style="font-size: 28px; font-weight: 700; margin-bottom: 16px; color: var(--accent);">Für Studierende</h3>
+                <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 24px;">
+                  Meistere dein nächstes Bewerbungsgespräch mit realistischen Interview-Simulationen und persönlichem KI-Feedback. Perfekt für deinen Berufseinstieg.
+                </p>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                  <li style="padding: 12px 0; padding-left: 28px; position: relative; color: var(--text-secondary); font-size: 14px;">
+                    <span style="position: absolute; left: 0; color: #10b981; font-weight: 700;">✓</span>
+                    Unbegrenzte Interview-Übungen
+                  </li>
+                  <li style="padding: 12px 0; padding-left: 28px; position: relative; color: var(--text-secondary); font-size: 14px;">
+                    <span style="position: absolute; left: 0; color: #10b981; font-weight: 700;">✓</span>
+                    Sofortiges KI-Feedback
+                  </li>
+                  <li style="padding: 12px 0; padding-left: 28px; position: relative; color: var(--text-secondary); font-size: 14px;">
+                    <span style="position: absolute; left: 0; color: #10b981; font-weight: 700;">✓</span>
+                    CV-Optimierung & Karrieretipps
+                  </li>
+                </ul>
+                <div style="margin-top: 24px; font-weight: 600; color: var(--accent); display: flex; align-items: center; gap: 8px;">
+                  Mehr erfahren →
+                </div>
+              </div>
+            </a>
+
+            <!-- Universities -->
+            <a href="/universities.html" style="text-decoration: none; color: inherit;">
+              <div style="background: white; border: 2px solid var(--border); border-radius: 16px; padding: 40px; transition: all 0.3s ease; box-shadow: 0 4px 16px rgba(0,0,0,0.05); height: 100%; cursor: pointer;">
+                <div style="font-size: 64px; margin-bottom: 20px;">🏫</div>
+                <h3 style="font-size: 28px; font-weight: 700; margin-bottom: 16px; color: var(--accent);">Für Hochschulen</h3>
+                <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 24px;">
+                  Integrieren Sie CareerSIM in Ihre Career Services und unterstützen Sie Studierende bei der Karrierevorbereitung mit modernster KI-Technologie.
+                </p>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                  <li style="padding: 12px 0; padding-left: 28px; position: relative; color: var(--text-secondary); font-size: 14px;">
+                    <span style="position: absolute; left: 0; color: #10b981; font-weight: 700;">✓</span>
+                    White-Label Integration
+                  </li>
+                  <li style="padding: 12px 0; padding-left: 28px; position: relative; color: var(--text-secondary); font-size: 14px;">
+                    <span style="position: absolute; left: 0; color: #10b981; font-weight: 700;">✓</span>
+                    Analytics & Reporting Dashboard
+                  </li>
+                  <li style="padding: 12px 0; padding-left: 28px; position: relative; color: var(--text-secondary); font-size: 14px;">
+                    <span style="position: absolute; left: 0; color: #10b981; font-weight: 700;">✓</span>
+                    Dedicated Support
+                  </li>
+                </ul>
+                <div style="margin-top: 24px; font-weight: 600; color: var(--accent); display: flex; align-items: center; gap: 8px;">
+                  Mehr erfahren →
+                </div>
+              </div>
+            </a>
+
+            <!-- Companies -->
+            <a href="/companies.html" style="text-decoration: none; color: inherit;">
+              <div style="background: white; border: 2px solid var(--border); border-radius: 16px; padding: 40px; transition: all 0.3s ease; box-shadow: 0 4px 16px rgba(0,0,0,0.05); height: 100%; cursor: pointer;">
+                <div style="font-size: 64px; margin-bottom: 20px;">💼</div>
+                <h3 style="font-size: 28px; font-weight: 700; margin-bottom: 16px; color: var(--accent);">Für Unternehmen</h3>
+                <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 24px;">
+                  Optimieren Sie Ihren Recruiting-Prozess und identifizieren Sie die besten Kandidaten mit KI-gestütztem Pre-Assessment und strukturierten Interviews.
+                </p>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                  <li style="padding: 12px 0; padding-left: 28px; position: relative; color: var(--text-secondary); font-size: 14px;">
+                    <span style="position: absolute; left: 0; color: #10b981; font-weight: 700;">✓</span>
+                    Automatisiertes Candidate Screening
+                  </li>
+                  <li style="padding: 12px 0; padding-left: 28px; position: relative; color: var(--text-secondary); font-size: 14px;">
+                    <span style="position: absolute; left: 0; color: #10b981; font-weight: 700;">✓</span>
+                    Custom Interview Templates
+                  </li>
+                  <li style="padding: 12px 0; padding-left: 28px; position: relative; color: var(--text-secondary); font-size: 14px;">
+                    <span style="position: absolute; left: 0; color: #10b981; font-weight: 700;">✓</span>
+                    API & Enterprise Integration
+                  </li>
+                </ul>
+                <div style="margin-top: 24px; font-weight: 600; color: var(--accent); display: flex; align-items: center; gap: 8px;">
+                  Mehr erfahren →
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Testimonials Section -->
+      <section style="padding: 100px 20px; background: white;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+          <div class="section-header" style="text-align: center; margin-bottom: 64px;">
+            <h2 class="section-title" style="font-size: 42px; margin-bottom: 16px;">
+              <strong>Was unsere Nutzer <span style="color: var(--accent);">sagen</span></strong>
+            </h2>
+            <p class="section-subtitle" style="font-size: 18px; color: var(--text-secondary);">
+              Erfolgsgeschichten von Studierenden, Hochschulen und Unternehmen
+            </p>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 32px;">
+            <!-- Student Testimonial -->
+            <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border: 2px solid #bae6fd; border-radius: 16px; padding: 32px; position: relative;">
+              <div style="position: absolute; top: -20px; left: 32px; width: 60px; height: 60px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                👩‍🎓
+              </div>
+              <div style="margin-top: 24px;">
+                <div style="font-size: 32px; color: #3b82f6; margin-bottom: 16px;">"</div>
+                <p style="font-size: 16px; line-height: 1.8; color: var(--text-primary); margin-bottom: 24px; font-style: italic;">
+                  CareerSIM hat mir geholfen, selbstbewusst in mein erstes Bewerbungsgespräch bei Google zu gehen. Das KI-Feedback war unglaublich präzise und hat mir gezeigt, wo ich mich verbessern konnte.
+                </p>
+                <div style="border-top: 2px solid #bae6fd; padding-top: 16px;">
+                  <div style="font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">Sarah M.</div>
+                  <div style="font-size: 14px; color: var(--text-secondary);">Informatik-Studentin, TU München</div>
+                  <div style="font-size: 13px; color: #10b981; margin-top: 8px; font-weight: 600;">✓ Job erhalten bei Google</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- University Testimonial -->
+            <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border: 2px solid #fcd34d; border-radius: 16px; padding: 32px; position: relative;">
+              <div style="position: absolute; top: -20px; left: 32px; width: 60px; height: 60px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                👨‍🏫
+              </div>
+              <div style="margin-top: 24px;">
+                <div style="font-size: 32px; color: #d97706; margin-bottom: 16px;">"</div>
+                <p style="font-size: 16px; line-height: 1.8; color: var(--text-primary); margin-bottom: 24px; font-style: italic;">
+                  Seit wir CareerSIM in unsere Career Services integriert haben, sehen wir eine deutliche Verbesserung in der Bewerbungsquote unserer Studierenden. Ein fantastisches Tool!
+                </p>
+                <div style="border-top: 2px solid #fcd34d; padding-top: 16px;">
+                  <div style="font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">Dr. Michael Schmidt</div>
+                  <div style="font-size: 14px; color: var(--text-secondary);">Career Service Leiter, LMU München</div>
+                  <div style="font-size: 13px; color: #10b981; margin-top: 8px; font-weight: 600;">✓ 2.500+ Studierende nutzen CareerSIM</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Company Testimonial -->
+            <div style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border: 2px solid #bbf7d0; border-radius: 16px; padding: 32px; position: relative;">
+              <div style="position: absolute; top: -20px; left: 32px; width: 60px; height: 60px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                👔
+              </div>
+              <div style="margin-top: 24px;">
+                <div style="font-size: 32px; color: #059669; margin-bottom: 16px;">"</div>
+                <p style="font-size: 16px; line-height: 1.8; color: var(--text-primary); margin-bottom: 24px; font-style: italic;">
+                  CareerSIM hat unseren Recruiting-Prozess revolutioniert. Wir können Kandidaten jetzt schon vor dem ersten Gespräch objektiv bewerten und sparen dadurch enorm viel Zeit.
+                </p>
+                <div style="border-top: 2px solid #bbf7d0; padding-top: 16px;">
+                  <div style="font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">Julia Berger</div>
+                  <div style="font-size: 14px; color: var(--text-secondary);">HR Director, Tech StartUp GmbH</div>
+                  <div style="font-size: 13px; color: #10b981; margin-top: 8px; font-weight: 600;">✓ 40% schnellerer Hiring-Prozess</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats Row -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 32px; margin-top: 80px; padding: 48px; background: var(--bg-secondary); border-radius: 16px;">
+            <div style="text-align: center;">
+              <div style="font-size: 48px; font-weight: 700; color: var(--accent); margin-bottom: 8px;">10.000+</div>
+              <div style="font-size: 15px; color: var(--text-secondary); font-weight: 600;">Aktive Nutzer</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 48px; font-weight: 700; color: var(--accent); margin-bottom: 8px;">50+</div>
+              <div style="font-size: 15px; color: var(--text-secondary); font-weight: 600;">Partner-Hochschulen</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 48px; font-weight: 700; color: var(--accent); margin-bottom: 8px;">200+</div>
+              <div style="font-size: 15px; color: var(--text-secondary); font-weight: 600;">Unternehmen vertrauen uns</div>
+            </div>
+            <div style="text-align: center;">
+              <div style="font-size: 48px; font-weight: 700; color: var(--accent); margin-bottom: 8px;">4.8/5</div>
+              <div style="font-size: 15px; color: var(--text-secondary); font-weight: 600;">Durchschnittliche Bewertung</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Product Screenshots Section -->
+      <section style="padding: 80px 20px; background: var(--bg); max-width: 1200px; margin: 0 auto;">
+        <div class="section-header">
+          <h2 class="section-title"><strong data-i18n="screenshots_title">So sieht <span style="color: var(--accent);">KI-gestütztes</span> Training aus</strong></h2>
+          <p class="section-subtitle" data-i18n="screenshots_desc">
+            Moderne Benutzeroberfläche mit intelligenten Funktionen für maximalen Lernerfolg
+          </p>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 32px; margin-top: 48px;">
+          <!-- KI-Interview Interface Screenshot -->
+          <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 32px; box-shadow: 0 4px 12px var(--shadow);">
+            <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-radius: 8px; padding: 48px 24px; min-height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid #bae6fd; position: relative; overflow: hidden;">
+              <div style="position: absolute; top: 12px; left: 12px; background: white; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                🎥 Live Interview
+              </div>
+              <div style="display: flex; gap: 16px; width: 100%; max-width: 400px;">
+                <div style="flex: 1; background: linear-gradient(135deg, #e8f4f8, #d4e7f0); border-radius: 8px; padding: 16px; text-align: center; min-height: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+                  <div style="font-size: 48px; margin-bottom: 8px;">👔</div>
+                  <div style="font-size: 13px; font-weight: 600; color: var(--text-secondary);">KI-Interviewer</div>
+                </div>
+                <div style="flex: 1; background: linear-gradient(135deg, #f0f9ff, #dbeafe); border-radius: 8px; padding: 16px; text-align: center; min-height: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid var(--accent); box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+                  <div style="font-size: 48px; margin-bottom: 8px;">🧑‍💼</div>
+                  <div style="font-size: 13px; font-weight: 600; color: var(--accent);">Du</div>
+                </div>
+              </div>
+              <div style="margin-top: 16px; display: flex; gap: 8px;">
+                <div style="width: 40px; height: 40px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">🎤</div>
+                <div style="width: 40px; height: 40px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">📹</div>
+                <div style="width: 40px; height: 40px; background: #ef4444; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">📞</div>
+              </div>
+            </div>
+            <h3 style="font-size: 20px; font-weight: 700; margin: 20px 0 8px; color: var(--text-primary);">
+              <strong data-i18n="screenshot_interview_title">KI-Interview Simulator</strong>
+            </h3>
+            <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin: 0;" data-i18n="screenshot_interview_desc">
+              Video-Call-Interface mit Echtzeit-Feedback und realistischer Gesprächssimulation
+            </p>
+          </div>
+
+          <!-- KI-Karriereberatung Interface Screenshot -->
+          <div style="background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 32px; box-shadow: 0 4px 12px var(--shadow);">
+            <div style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-radius: 8px; padding: 48px 24px; min-height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid #bbf7d0; position: relative;">
+              <div style="position: absolute; top: 12px; left: 12px; background: white; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                💼 <span data-i18n="screenshot_career_badge">Karriereberatung</span>
+              </div>
+              <div style="width: 100%; max-width: 400px; background: white; border-radius: 8px; padding: 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+                <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                  <div style="width: 48px; height: 48px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px;">🎯</div>
+                  <div style="flex: 1;">
+                    <div style="font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;" data-i18n="screenshot_career_analysis">Karriere-Analyse</div>
+                    <div style="font-size: 12px; color: var(--text-secondary);" data-i18n="screenshot_career_status">Wird generiert...</div>
+                  </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+                    <span style="color: var(--text-secondary);" data-i18n="screenshot_skills">Fähigkeiten</span>
+                    <span style="font-weight: 600; color: var(--accent);">85%</span>
+                  </div>
+                  <div style="height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;">
+                    <div style="height: 100%; width: 85%; background: var(--accent); border-radius: 3px;"></div>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-top: 4px;">
+                    <span style="color: var(--text-secondary);" data-i18n="screenshot_experience">Erfahrung</span>
+                    <span style="font-weight: 600; color: #3b82f6;">72%</span>
+                  </div>
+                  <div style="height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;">
+                    <div style="height: 100%; width: 72%; background: #3b82f6; border-radius: 3px;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <h3 style="font-size: 20px; font-weight: 700; margin: 20px 0 8px; color: var(--text-primary);">
+              <strong data-i18n="screenshot_career_title">KI-Karriereberatung</strong>
+            </h3>
+            <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin: 0;" data-i18n="screenshot_career_desc">
+              Personalisierte Empfehlungen und datenbasierte Karriere-Insights
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Target Audience Section -->
+      <section class="audience-section">
+        <div class="section-header">
+          <h2 class="section-title">Für jeden die richtige Lösung</h2>
+          <p class="section-subtitle">
+            Maßgeschneiderte KI-Lösungen für Studierende, Hochschulen und Unternehmen
+          </p>
+        </div>
+        <div class="audience-grid">
+          <div class="audience-card">
+            <div class="audience-icon">🎓</div>
+            <h3 class="audience-title">Für Studierende</h3>
+            <p class="audience-desc">
+              Bereite dich optimal auf Bewerbungsgespräche vor. Übe mit KI, erhalte Feedback und steigere deine Chancen.
+            </p>
+            <a href="/students.html" class="cta-primary" style="display: inline-block; padding: 12px 32px; font-size: 16px;">
+              Mehr erfahren
+            </a>
+          </div>
+          <div class="audience-card">
+            <div class="audience-icon">🏫</div>
+            <h3 class="audience-title">Für Hochschulen</h3>
+            <p class="audience-desc">
+              Unterstütze deine Studierenden mit moderner KI-Technologie. Integration in Career Services.
+            </p>
+            <a href="/universities.html" class="cta-primary" style="display: inline-block; padding: 12px 32px; font-size: 16px;">
+              Demo buchen
+            </a>
+          </div>
+          <div class="audience-card">
+            <div class="audience-icon">💼</div>
+            <h3 class="audience-title">Für Unternehmen</h3>
+            <p class="audience-desc">
+              Trainiere deine Teams und Kandidaten effizient. Standardisierte Bewertungen und Analytics.
+            </p>
+            <a href="/companies.html" class="cta-primary" style="display: inline-block; padding: 12px 32px; font-size: 16px;">
+              Kontakt
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA Section -->
+      <section class="cta-section">
+        <div class="cta-container">
+          <h2 class="cta-title" data-i18n="cta_section_title">Starte jetzt deine KI-gestützte Interview-Vorbereitung</h2>
+          <p class="cta-desc" data-i18n="cta_section_desc">
+            Werde Teil von tausenden erfolgreichen Kandidaten. Kostenlos testen!
+          </p>
+          <a href="/pricing.html" class="cta-button" data-i18n="cta_start_now">
+            Jetzt starten
+          </a>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="footer-container">
+          <div class="footer-top">
+            <!-- Brand Column -->
+            <div class="footer-brand">
+              <div class="footer-logo" style="display: flex; align-items: center; gap: 8px;">
+                <img src="/images/logo-icon.svg" alt="CareerSIM" style="width: 32px; height: 32px; border-radius: 8px;" />
+                <span>CareerSIM</span>
+              </div>
+              <p class="footer-tagline">
+                KI-gestützte Interview-Vorbereitung für deinen Karriere-Erfolg. 
+                Meistere Bewerbungsgespräche mit modernster Technologie.
+              </p>
+              <div class="footer-social">
+                <a href="#" class="footer-social-link" aria-label="LinkedIn">in</a>
+                <a href="#" class="footer-social-link" aria-label="Twitter">𝕏</a>
+                <a href="#" class="footer-social-link" aria-label="Instagram">📷</a>
+                <a href="#" class="footer-social-link" aria-label="Facebook">f</a>
+              </div>
+            </div>
+
+            <!-- Product Column -->
+            <div class="footer-col">
+              <h4>Produkt</h4>
+              <ul class="footer-links">
+                <li><a href="/features-new.html">KI-Interview</a></li>
+                <li><a href="/features-new.html">KI-Karriereberatung</a></li>
+                <li><a href="/pricing.html">Preise</a></li>
+                <li><a href="/dashboard.html">Dashboard</a></li>
+              </ul>
+            </div>
+
+            <!-- Solutions Column -->
+            <div class="footer-col">
+              <h4>Lösungen</h4>
+              <ul class="footer-links">
+                <li><a href="/students.html">Für Studierende</a></li>
+                <li><a href="/universities.html">Für Hochschulen</a></li>
+                <li><a href="/companies.html">Für Unternehmen</a></li>
+              </ul>
+            </div>
+
+            <!-- Company Column -->
+            <div class="footer-col">
+              <h4>Unternehmen</h4>
+              <ul class="footer-links">
+                <li><a href="/about.html">Über uns</a></li>
+                <li><a href="/contact.html">Kontakt</a></li>
+                <li><a href="/privacy.html">Datenschutz</a></li>
+                <li><a href="/terms.html">AGB</a></li>
+              </ul>
+            </div>
+
+            <!-- Newsletter Column -->
+            <div class="footer-newsletter">
+              <h4>Stay connected</h4>
+              <p>Get the latest platform updates.</p>
+              <form class="newsletter-form" onsubmit="event.preventDefault(); alert('✓ Danke für deine Anmeldung!');">
+                <input type="email" class="newsletter-input" placeholder="Deine E-Mail" required />
+                <button type="submit" class="newsletter-btn">Subscribe</button>
+              </form>
+              <p style="margin-top: 12px; font-size: 12px;">
+                Read our <a href="/privacy.html" style="color: var(--accent); text-decoration: underline;">privacy</a> for more info.
+              </p>
+            </div>
+          </div>
+
+          <!-- Bottom Bar -->
+          <div class="footer-bottom">
+            <div class="footer-bottom-left">
+              © 2025 CareerSIM. Alle Rechte vorbehalten.
+            </div>
+            <div class="footer-bottom-links">
+              <a href="mailto:contact@careersim.com">contact@careersim.com</a>
+              <a href="#">Dribbble</a>
+              <a href="#">LinkedIn</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+      </main>
+    </div>
+
+    <!-- I18n System -->
+    <script src="/js/i18n.js"></script>
+    <script>
+      // Jost Pop-up functionality
+      function closeJostPopup() {
+        const overlay = document.getElementById('jostOverlay');
+        overlay.style.animation = 'fadeOut 0.3s ease';
+        setTimeout(() => {
+          overlay.classList.add('hidden');
+        }, 300);
+      }
+
+      // Initialize language from localStorage or default to German
+      document.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('language') || 'de';
+        i18n.setLanguage(savedLang);
+        
+        // Update active language switch button
+        document.querySelectorAll('.lang-switch').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.lang === savedLang);
+        });
+
+        // Cookie Banner
+        if (!localStorage.getItem('cookiesAccepted')) {
+          document.getElementById('cookieBanner').style.display = 'block';
+        }
+      });
+
+      function acceptCookies() {
+        localStorage.setItem('cookiesAccepted', 'true');
+        document.getElementById('cookieBanner').style.display = 'none';
+      }
+
+      function declineCookies() {
+        document.getElementById('cookieBanner').style.display = 'none';
+      }
+    </script>
+
+    <!-- Cookie Banner -->
+    <div id="cookieBanner" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; background: white; border-top: 2px solid var(--border); padding: 24px; box-shadow: 0 -4px 24px rgba(0,0,0,0.1); z-index: 9999;">
+      <div style="max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+        <div style="flex: 1; min-width: 300px;">
+          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
+            <span style="font-size: 24px;">🍪</span>
+            <h4 style="font-size: 18px; font-weight: 700; margin: 0;">Wir verwenden Cookies</h4>
+          </div>
+          <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+            Wir nutzen Cookies und ähnliche Technologien, um die Nutzung unserer Website zu analysieren und Ihr Erlebnis zu verbessern. 
+            Ihre Daten werden gemäß <a href="/privacy.html" style="color: var(--accent); text-decoration: underline;">DSGVO</a> verarbeitet.
+          </p>
+        </div>
+        <div style="display: flex; gap: 12px; flex-shrink: 0;">
+          <button onclick="declineCookies()" style="padding: 12px 24px; background: transparent; color: var(--text-secondary); border: 1px solid var(--border); border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+            Ablehnen
+          </button>
+          <button onclick="acceptCookies()" style="padding: 12px 32px; background: var(--accent); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+            Akzeptieren
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

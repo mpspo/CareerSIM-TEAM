@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CV Rating - CareerSIM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      .cv-container {
+        min-height: 100vh;
+        padding: 100px 20px 80px;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      .cv-header {
+        text-align: center;
+        margin-bottom: 60px;
+      }
+      .cv-header h1 {
+        font-size: 48px;
+        margin-bottom: 16px;
+      }
+      .cv-header p {
+        font-size: 18px;
+        color: var(--text-secondary);
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      .upload-area {
+        background: var(--bg);
+        border: 3px dashed var(--border);
+        border-radius: 20px;
+        padding: 80px 40px;
+        text-align: center;
+        margin-bottom: 40px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .upload-area:hover {
+        border-color: var(--accent);
+        background: rgba(0, 0, 0, 0.02);
+      }
+      .upload-area.dragover {
+        border-color: var(--accent);
+        background: rgba(0, 0, 0, 0.05);
+      }
+      .upload-icon {
+        font-size: 72px;
+        margin-bottom: 24px;
+      }
+      .upload-area h3 {
+        font-size: 24px;
+        margin-bottom: 12px;
+      }
+      .upload-area p {
+        color: var(--text-secondary);
+        margin-bottom: 24px;
+      }
+      .upload-btn {
+        display: inline-block;
+        padding: 16px 40px;
+        background: var(--accent);
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .upload-btn:hover {
+        background: var(--accent-hover);
+      }
+      .rating-result {
+        display: none;
+        background: var(--bg);
+        border: 2px solid var(--border);
+        border-radius: 16px;
+        padding: 40px;
+        box-shadow: 0 4px 16px var(--shadow);
+      }
+      .rating-result.show {
+        display: block;
+      }
+      .score-circle {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        border: 10px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 32px;
+        position: relative;
+      }
+      .score-value {
+        font-size: 64px;
+        font-weight: 800;
+        color: var(--accent);
+      }
+      .rating-categories {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 24px;
+        margin-top: 40px;
+      }
+      .category {
+        background: var(--bg-secondary);
+        padding: 20px;
+        border-radius: 12px;
+      }
+      .category h4 {
+        font-size: 16px;
+        margin-bottom: 12px;
+        color: var(--text-primary);
+      }
+      .category-score {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--accent);
+      }
+      .feedback-section {
+        margin-top: 40px;
+        padding-top: 40px;
+        border-top: 2px solid var(--border);
+      }
+      .feedback-item {
+        margin-bottom: 24px;
+      }
+      .feedback-item h4 {
+        font-size: 18px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .feedback-item p {
+        color: var(--text-secondary);
+        line-height: 1.6;
+      }
+      .loading {
+        display: none;
+        text-align: center;
+        padding: 40px;
+      }
+      .loading.show {
+        display: block;
+      }
+      .spinner {
+        border: 4px solid var(--border);
+        border-top: 4px solid var(--accent);
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <nav class="navbar">
+        <div class="navbar-container">
+          <div class="navbar-brand">
+            <a href="/" class="navbar-logo">
+              <img src="/images/logo-icon.svg" alt="CareerSIM Logo" style="width: 40px; height: 40px; border-radius: 10px;" />
+              <span class="navbar-logo-text">CareerSIM</span>
+            </a>
+          </div>
+          <div class="navbar-menu">
+            <div class="navbar-links">
+              <a href="/dashboard.html" class="navbar-link" data-i18n="nav_dashboard">Dashboard</a>
+              <a href="/interview.html" class="navbar-link" data-i18n="nav_start_interview">Interview Simulation</a>
+              <a href="/career-advice.html" class="navbar-link">KI Karriereberatung</a>
+              <a href="/cv-rating.html" class="navbar-link" style="color: var(--accent);">CV Rating</a>
+              <a href="/account-settings.html" class="navbar-link">Account Settings</a>
+            </div>
+          </div>
+          <div class="navbar-cta">
+            <div class="lang-switcher" style="display: flex; gap: 8px; align-items: center; margin-right: 16px;">
+              <button class="lang-switch active" data-lang="de" onclick="i18n.setLanguage('de')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">DE</button>
+              <button class="lang-switch" data-lang="en" onclick="i18n.setLanguage('en')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">EN</button>
+            </div>
+            <button id="logout-btn" class="navbar-btn-login" data-i18n="nav_logout">Logout</button>
+          </div>
+        </div>
+      </nav>
+
+      <div class="cv-container">
+        <div class="cv-header">
+          <h1>📄 CV Rating & Analyse</h1>
+          <p>Lade deinen Lebenslauf hoch und erhalte eine professionelle KI-Bewertung mit detailliertem Feedback</p>
+        </div>
+
+        <div class="upload-area" id="upload-area" onclick="document.getElementById('cv-file-input').click()">
+          <div class="upload-icon">📤</div>
+          <h3>CV hochladen</h3>
+          <p>Ziehe deine Datei hierher oder klicke zum Auswählen<br><small>Unterstützte Formate: PDF, DOC, DOCX (max. 5MB)</small></p>
+          <button class="upload-btn">Datei auswählen</button>
+          <input type="file" id="cv-file-input" accept=".pdf,.doc,.docx" style="display: none;" onchange="handleFileUpload(event)">
+        </div>
+
+        <div class="loading" id="loading">
+          <div class="spinner"></div>
+          <h3>Analysiere deinen Lebenslauf...</h3>
+          <p style="color: var(--text-secondary);">Dies kann einige Sekunden dauern</p>
+        </div>
+
+        <div class="rating-result" id="rating-result">
+          <h2 style="text-align: center; margin-bottom: 40px;">Dein CV Score</h2>
+          
+          <div class="score-circle">
+            <div class="score-value" id="overall-score">—</div>
+          </div>
+          <h3 style="text-align: center; color: var(--text-secondary); font-weight: 400;">von 100 Punkten</h3>
+
+          <div class="rating-categories">
+            <div class="category">
+              <h4>📝 Struktur & Format</h4>
+              <div class="category-score" id="structure-score">—</div>
+            </div>
+            <div class="category">
+              <h4>💼 Inhalt & Relevanz</h4>
+              <div class="category-score" id="content-score">—</div>
+            </div>
+            <div class="category">
+              <h4>🎯 Klarheit</h4>
+              <div class="category-score" id="clarity-score">—</div>
+            </div>
+            <div class="category">
+              <h4>✨ Professionalität</h4>
+              <div class="category-score" id="professionalism-score">—</div>
+            </div>
+          </div>
+
+          <div class="feedback-section">
+            <h3 style="margin-bottom: 24px;">Detailliertes Feedback</h3>
+            <div id="feedback-content">
+              <!-- Will be populated by JS -->
+            </div>
+          </div>
+
+          <div style="text-align: center; margin-top: 40px;">
+            <button class="upload-btn" onclick="resetUpload()">Neuen CV hochladen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/i18n.js"></script>
+    <script>
+      // Logout functionality
+      document.getElementById('logout-btn')?.addEventListener('click', () => {
+        localStorage.removeItem('token');
+        window.location.href = '/login.html';
+      });
+
+      // Drag and drop
+      const uploadArea = document.getElementById('upload-area');
+      
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, preventDefaults, false);
+      });
+
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      ['dragenter', 'dragover'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, () => {
+          uploadArea.classList.add('dragover');
+        }, false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, () => {
+          uploadArea.classList.remove('dragover');
+        }, false);
+      });
+
+      uploadArea.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files.length > 0) {
+          handleFile(files[0]);
+        }
+      }, false);
+
+      function handleFileUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+          handleFile(file);
+        }
+      }
+
+      async function handleFile(file) {
+        // Validate file
+        const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+        if (!validTypes.includes(file.type)) {
+          alert('Bitte lade nur PDF, DOC oder DOCX Dateien hoch.');
+          return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+          alert('Die Datei ist zu groß. Maximal 5MB erlaubt.');
+          return;
+        }
+
+        // Show loading
+        document.getElementById('upload-area').style.display = 'none';
+        document.getElementById('loading').classList.add('show');
+
+        // Simulate API call
+        try {
+          const formData = new FormData();
+          formData.append('cv', file);
+
+          const token = localStorage.getItem('token');
+          // TODO: Implement actual API endpoint
+          // const response = await fetch('/api/cv-rating', {
+          //   method: 'POST',
+          //   headers: { 'Authorization': token },
+          //   body: formData
+          // });
+
+          // Simulate delay
+          await new Promise(resolve => setTimeout(resolve, 2000));
+
+          // Mock data for demonstration
+          displayResults({
+            overallScore: 78,
+            structureScore: 85,
+            contentScore: 75,
+            clarityScore: 80,
+            professionalismScore: 72,
+            feedback: [
+              { type: '✅', title: 'Stärken', text: 'Übersichtliche Struktur, klare Zeitangaben, professionelles Layout' },
+              { type: '⚠️', title: 'Verbesserungspotential', text: 'Fehlende Quantifizierung von Erfolgen, zu allgemeine Beschreibungen' },
+              { type: '💡', title: 'Empfehlungen', text: 'Füge messbare Erfolge hinzu (z.B. "Umsatzsteigerung um 20%"), verwende mehr Action-Verben' }
+            ]
+          });
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Es gab einen Fehler beim Analysieren deines CVs. Bitte versuche es erneut.');
+          resetUpload();
+        }
+      }
+
+      function displayResults(data) {
+        document.getElementById('loading').classList.remove('show');
+        document.getElementById('rating-result').classList.add('show');
+        
+        document.getElementById('overall-score').textContent = data.overallScore;
+        document.getElementById('structure-score').textContent = data.structureScore;
+        document.getElementById('content-score').textContent = data.contentScore;
+        document.getElementById('clarity-score').textContent = data.clarityScore;
+        document.getElementById('professionalism-score').textContent = data.professionalismScore;
+
+        const feedbackContainer = document.getElementById('feedback-content');
+        feedbackContainer.innerHTML = '';
+        
+        data.feedback.forEach(item => {
+          const feedbackItem = document.createElement('div');
+          feedbackItem.className = 'feedback-item';
+          feedbackItem.innerHTML = `
+            <h4>${item.type} ${item.title}</h4>
+            <p>${item.text}</p>
+          `;
+          feedbackContainer.appendChild(feedbackItem);
+        });
+      }
+
+      function resetUpload() {
+        document.getElementById('upload-area').style.display = 'block';
+        document.getElementById('loading').classList.remove('show');
+        document.getElementById('rating-result').classList.remove('show');
+        document.getElementById('cv-file-input').value = '';
+      }
+
+      // Language switcher
+      document.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('language') || 'de';
+        i18n.setLanguage(savedLang);
+        document.querySelectorAll('.lang-switch').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.lang === savedLang);
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.lang-switch').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+          });
+        });
+      });
+    </script>
+    <style>
+      .lang-switch {
+        background: transparent !important;
+        border: 1.5px solid var(--border) !important;
+        color: var(--text-secondary) !important;
+      }
+      .lang-switch:hover {
+        border-color: var(--accent) !important;
+        color: var(--accent) !important;
+        background: rgba(0, 0, 0, 0.05) !important;
+      }
+      .lang-switch.active {
+        background: transparent !important;
+        border: 1.5px solid var(--accent) !important;
+        color: var(--accent) !important;
+        font-weight: 700 !important;
+      }
+    </style>
+  </body>
+</html>

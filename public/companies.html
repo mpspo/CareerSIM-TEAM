@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CareerSIM für Unternehmen - Enterprise Interview Training</title>
+  <meta name="description" content="KI-gestützte Interview-Vorbereitung und Kandidaten-Assessment für Ihr Unternehmen. Standardisierte Bewertungen und Analytics." />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .company-hero {
+      padding: 120px 0 80px;
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+    .company-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+    .company-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .company-title {
+      font-size: 56px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 24px;
+      color: var(--text-primary);
+    }
+    .company-desc {
+      font-size: 20px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+    .company-logos {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    .company-logo-item {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text-secondary);
+      box-shadow: 0 2px 8px var(--shadow);
+    }
+    .company-image {
+      width: 100%;
+      height: 400px;
+      background: var(--bg-secondary);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 100px;
+    }
+    .use-cases-section {
+      padding: 100px 0;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+    .use-cases-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+      margin-top: 48px;
+    }
+    .use-case-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 40px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px var(--shadow);
+    }
+    .use-case-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--accent);
+      box-shadow: 0 8px 24px var(--shadow);
+    }
+    .use-case-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    .use-case-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .use-case-desc {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .use-case-benefits {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .use-case-benefit {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .features-section {
+      padding: 80px 0;
+      background: var(--bg-secondary);
+    }
+    .features-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .features-grid-enterprise {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 48px;
+    }
+    .feature-card-enterprise {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      text-align: center;
+      box-shadow: 0 2px 8px var(--shadow);
+    }
+    .feature-icon-enterprise {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    .feature-title-enterprise {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .feature-desc-enterprise {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    @media (max-width: 768px) {
+      .company-grid {
+        grid-template-columns: 1fr;
+      }
+      .company-title {
+        font-size: 36px;
+      }
+      .company-logos {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .use-cases-grid {
+        grid-template-columns: 1fr;
+      }
+      .features-grid-enterprise {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="navbar-container">
+        <div class="navbar-brand">
+          <a href="/" class="navbar-logo">
+            <img src="/images/logo-icon.svg" alt="CareerSIM Logo" style="width: 40px; height: 40px; border-radius: 10px;" />
+            <span class="navbar-logo-text">CareerSIM</span>
+          </a>
+        </div>
+
+        <div class="navbar-menu">
+          <div class="navbar-links">
+            <a href="/" class="navbar-link" data-i18n="nav_home">Startseite</a>
+            <a href="/features-new.html" class="navbar-link" data-i18n="nav_features">Funktionen</a>
+            <a href="/pricing.html" class="navbar-link" data-i18n="nav_pricing">Preise</a>
+            <a href="/about.html" class="navbar-link" data-i18n="nav_about">Über uns</a>
+            <a href="/contact.html" class="navbar-link" data-i18n="nav_contact">Kontakt</a>
+          </div>
+        </div>
+
+        <div class="navbar-cta">
+          <div class="lang-switcher" style="display: flex; gap: 8px; align-items: center; margin-right: 16px;">
+            <button class="lang-switch active" data-lang="de" onclick="i18n.setLanguage('de')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">DE</button>
+            <button class="lang-switch" data-lang="en" onclick="i18n.setLanguage('en')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">EN</button>
+          </div>
+          <a href="/login.html" class="navbar-btn-login" data-i18n="nav_login">Anmelden</a>
+          <a href="/contact.html" class="navbar-btn-start">Kontakt</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="company-hero">
+      <div class="company-content">
+        <div class="company-grid">
+          <div>
+            <h1 class="company-title">KI-gestützte Kandidaten-Vorbereitung für Ihr Unternehmen</h1>
+            <p class="company-desc">
+              Verbessern Sie Ihre Recruiting-Effizienz und Kandidaten-Experience mit CareerSIM. Standardisierte Assessments, detaillierte Analytics und nahtlose Integration in Ihren Hiring-Prozess.
+            </p>
+            <div class="company-logos">
+              <div class="company-logo-item">DAX 30</div>
+              <div class="company-logo-item">Startups</div>
+              <div class="company-logo-item">Mittelstand</div>
+              <div class="company-logo-item">Tech Giants</div>
+            </div>
+            <div style="display: flex; gap: 16px;">
+              <a href="/contact.html" class="cta-primary" style="display: inline-block; padding: 16px 40px;">
+                Demo anfragen
+              </a>
+              <a href="#use-cases" class="cta-secondary" style="display: inline-block; padding: 16px 40px;">
+                Use Cases
+              </a>
+            </div>
+          </div>
+          <div class="company-image">
+            💼
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Use Cases Section -->
+    <section class="use-cases-section" id="use-cases">
+      <div style="text-align: center; margin-bottom: 48px;">
+        <h2 class="section-title">Einsatzmöglichkeiten</h2>
+        <p class="section-subtitle">Vielseitige Lösungen für Ihre Recruiting-Herausforderungen</p>
+      </div>
+      <div class="use-cases-grid">
+        <div class="use-case-card">
+          <div class="use-case-icon">🎯</div>
+          <h3 class="use-case-title">Kandidaten-Vorbereitung</h3>
+          <p class="use-case-desc">
+            Bereiten Sie Ihre Kandidaten optimal auf Interviews vor. Reduzieren Sie No-Shows und verbessern Sie die Interview-Qualität.
+          </p>
+          <div class="use-case-benefits">
+            <div class="use-case-benefit">✓ Höhere Erscheinungsrate bei Interviews</div>
+            <div class="use-case-benefit">✓ Besser vorbereitete Kandidaten</div>
+            <div class="use-case-benefit">✓ Reduzierte Time-to-Hire</div>
+            <div class="use-case-benefit">✓ Verbesserte Candidate Experience</div>
+          </div>
+        </div>
+
+        <div class="use-case-card">
+          <div class="use-case-icon">📊</div>
+          <h3 class="use-case-title">Pre-Screening Assessment</h3>
+          <p class="use-case-desc">
+            Nutzen Sie KI-gestützte Assessments für ein objektives Pre-Screening Ihrer Kandidaten.
+          </p>
+          <div class="use-case-benefits">
+            <div class="use-case-benefit">✓ Standardisierte Bewertungen</div>
+            <div class="use-case-benefit">✓ Objektive Vergleichbarkeit</div>
+            <div class="use-case-benefit">✓ Automatisierte Scoring</div>
+            <div class="use-case-benefit">✓ Bias-Reduktion</div>
+          </div>
+        </div>
+
+        <div class="use-case-card">
+          <div class="use-case-icon">🎓</div>
+          <h3 class="use-case-title">Mitarbeiter-Training</h3>
+          <p class="use-case-desc">
+            Trainieren Sie Ihre eigenen Interviewer und HR-Teams mit realistischen Szenarien.
+          </p>
+          <div class="use-case-benefits">
+            <div class="use-case-benefit">✓ Interviewer-Schulungen</div>
+            <div class="use-case-benefit">✓ Best Practice Training</div>
+            <div class="use-case-benefit">✓ Verhaltensbasierte Interviews</div>
+            <div class="use-case-benefit">✓ Kontinuierliche Weiterbildung</div>
+          </div>
+        </div>
+
+        <div class="use-case-card">
+          <div class="use-case-icon">🌍</div>
+          <h3 class="use-case-title">Campus Recruiting</h3>
+          <p class="use-case-desc">
+            Optimieren Sie Ihr Campus Recruiting mit standardisierten Interview-Prozessen.
+          </p>
+          <div class="use-case-benefits">
+            <div class="use-case-benefit">✓ Employer Branding Stärkung</div>
+            <div class="use-case-benefit">✓ Skalierbare Prozesse</div>
+            <div class="use-case-benefit">✓ Hochschul-Kooperationen</div>
+            <div class="use-case-benefit">✓ Talentpool-Aufbau</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+      <div class="features-container">
+        <div style="text-align: center; margin-bottom: 48px;">
+          <h2 class="section-title">Enterprise Features</h2>
+          <p class="section-subtitle">Alles was Sie für professionelles Recruiting benötigen</p>
+        </div>
+        <div class="features-grid-enterprise">
+          <div class="feature-card-enterprise">
+            <div class="feature-icon-enterprise">🔗</div>
+            <h3 class="feature-title-enterprise">ATS Integration</h3>
+            <p class="feature-desc-enterprise">
+              Nahtlose Integration in Ihr Applicant Tracking System (Workday, SAP SuccessFactors, Greenhouse, etc.)
+            </p>
+          </div>
+          <div class="feature-card-enterprise">
+            <div class="feature-icon-enterprise">🎨</div>
+            <h3 class="feature-title-enterprise">White-Label</h3>
+            <p class="feature-desc-enterprise">
+              Vollständig anpassbare Plattform mit Ihrem Branding, Logo und Corporate Design
+            </p>
+          </div>
+          <div class="feature-card-enterprise">
+            <div class="feature-icon-enterprise">📊</div>
+            <h3 class="feature-title-enterprise">Advanced Analytics</h3>
+            <p class="feature-desc-enterprise">
+              Detaillierte Einblicke in Kandidaten-Performance, Benchmarking und Hiring-Metriken
+            </p>
+          </div>
+          <div class="feature-card-enterprise">
+            <div class="feature-icon-enterprise">🔐</div>
+            <h3 class="feature-title-enterprise">Enterprise Security</h3>
+            <p class="feature-desc-enterprise">
+              ISO 27001 zertifiziert, SOC 2 Type II, DSGVO-konform, dedizierte Server in Deutschland
+            </p>
+          </div>
+          <div class="feature-card-enterprise">
+            <div class="feature-icon-enterprise">👥</div>
+            <h3 class="feature-title-enterprise">Multi-Tenant</h3>
+            <p class="feature-desc-enterprise">
+              Separate Umgebungen für verschiedene Abteilungen, Standorte oder Tochtergesellschaften
+            </p>
+          </div>
+          <div class="feature-card-enterprise">
+            <div class="feature-icon-enterprise">🛠️</div>
+            <h3 class="feature-title-enterprise">API & Webhooks</h3>
+            <p class="feature-desc-enterprise">
+              Vollständige REST API, Webhooks für Echtzeit-Updates und umfangreiche Dokumentation
+            </p>
+          </div>
+          <div class="feature-card-enterprise">
+            <div class="feature-icon-enterprise">📱</div>
+            <h3 class="feature-title-enterprise">Mobile First</h3>
+            <p class="feature-desc-enterprise">
+              Responsive Design für alle Geräte, native iOS/Android Apps verfügbar
+            </p>
+          </div>
+          <div class="feature-card-enterprise">
+            <div class="feature-icon-enterprise">🌐</div>
+            <h3 class="feature-title-enterprise">Mehrsprachig</h3>
+            <p class="feature-desc-enterprise">
+              Unterstützung für 20+ Sprachen, ideal für internationale Recruiting-Kampagnen
+            </p>
+          </div>
+          <div class="feature-card-enterprise">
+            <div class="feature-icon-enterprise">💬</div>
+            <h3 class="feature-title-enterprise">Premium Support</h3>
+            <p class="feature-desc-enterprise">
+              24/7 Support, dedizierter Account Manager, persönliches Onboarding und Schulungen
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="use-cases-section">
+      <div style="text-align: center; margin-bottom: 48px;">
+        <h2 class="section-title">Enterprise Pricing</h2>
+        <p class="section-subtitle">Flexible Lizenzmodelle für jede Unternehmensgröße</p>
+      </div>
+      <div style="max-width: 900px; margin: 0 auto;">
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+          <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 32px; text-align: center; box-shadow: 0 2px 8px var(--shadow);">
+            <h3 style="font-size: 24px; margin-bottom: 16px;">Startup</h3>
+            <div style="font-size: 36px; font-weight: 800; color: var(--accent); margin-bottom: 16px;">Custom</div>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Bis 100 Kandidaten/Jahr</p>
+            <ul style="list-style: none; padding: 0; text-align: left; color: var(--text-secondary); line-height: 2;">
+              <li>✓ Alle Features</li>
+              <li>✓ Email Support</li>
+              <li>✓ Basic Analytics</li>
+            </ul>
+          </div>
+          <div style="background: var(--bg); border: 2px solid var(--accent); border-radius: 12px; padding: 32px; text-align: center; box-shadow: 0 8px 24px var(--shadow);">
+            <h3 style="font-size: 24px; margin-bottom: 16px;">Business</h3>
+            <div style="font-size: 36px; font-weight: 800; color: var(--accent); margin-bottom: 16px;">Custom</div>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Bis 500 Kandidaten/Jahr</p>
+            <ul style="list-style: none; padding: 0; text-align: left; color: var(--text-secondary); line-height: 2;">
+              <li>✓ Alle Startup Features</li>
+              <li>✓ Priority Support</li>
+              <li>✓ Advanced Analytics</li>
+              <li>✓ ATS Integration</li>
+            </ul>
+          </div>
+          <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 32px; text-align: center; box-shadow: 0 2px 8px var(--shadow);">
+            <h3 style="font-size: 24px; margin-bottom: 16px;">Enterprise</h3>
+            <div style="font-size: 36px; font-weight: 800; color: var(--accent); margin-bottom: 16px;">Custom</div>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Unbegrenzt</p>
+            <ul style="list-style: none; padding: 0; text-align: left; color: var(--text-secondary); line-height: 2;">
+              <li>✓ Alle Business Features</li>
+              <li>✓ 24/7 Support</li>
+              <li>✓ White-Label</li>
+              <li>✓ Dedicated Server</li>
+              <li>✓ Account Manager</li>
+            </ul>
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: 48px;">
+          <p style="color: var(--text-secondary); margin-bottom: 24px;">
+            Kontaktieren Sie uns für ein individuelles Angebot
+          </p>
+          <a href="/contact.html" class="cta-primary" style="display: inline-block; padding: 16px 48px; font-size: 18px;">
+            Angebot anfordern
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="cta-container">
+        <h2 class="cta-title">Bereit für effizienteres Recruiting?</h2>
+        <p class="cta-desc">
+          Vereinbaren Sie eine persönliche Demo und erfahren Sie, wie CareerSIM Ihren Recruiting-Prozess optimiert.
+        </p>
+        <a href="/contact.html" class="cta-primary" style="display: inline-block; padding: 16px 48px; font-size: 18px;">
+          Demo anfragen
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-top">
+          <!-- Brand Column -->
+          <div class="footer-brand">
+            <div class="footer-logo" style="display: flex; align-items: center; gap: 8px;">
+              <img src="/images/logo-icon.svg" alt="CareerSIM" style="width: 32px; height: 32px; border-radius: 8px;" />
+              <span>CareerSIM</span>
+            </div>
+            <p class="footer-tagline">
+              KI-gestützte Interview-Vorbereitung für deinen Karriere-Erfolg. 
+              Meistere Bewerbungsgespräche mit modernster Technologie.
+            </p>
+            <div class="footer-social">
+              <a href="#" class="footer-social-link" aria-label="LinkedIn">in</a>
+              <a href="#" class="footer-social-link" aria-label="Twitter">𝕏</a>
+              <a href="#" class="footer-social-link" aria-label="Instagram">📷</a>
+              <a href="#" class="footer-social-link" aria-label="Facebook">f</a>
+            </div>
+          </div>
+
+          <!-- Product Column -->
+          <div class="footer-col">
+            <h4>Produkt</h4>
+            <ul class="footer-links">
+              <li><a href="/features-new.html">KI-Interview</a></li>
+              <li><a href="/features-new.html">KI-Karriereberatung</a></li>
+              <li><a href="/pricing.html">Preise</a></li>
+              <li><a href="/dashboard.html">Dashboard</a></li>
+            </ul>
+          </div>
+
+          <!-- Solutions Column -->
+          <div class="footer-col">
+            <h4>Lösungen</h4>
+            <ul class="footer-links">
+              <li><a href="/students.html">Für Studierende</a></li>
+              <li><a href="/universities.html">Für Hochschulen</a></li>
+              <li><a href="/companies.html">Für Unternehmen</a></li>
+            </ul>
+          </div>
+
+          <!-- Company Column -->
+          <div class="footer-col">
+            <h4>Unternehmen</h4>
+            <ul class="footer-links">
+              <li><a href="/about.html">Über uns</a></li>
+              <li><a href="/contact.html">Kontakt</a></li>
+              <li><a href="/privacy.html">Datenschutz</a></li>
+              <li><a href="/terms.html">AGB</a></li>
+            </ul>
+          </div>
+
+          <!-- Newsletter Column -->
+          <div class="footer-newsletter">
+            <h4>Stay connected</h4>
+            <p>Get the latest platform updates.</p>
+            <form class="newsletter-form" onsubmit="event.preventDefault(); alert('✓ Danke für deine Anmeldung!');">
+              <input type="email" class="newsletter-input" placeholder="Deine E-Mail" required />
+              <button type="submit" class="newsletter-btn">Subscribe</button>
+            </form>
+            <p style="margin-top: 12px; font-size: 12px;">
+              Read our <a href="/privacy.html" style="color: var(--accent); text-decoration: underline;">privacy</a> for more info.
+            </p>
+          </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="footer-bottom">
+          <div class="footer-bottom-left">
+            © 2025 CareerSIM. Alle Rechte vorbehalten.
+          </div>
+          <div class="footer-bottom-links">
+            <a href="mailto:contact@careersim.com">contact@careersim.com</a>
+            <a href="#">Dribbble</a>
+            <a href="#">LinkedIn</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="/js/i18n.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedLang = localStorage.getItem('language') || 'de';
+      i18n.setLanguage(savedLang);
+      document.querySelectorAll('.lang-switch').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === savedLang);
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.lang-switch').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        });
+      });
+    });
+  </script>
+  <style>
+    .lang-switch {
+      background: transparent !important;
+      border: 1.5px solid var(--border) !important;
+      color: var(--text-secondary) !important;
+    }
+    .lang-switch:hover {
+      border-color: var(--accent) !important;
+      color: var(--accent) !important;
+      background: rgba(0, 0, 0, 0.05) !important;
+    }
+    .lang-switch.active {
+      background: transparent !important;
+      border: 1.5px solid var(--accent) !important;
+      color: var(--accent) !important;
+      font-weight: 700 !important;
+    }
+  </style>
+</body>
+</html>

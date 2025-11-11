@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CareerSIM für Studierende - KI-Interview Training</title>
+  <meta name="description" content="Bereite dich optimal auf Bewerbungsgespräche vor mit KI-gestützter Interview-Simulation für Studierende." />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .student-hero {
+      padding: 120px 0 80px;
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+    .student-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 20% 50%, rgba(0, 0, 0, 0.02) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 80%, rgba(0, 0, 0, 0.02) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .student-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+    .student-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .student-title {
+      font-size: 56px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 24px;
+      color: var(--text-primary);
+    }
+    .student-desc {
+      font-size: 20px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+    .student-features {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .student-feature-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .student-feature-icon {
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    .student-feature-text {
+      font-size: 16px;
+      color: var(--text-primary);
+    }
+    .student-image {
+      width: 100%;
+      height: 400px;
+      background: var(--bg-secondary);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 80px;
+    }
+    .benefits-section {
+      padding: 80px 0;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 48px;
+    }
+    .benefit-card {
+      background: var(--bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 2px 8px var(--shadow);
+      transition: all 0.2s ease;
+    }
+    .benefit-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px var(--shadow);
+    }
+    .benefit-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    .benefit-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .benefit-desc {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .testimonials-section {
+      padding: 80px 0;
+      background: rgba(15, 23, 42, 0.5);
+    }
+    .testimonials-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+      margin-top: 48px;
+    }
+    .testimonial-card {
+      background: var(--bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 2px 8px var(--shadow);
+    }
+    .testimonial-text {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .testimonial-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .testimonial-info {
+      flex: 1;
+    }
+    .testimonial-name {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .testimonial-role {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    @media (max-width: 768px) {
+      .student-grid {
+        grid-template-columns: 1fr;
+      }
+      .student-title {
+        font-size: 36px;
+      }
+      .benefits-grid {
+        grid-template-columns: 1fr;
+      }
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="navbar-container">
+        <div class="navbar-brand">
+          <a href="/" class="navbar-logo">
+            <img src="/images/logo-icon.svg" alt="CareerSIM Logo" style="width: 40px; height: 40px; border-radius: 10px;" />
+            <span class="navbar-logo-text">CareerSIM</span>
+          </a>
+        </div>
+
+        <div class="navbar-menu">
+          <div class="navbar-links">
+            <a href="/" class="navbar-link" data-i18n="nav_home">Startseite</a>
+            <a href="/features-new.html" class="navbar-link" data-i18n="nav_features">Funktionen</a>
+            <a href="/pricing.html" class="navbar-link" data-i18n="nav_pricing">Preise</a>
+            <a href="/about.html" class="navbar-link" data-i18n="nav_about">Über uns</a>
+            <a href="/contact.html" class="navbar-link" data-i18n="nav_contact">Kontakt</a>
+          </div>
+        </div>
+
+        <div class="navbar-cta">
+          <div class="lang-switcher">
+            <button class="lang-switch active" data-lang="de" onclick="i18n.setLanguage('de')">DE</button>
+            <button class="lang-switch" data-lang="en" onclick="i18n.setLanguage('en')">EN</button>
+          </div>
+          <a href="/login.html" class="navbar-btn-login" data-i18n="nav_login">Anmelden</a>
+          <a href="/pricing.html" class="navbar-btn-start" data-i18n="nav_signup">Registrieren</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="student-hero">
+      <div class="student-content">
+        <div class="student-grid">
+          <div>
+            <h1 class="student-title">KI-Interview Training für Studierende</h1>
+            <p class="student-desc">
+              Bereite dich optimal auf dein erstes Bewerbungsgespräch vor. Übe mit unserer KI, erhalte sofortiges Feedback und steigere deine Chancen auf deinen Traumjob.
+            </p>
+            <div class="student-features">
+              <div class="student-feature-item">
+                <span class="student-feature-icon">✓</span>
+                <span class="student-feature-text">Unbegrenzte KI-Interview Simulationen</span>
+              </div>
+              <div class="student-feature-item">
+                <span class="student-feature-icon">✓</span>
+                <span class="student-feature-text">Personalisiertes Feedback nach jeder Session</span>
+              </div>
+              <div class="student-feature-item">
+                <span class="student-feature-icon">✓</span>
+                <span class="student-feature-text">Über 500 Unternehmens-spezifische Fragen</span>
+              </div>
+              <div class="student-feature-item">
+                <span class="student-feature-icon">✓</span>
+                <span class="student-feature-text">Performance Tracking & Analytics</span>
+              </div>
+            </div>
+            <div style="display: flex; gap: 16px;">
+              <a href="/pricing.html" class="cta-primary" style="display: inline-block; padding: 16px 40px;">
+                Jetzt kostenlos starten
+              </a>
+              <a href="/features-new.html" class="cta-secondary" style="display: inline-block; padding: 16px 40px;">
+                Mehr erfahren
+              </a>
+            </div>
+          </div>
+          <div class="student-image">
+            🎓
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits-section">
+      <div style="text-align: center; margin-bottom: 48px;">
+        <h2 class="section-title">Warum CareerSIM für Studierende?</h2>
+        <p class="section-subtitle">Die perfekte Vorbereitung für deinen Karrierestart</p>
+      </div>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">🎯</div>
+          <h3 class="benefit-title">Praxisnahes Training</h3>
+          <p class="benefit-desc">
+            Übe mit realistischen Interview-Szenarien, die auf dein Studienfach und Wunschunternehmen zugeschnitten sind.
+          </p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">⚡</div>
+          <h3 class="benefit-title">Sofortiges Feedback</h3>
+          <p class="benefit-desc">
+            Erhalte detailliertes KI-Feedback zu deinen Antworten und verbessere dich kontinuierlich.
+          </p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">📊</div>
+          <h3 class="benefit-title">Performance Analytics</h3>
+          <p class="benefit-desc">
+            Verfolge deinen Fortschritt mit detaillierten Statistiken und erkenne deine Stärken und Schwächen.
+          </p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">💰</div>
+          <h3 class="benefit-title">Studenten-Preise</h3>
+          <p class="benefit-desc">
+            Spare bis zu 70% mit unserem speziellen Studententarif. Bereits ab 3€ pro Monat.
+          </p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🕐</div>
+          <h3 class="benefit-title">24/7 Verfügbar</h3>
+          <p class="benefit-desc">
+            Übe wann immer du möchtest - keine Terminvereinbarung, keine Wartezeiten.
+          </p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🌍</div>
+          <h3 class="benefit-title">Internationale Unternehmen</h3>
+          <p class="benefit-desc">
+            Trainiere für Top-Unternehmen weltweit - von Startups bis DAX-Konzerne.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials-section">
+      <div class="testimonials-container">
+        <div style="text-align: center; margin-bottom: 48px;">
+          <h2 class="section-title">Was Studierende sagen</h2>
+          <p class="section-subtitle">Erfolgsgeschichten unserer Nutzer</p>
+        </div>
+        <div class="testimonials-grid">
+          <div class="testimonial-card">
+            <p class="testimonial-text">
+              "CareerSIM hat mir enorm geholfen, meine Interview-Skills zu verbessern. Nach nur zwei Wochen Training habe ich mein Traumjob-Angebot bei einem DAX-Konzern bekommen!"
+            </p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">L</div>
+              <div class="testimonial-info">
+                <div class="testimonial-name">Lisa M.</div>
+                <div class="testimonial-role">BWL-Studentin, TU München</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <p class="testimonial-text">
+              "Das KI-Feedback ist unglaublich hilfreich. Ich konnte meine Antworten gezielt verbessern und bin jetzt viel selbstbewusster in Interviews."
+            </p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">M</div>
+              <div class="testimonial-info">
+                <div class="testimonial-name">Max K.</div>
+                <div class="testimonial-role">Informatik-Student, RWTH Aachen</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <p class="testimonial-text">
+              "Als internationale Studentin war es wichtig für mich, auf Deutsch und Englisch zu üben. CareerSIM hat mir dabei perfekt geholfen!"
+            </p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">S</div>
+              <div class="testimonial-info">
+                <div class="testimonial-name">Sarah L.</div>
+                <div class="testimonial-role">Master-Studentin, Uni Heidelberg</div>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <p class="testimonial-text">
+              "Der Studententarif ist super fair und das Tool hat mir wirklich geholfen, meine erste Zusage zu bekommen. Absolute Empfehlung!"
+            </p>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">T</div>
+              <div class="testimonial-info">
+                <div class="testimonial-name">Tom S.</div>
+                <div class="testimonial-role">Wirtschaftsingenieur, KIT</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="cta-container">
+        <h2 class="cta-title">Starte jetzt deine Interview-Vorbereitung</h2>
+        <p class="cta-desc">
+          Sichere dir den Studententarif und bereite dich optimal auf deine Bewerbungen vor.
+        </p>
+        <a href="/pricing.html" class="cta-primary" style="display: inline-block; padding: 16px 48px; font-size: 18px;">
+          Zum Studententarif
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-top">
+          <!-- Brand Column -->
+          <div class="footer-brand">
+            <div class="footer-logo" style="display: flex; align-items: center; gap: 8px;">
+              <img src="/images/logo-icon.svg" alt="CareerSIM" style="width: 32px; height: 32px; border-radius: 8px;" />
+              <span>CareerSIM</span>
+            </div>
+            <p class="footer-tagline">
+              KI-gestützte Interview-Vorbereitung für deinen Karriere-Erfolg. 
+              Meistere Bewerbungsgespräche mit modernster Technologie.
+            </p>
+            <div class="footer-social">
+              <a href="#" class="footer-social-link" aria-label="LinkedIn">in</a>
+              <a href="#" class="footer-social-link" aria-label="Twitter">𝕏</a>
+              <a href="#" class="footer-social-link" aria-label="Instagram">📷</a>
+              <a href="#" class="footer-social-link" aria-label="Facebook">f</a>
+            </div>
+          </div>
+
+          <!-- Product Column -->
+          <div class="footer-col">
+            <h4>Produkt</h4>
+            <ul class="footer-links">
+              <li><a href="/features-new.html">KI-Interview</a></li>
+              <li><a href="/features-new.html">KI-Karriereberatung</a></li>
+              <li><a href="/pricing.html">Preise</a></li>
+              <li><a href="/dashboard.html">Dashboard</a></li>
+            </ul>
+          </div>
+
+          <!-- Solutions Column -->
+          <div class="footer-col">
+            <h4>Lösungen</h4>
+            <ul class="footer-links">
+              <li><a href="/students.html">Für Studierende</a></li>
+              <li><a href="/universities.html">Für Hochschulen</a></li>
+              <li><a href="/companies.html">Für Unternehmen</a></li>
+            </ul>
+          </div>
+
+          <!-- Company Column -->
+          <div class="footer-col">
+            <h4>Unternehmen</h4>
+            <ul class="footer-links">
+              <li><a href="/about.html">Über uns</a></li>
+              <li><a href="/contact.html">Kontakt</a></li>
+              <li><a href="/privacy.html">Datenschutz</a></li>
+              <li><a href="/terms.html">AGB</a></li>
+            </ul>
+          </div>
+
+          <!-- Newsletter Column -->
+          <div class="footer-newsletter">
+            <h4>Stay connected</h4>
+            <p>Get the latest platform updates.</p>
+            <form class="newsletter-form" onsubmit="event.preventDefault(); alert('✓ Danke für deine Anmeldung!');">
+              <input type="email" class="newsletter-input" placeholder="Deine E-Mail" required />
+              <button type="submit" class="newsletter-btn">Subscribe</button>
+            </form>
+            <p style="margin-top: 12px; font-size: 12px;">
+              Read our <a href="/privacy.html" style="color: var(--accent); text-decoration: underline;">privacy</a> for more info.
+            </p>
+          </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="footer-bottom">
+          <div class="footer-bottom-left">
+            © 2025 CareerSIM. Alle Rechte vorbehalten.
+          </div>
+          <div class="footer-bottom-links">
+            <a href="mailto:contact@careersim.com">contact@careersim.com</a>
+            <a href="#">Dribbble</a>
+            <a href="#">LinkedIn</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="/js/i18n.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedLang = localStorage.getItem('language') || 'de';
+      i18n.setLanguage(savedLang);
+      document.querySelectorAll('.lang-switch').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === savedLang);
+      });
+    });
+  </script>
+</body>
+</html>

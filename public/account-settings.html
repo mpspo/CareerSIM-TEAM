@@ -1,0 +1,1067 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Account Einstellungen - CareerSIM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      .settings-container {
+        min-height: 100vh;
+        padding: 100px 20px 80px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+      .settings-header {
+        margin-bottom: 48px;
+      }
+      .settings-header h1 {
+        font-size: 42px;
+        margin-bottom: 12px;
+      }
+      .settings-header p {
+        color: var(--text-secondary);
+        font-size: 16px;
+      }
+      .settings-layout {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 32px;
+      }
+      
+      /* Sidebar Navigation */
+      .settings-sidebar {
+        position: sticky;
+        top: 100px;
+        height: fit-content;
+      }
+      .settings-nav {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 8px;
+        box-shadow: 0 2px 8px var(--shadow);
+      }
+      .settings-nav-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 16px;
+        margin-bottom: 4px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: var(--text-secondary);
+        font-weight: 500;
+        font-size: 15px;
+        text-decoration: none;
+      }
+      .settings-nav-item:hover {
+        background: var(--bg-secondary);
+        color: var(--accent);
+      }
+      .settings-nav-item.active {
+        background: var(--accent);
+        color: white;
+        font-weight: 600;
+      }
+      .settings-nav-icon {
+        font-size: 20px;
+        width: 24px;
+        text-align: center;
+      }
+      
+      /* Content Area */
+      .settings-content {
+        display: none;
+      }
+      .settings-content.active {
+        display: block;
+      }
+      .settings-card {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 32px;
+        margin-bottom: 24px;
+        box-shadow: 0 2px 8px var(--shadow);
+      }
+      .settings-card h2 {
+        font-size: 24px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .settings-card-desc {
+        color: var(--text-secondary);
+        font-size: 14px;
+        margin-bottom: 24px;
+      }
+      .form-section {
+        margin-bottom: 32px;
+      }
+      .form-section:last-child {
+        margin-bottom: 0;
+      }
+      .form-section h3 {
+        font-size: 18px;
+        margin-bottom: 20px;
+        color: var(--accent);
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      .form-label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: var(--text-primary);
+      }
+      .form-input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        font-family: inherit;
+      }
+      .form-input:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+      }
+      .form-input:disabled {
+        background: var(--bg-secondary);
+        cursor: not-allowed;
+      }
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      .form-textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+      .form-select {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-size: 15px;
+        transition: all 0.3s ease;
+        font-family: inherit;
+        background: var(--bg);
+        cursor: pointer;
+      }
+      .form-select:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+      }
+      
+      /* Buttons */
+      .btn-primary {
+        padding: 12px 32px;
+        background: var(--accent);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px var(--shadow);
+      }
+      .btn-secondary {
+        padding: 12px 32px;
+        background: transparent;
+        color: var(--accent);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .btn-secondary:hover {
+        background: var(--bg-secondary);
+        border-color: var(--accent);
+      }
+      .btn-danger {
+        padding: 12px 32px;
+        background: #dc2626;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .btn-danger:hover {
+        background: #b91c1c;
+        transform: translateY(-2px);
+      }
+      .btn-group {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+      }
+      
+      /* Profile Avatar */
+      .profile-avatar-section {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 32px;
+        padding-bottom: 32px;
+        border-bottom: 1px solid var(--border);
+      }
+      .avatar-circle {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 42px;
+        color: white;
+        font-weight: 700;
+      }
+      .avatar-info h3 {
+        font-size: 24px;
+        margin-bottom: 4px;
+      }
+      .avatar-info p {
+        color: var(--text-secondary);
+        font-size: 14px;
+        margin-bottom: 12px;
+      }
+      
+      /* Payment Card */
+      .payment-card {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        border-radius: 16px;
+        padding: 24px;
+        color: white;
+        margin-bottom: 24px;
+        position: relative;
+        overflow: hidden;
+      }
+      .payment-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -10%;
+        width: 200px;
+        height: 200px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+      }
+      .card-type {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 16px;
+        opacity: 0.8;
+      }
+      .card-number {
+        font-size: 20px;
+        letter-spacing: 3px;
+        margin-bottom: 20px;
+        font-family: 'Courier New', monospace;
+      }
+      .card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .card-holder {
+        font-size: 13px;
+      }
+      .card-expiry {
+        font-size: 13px;
+      }
+      
+      /* Plan Card */
+      .plan-card {
+        border: 2px solid var(--border);
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 16px;
+        position: relative;
+      }
+      .plan-card.active {
+        border-color: var(--accent);
+        background: rgba(0, 0, 0, 0.02);
+      }
+      .plan-badge {
+        position: absolute;
+        top: -12px;
+        right: 24px;
+        background: var(--accent);
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .plan-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .plan-name {
+        font-size: 20px;
+        font-weight: 700;
+      }
+      .plan-price {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--accent);
+      }
+      .plan-features {
+        list-style: none;
+        padding: 0;
+        margin: 16px 0;
+      }
+      .plan-features li {
+        padding: 8px 0;
+        padding-left: 24px;
+        position: relative;
+        color: var(--text-secondary);
+      }
+      .plan-features li:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #10b981;
+        font-weight: 700;
+      }
+      
+      /* Toggle Switch */
+      .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 52px;
+        height: 28px;
+      }
+      .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: var(--border);
+        transition: 0.3s;
+        border-radius: 28px;
+      }
+      .toggle-slider:before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: 0.3s;
+        border-radius: 50%;
+      }
+      input:checked + .toggle-slider {
+        background-color: var(--accent);
+      }
+      input:checked + .toggle-slider:before {
+        transform: translateX(24px);
+      }
+      .toggle-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .toggle-item:last-child {
+        border-bottom: none;
+      }
+      .toggle-info h4 {
+        font-size: 15px;
+        margin-bottom: 4px;
+      }
+      .toggle-info p {
+        font-size: 13px;
+        color: var(--text-secondary);
+        margin: 0;
+      }
+      
+      /* Alert Box */
+      .alert-box {
+        padding: 16px 20px;
+        border-radius: 8px;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: start;
+        gap: 12px;
+      }
+      .alert-info {
+        background: #eff6ff;
+        border: 1px solid #3b82f6;
+        color: #1e40af;
+      }
+      .alert-warning {
+        background: #fef3c7;
+        border: 1px solid #f59e0b;
+        color: #92400e;
+      }
+      .alert-danger {
+        background: #fee2e2;
+        border: 1px solid #dc2626;
+        color: #991b1b;
+      }
+      .alert-icon {
+        font-size: 20px;
+        flex-shrink: 0;
+      }
+      
+      @media (max-width: 968px) {
+        .settings-layout {
+          grid-template-columns: 1fr;
+        }
+        .settings-sidebar {
+          position: static;
+        }
+        .settings-nav {
+          display: flex;
+          overflow-x: auto;
+          gap: 8px;
+        }
+        .settings-nav-item {
+          white-space: nowrap;
+          margin-bottom: 0;
+        }
+        .form-row {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!-- Navigation -->
+      <nav class="navbar">
+        <div class="navbar-container">
+          <div class="navbar-brand">
+            <a href="/" class="navbar-logo">
+              <img src="/images/logo-icon.svg" alt="CareerSIM Logo" style="width: 40px; height: 40px; border-radius: 10px;" />
+              <span class="navbar-logo-text">CareerSIM</span>
+            </a>
+          </div>
+          <div class="navbar-menu">
+            <div class="navbar-links">
+              <a href="/dashboard.html" class="navbar-link" data-i18n="nav_dashboard">Dashboard</a>
+              <a href="/interview.html" class="navbar-link" data-i18n="nav_start_interview">Interview Simulation</a>
+              <a href="/career-advice.html" class="navbar-link">KI Karriereberatung</a>
+              <a href="/cv-rating.html" class="navbar-link">CV Rating</a>
+              <a href="/account-settings.html" class="navbar-link" style="color: var(--accent);">Account Settings</a>
+            </div>
+          </div>
+          <div class="navbar-cta">
+            <div class="lang-switcher" style="display: flex; gap: 8px; align-items: center; margin-right: 16px;">
+              <button class="lang-switch active" data-lang="de" onclick="i18n.setLanguage('de')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">DE</button>
+              <button class="lang-switch" data-lang="en" onclick="i18n.setLanguage('en')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">EN</button>
+            </div>
+            <button id="logout-btn" class="navbar-btn-login" data-i18n="nav_logout">Logout</button>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <div class="settings-container">
+        <div class="settings-header">
+          <h1>⚙️ Account Einstellungen</h1>
+          <p>Verwalte deine persönlichen Informationen, Zahlungsmethoden und Präferenzen</p>
+        </div>
+
+        <div class="settings-layout">
+          <!-- Sidebar Navigation -->
+          <div class="settings-sidebar">
+            <nav class="settings-nav">
+              <a href="#" class="settings-nav-item active" data-section="profile">
+                <span class="settings-nav-icon">👤</span>
+                <span>Profil</span>
+              </a>
+              <a href="#" class="settings-nav-item" data-section="personal">
+                <span class="settings-nav-icon">📝</span>
+                <span>Persönliche Daten</span>
+              </a>
+              <a href="#" class="settings-nav-item" data-section="security">
+                <span class="settings-nav-icon">🔒</span>
+                <span>Sicherheit</span>
+              </a>
+              <a href="#" class="settings-nav-item" data-section="subscription">
+                <span class="settings-nav-icon">💳</span>
+                <span>Abo & Zahlung</span>
+              </a>
+              <a href="#" class="settings-nav-item" data-section="notifications">
+                <span class="settings-nav-icon">🔔</span>
+                <span>Benachrichtigungen</span>
+              </a>
+              <a href="#" class="settings-nav-item" data-section="privacy">
+                <span class="settings-nav-icon">🛡️</span>
+                <span>Datenschutz</span>
+              </a>
+            </nav>
+          </div>
+
+          <!-- Content Area -->
+          <div class="settings-main">
+            <!-- Profile Section -->
+            <div class="settings-content active" id="section-profile">
+              <div class="settings-card">
+                <h2>👤 Profil Informationen</h2>
+                <p class="settings-card-desc">Aktualisiere dein öffentliches Profil und Avatar</p>
+                
+                <div class="profile-avatar-section">
+                  <div class="avatar-circle" id="profile-avatar">U</div>
+                  <div class="avatar-info">
+                    <h3 id="profile-name">User</h3>
+                    <p>Mitglied seit Oktober 2024</p>
+                    <button class="btn-secondary" onclick="alert('Avatar-Upload wird bald verfügbar sein!')">Foto ändern</button>
+                  </div>
+                </div>
+
+                <form id="profile-form">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label">Vorname</label>
+                      <input type="text" class="form-input" id="first-name" placeholder="Max">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Nachname</label>
+                      <input type="text" class="form-input" id="last-name" placeholder="Mustermann">
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="form-label">Studiengang</label>
+                    <input type="text" class="form-input" id="study" placeholder="z.B. Informatik">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="form-label">Zielunternehmen</label>
+                    <input type="text" class="form-input" id="target" placeholder="z.B. Google, Microsoft">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="form-label">Bio</label>
+                    <textarea class="form-input form-textarea" id="bio" placeholder="Erzähle etwas über dich..."></textarea>
+                  </div>
+                  
+                  <div class="btn-group">
+                    <button type="submit" class="btn-primary">Änderungen speichern</button>
+                    <button type="button" class="btn-secondary" onclick="location.reload()">Abbrechen</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- Personal Data Section -->
+            <div class="settings-content" id="section-personal">
+              <div class="settings-card">
+                <h2>📝 Persönliche Daten</h2>
+                <p class="settings-card-desc">Verwalte deine Kontakt- und Adressdaten</p>
+                
+                <form id="personal-form">
+                  <div class="form-section">
+                    <h3>Kontaktinformationen</h3>
+                    <div class="form-group">
+                      <label class="form-label">E-Mail Adresse</label>
+                      <input type="email" class="form-input" id="email" placeholder="max.mustermann@example.com">
+                    </div>
+                    
+                    <div class="form-group">
+                      <label class="form-label">Telefonnummer</label>
+                      <input type="tel" class="form-input" id="phone" placeholder="+49 123 456789">
+                    </div>
+                  </div>
+                  
+                  <div class="form-section">
+                    <h3>Adresse</h3>
+                    <div class="form-group">
+                      <label class="form-label">Straße und Hausnummer</label>
+                      <input type="text" class="form-input" id="street" placeholder="Musterstraße 123">
+                    </div>
+                    
+                    <div class="form-row">
+                      <div class="form-group">
+                        <label class="form-label">Postleitzahl</label>
+                        <input type="text" class="form-input" id="zip" placeholder="12345">
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label">Stadt</label>
+                        <input type="text" class="form-input" id="city" placeholder="Berlin">
+                      </div>
+                    </div>
+                    
+                    <div class="form-group">
+                      <label class="form-label">Land</label>
+                      <select class="form-select" id="country">
+                        <option value="DE">Deutschland</option>
+                        <option value="AT">Österreich</option>
+                        <option value="CH">Schweiz</option>
+                        <option value="OTHER">Andere</option>
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div class="btn-group">
+                    <button type="submit" class="btn-primary">Änderungen speichern</button>
+                    <button type="button" class="btn-secondary" onclick="location.reload()">Abbrechen</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <!-- Security Section -->
+            <div class="settings-content" id="section-security">
+              <div class="settings-card">
+                <h2>🔒 Sicherheit</h2>
+                <p class="settings-card-desc">Schütze dein Konto mit einem starken Passwort</p>
+                
+                <div class="alert-box alert-info">
+                  <span class="alert-icon">ℹ️</span>
+                  <div>
+                    <strong>Passwort-Sicherheit</strong><br>
+                    Verwende mindestens 8 Zeichen mit Groß- und Kleinbuchstaben, Zahlen und Sonderzeichen.
+                  </div>
+                </div>
+                
+                <form id="security-form">
+                  <div class="form-group">
+                    <label class="form-label">Aktuelles Passwort</label>
+                    <input type="password" class="form-input" id="current-password" placeholder="••••••••">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="form-label">Neues Passwort</label>
+                    <input type="password" class="form-input" id="new-password" placeholder="••••••••">
+                  </div>
+                  
+                  <div class="form-group">
+                    <label class="form-label">Neues Passwort bestätigen</label>
+                    <input type="password" class="form-input" id="confirm-password" placeholder="••••••••">
+                  </div>
+                  
+                  <div class="btn-group">
+                    <button type="submit" class="btn-primary">Passwort ändern</button>
+                  </div>
+                </form>
+              </div>
+              
+              <div class="settings-card">
+                <h2>🔐 Zwei-Faktor-Authentifizierung</h2>
+                <p class="settings-card-desc">Erhöhe die Sicherheit deines Accounts</p>
+                
+                <div class="toggle-item">
+                  <div class="toggle-info">
+                    <h4>2FA aktivieren</h4>
+                    <p>Zusätzliche Sicherheitsebene für dein Konto</p>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="toggle-2fa">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Subscription Section -->
+            <div class="settings-content" id="section-subscription">
+              <div class="settings-card">
+                <h2>💳 Aktuelles Abonnement</h2>
+                <p class="settings-card-desc">Verwalte dein Abo und Zahlungsmethoden</p>
+                
+                <div class="plan-card active">
+                  <span class="plan-badge">AKTIV</span>
+                  <div class="plan-header">
+                    <div class="plan-name">Pro Plan</div>
+                    <div class="plan-price">19,99 €<span style="font-size: 14px; font-weight: 400; color: var(--text-secondary);">/Monat</span></div>
+                  </div>
+                  <ul class="plan-features">
+                    <li>Unbegrenzte Interview-Simulationen</li>
+                    <li>KI-gestützte Karriereberatung</li>
+                    <li>Detaillierte Analyse & Feedback</li>
+                    <li>CV-Rating & Optimierung</li>
+                    <li>Prioritäts-Support</li>
+                  </ul>
+                  <div style="margin-top: 16px; color: var(--text-secondary); font-size: 13px;">
+                    Nächste Abrechnung: <strong>11. Dezember 2025</strong>
+                  </div>
+                </div>
+                
+                <div class="btn-group">
+                  <button class="btn-secondary" onclick="alert('Plan-Upgrade wird bald verfügbar!')">Plan wechseln</button>
+                  <button class="btn-danger" onclick="if(confirm('Möchtest du dein Abo wirklich kündigen?')) alert('Abo wurde gekündigt')">Abo kündigen</button>
+                </div>
+              </div>
+              
+              <div class="settings-card">
+                <h2>💳 Zahlungsmethode</h2>
+                <p class="settings-card-desc">Verwalte deine hinterlegten Zahlungsmittel</p>
+                
+                <div class="payment-card">
+                  <div class="card-type">Visa</div>
+                  <div class="card-number">•••• •••• •••• 4242</div>
+                  <div class="card-footer">
+                    <div class="card-holder">Max Mustermann</div>
+                    <div class="card-expiry">Gültig bis 12/26</div>
+                  </div>
+                </div>
+                
+                <div class="btn-group">
+                  <button class="btn-secondary" onclick="alert('Zahlungsmethode bearbeiten wird bald verfügbar!')">Karte bearbeiten</button>
+                  <button class="btn-secondary" onclick="alert('Neue Karte hinzufügen wird bald verfügbar!')">+ Neue Karte</button>
+                </div>
+              </div>
+              
+              <div class="settings-card">
+                <h2>🧾 Rechnungen</h2>
+                <p class="settings-card-desc">Lade deine Rechnungen herunter</p>
+                
+                <div style="border: 1px solid var(--border); border-radius: 8px; overflow: hidden;">
+                  <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; border-bottom: 1px solid var(--border);">
+                    <div>
+                      <strong>November 2025</strong>
+                      <div style="font-size: 13px; color: var(--text-secondary);">11.11.2025</div>
+                    </div>
+                    <div style="display: flex; gap: 16px; align-items: center;">
+                      <span style="font-weight: 700;">19,99 €</span>
+                      <button class="btn-secondary" style="padding: 8px 16px; font-size: 13px;" onclick="alert('PDF wird heruntergeladen...')">📥 PDF</button>
+                    </div>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; border-bottom: 1px solid var(--border);">
+                    <div>
+                      <strong>Oktober 2025</strong>
+                      <div style="font-size: 13px; color: var(--text-secondary);">11.10.2025</div>
+                    </div>
+                    <div style="display: flex; gap: 16px; align-items: center;">
+                      <span style="font-weight: 700;">19,99 €</span>
+                      <button class="btn-secondary" style="padding: 8px 16px; font-size: 13px;" onclick="alert('PDF wird heruntergeladen...')">📥 PDF</button>
+                    </div>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px;">
+                    <div>
+                      <strong>September 2025</strong>
+                      <div style="font-size: 13px; color: var(--text-secondary);">11.09.2025</div>
+                    </div>
+                    <div style="display: flex; gap: 16px; align-items: center;">
+                      <span style="font-weight: 700;">19,99 €</span>
+                      <button class="btn-secondary" style="padding: 8px 16px; font-size: 13px;" onclick="alert('PDF wird heruntergeladen...')">📥 PDF</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Notifications Section -->
+            <div class="settings-content" id="section-notifications">
+              <div class="settings-card">
+                <h2>🔔 E-Mail Benachrichtigungen</h2>
+                <p class="settings-card-desc">Wähle aus, welche E-Mails du erhalten möchtest</p>
+                
+                <div class="toggle-item">
+                  <div class="toggle-info">
+                    <h4>Interview-Erinnerungen</h4>
+                    <p>Erhalte Erinnerungen für geplante Interviews</p>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                
+                <div class="toggle-item">
+                  <div class="toggle-info">
+                    <h4>Wöchentlicher Fortschrittsbericht</h4>
+                    <p>Zusammenfassung deiner Aktivitäten und Erfolge</p>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                
+                <div class="toggle-item">
+                  <div class="toggle-info">
+                    <h4>Neue Features & Updates</h4>
+                    <p>Informationen über neue Funktionen</p>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                
+                <div class="toggle-item">
+                  <div class="toggle-info">
+                    <h4>Marketing E-Mails</h4>
+                    <p>Tipps, Angebote und Newsletter</p>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+              
+              <div class="settings-card">
+                <h2>📱 Push Benachrichtigungen</h2>
+                <p class="settings-card-desc">Browser-Benachrichtigungen verwalten</p>
+                
+                <div class="toggle-item">
+                  <div class="toggle-info">
+                    <h4>Browser-Benachrichtigungen</h4>
+                    <p>Erhalte Echtzeit-Updates im Browser</p>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                
+                <div class="toggle-item">
+                  <div class="toggle-info">
+                    <h4>Interview-Feedback verfügbar</h4>
+                    <p>Benachrichtigung wenn Analyse fertig ist</p>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Privacy Section -->
+            <div class="settings-content" id="section-privacy">
+              <div class="settings-card">
+                <h2>🛡️ Datenschutz & Privatsphäre</h2>
+                <p class="settings-card-desc">Kontrolliere deine Daten und Privatsphäre-Einstellungen</p>
+                
+                <div class="toggle-item">
+                  <div class="toggle-info">
+                    <h4>Profil öffentlich anzeigen</h4>
+                    <p>Andere Nutzer können dein Profil sehen</p>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                
+                <div class="toggle-item">
+                  <div class="toggle-info">
+                    <h4>Fortschritt teilen</h4>
+                    <p>Erlaube anderen deine Erfolge zu sehen</p>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+                
+                <div class="toggle-item">
+                  <div class="toggle-info">
+                    <h4>Analytics & Cookies</h4>
+                    <p>Hilf uns die Plattform zu verbessern</p>
+                  </div>
+                  <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                  </label>
+                </div>
+              </div>
+              
+              <div class="settings-card">
+                <h2>📦 Daten exportieren</h2>
+                <p class="settings-card-desc">Lade eine Kopie deiner Daten herunter</p>
+                
+                <div class="alert-box alert-info">
+                  <span class="alert-icon">ℹ️</span>
+                  <div>
+                    Du kannst jederzeit eine Kopie all deiner Daten bei CareerSIM anfordern. Der Export enthält deine Profildaten, Interview-Historie und Feedback.
+                  </div>
+                </div>
+                
+                <button class="btn-secondary" onclick="alert('Export wird erstellt und per E-Mail zugesandt...')">📥 Daten exportieren</button>
+              </div>
+              
+              <div class="settings-card">
+                <h2>🗑️ Account löschen</h2>
+                <p class="settings-card-desc">Lösche deinen Account und alle zugehörigen Daten</p>
+                
+                <div class="alert-box alert-danger">
+                  <span class="alert-icon">⚠️</span>
+                  <div>
+                    <strong>Achtung:</strong> Diese Aktion kann nicht rückgängig gemacht werden. Alle deine Daten, Interview-Historie und Fortschritte werden permanent gelöscht.
+                  </div>
+                </div>
+                
+                <button class="btn-danger" onclick="if(confirm('Bist du sicher? Diese Aktion kann nicht rückgängig gemacht werden!')) alert('Account wurde zur Löschung markiert')">Account löschen</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Check auth
+      const token = localStorage.getItem('cs_token');
+      if (!token) {
+        window.location.href = '/login.html';
+      }
+
+      // Logout
+      document.getElementById('logout-btn').addEventListener('click', () => {
+        localStorage.removeItem('cs_token');
+        localStorage.removeItem('cs_username');
+        localStorage.removeItem('cs_study');
+        localStorage.removeItem('cs_target');
+        window.location.href = '/';
+      });
+
+      // Load user data
+      const username = localStorage.getItem('cs_username') || 'User';
+      const study = localStorage.getItem('cs_study') || '';
+      const target = localStorage.getItem('cs_target') || '';
+      
+      document.getElementById('profile-name').textContent = username;
+      document.getElementById('profile-avatar').textContent = username.charAt(0).toUpperCase();
+      document.getElementById('study').value = study;
+      document.getElementById('target').value = target;
+
+      // Section navigation
+      document.querySelectorAll('.settings-nav-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+          e.preventDefault();
+          const section = item.dataset.section;
+          
+          // Update active nav item
+          document.querySelectorAll('.settings-nav-item').forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+          
+          // Show selected section
+          document.querySelectorAll('.settings-content').forEach(content => {
+            content.classList.remove('active');
+          });
+          document.getElementById(`section-${section}`).classList.add('active');
+        });
+      });
+
+      // Profile form
+      document.getElementById('profile-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const study = document.getElementById('study').value;
+        const target = document.getElementById('target').value;
+        
+        localStorage.setItem('cs_study', study);
+        localStorage.setItem('cs_target', target);
+        
+        alert('✓ Profil wurde erfolgreich aktualisiert!');
+      });
+
+      // Personal data form
+      document.getElementById('personal-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('✓ Persönliche Daten wurden gespeichert!');
+      });
+
+      // Security form
+      document.getElementById('security-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const current = document.getElementById('current-password').value;
+        const newPass = document.getElementById('new-password').value;
+        const confirm = document.getElementById('confirm-password').value;
+        
+        if (!current || !newPass || !confirm) {
+          alert('❌ Bitte fülle alle Felder aus');
+          return;
+        }
+        
+        if (newPass !== confirm) {
+          alert('❌ Passwörter stimmen nicht überein');
+          return;
+        }
+        
+        if (newPass.length < 8) {
+          alert('❌ Passwort muss mindestens 8 Zeichen lang sein');
+          return;
+        }
+        
+        alert('✓ Passwort wurde erfolgreich geändert!');
+        document.getElementById('security-form').reset();
+      });
+
+      // 2FA Toggle
+      document.getElementById('toggle-2fa').addEventListener('change', (e) => {
+        if (e.target.checked) {
+          alert('✓ Zwei-Faktor-Authentifizierung wurde aktiviert!\n\nDu erhältst eine E-Mail mit weiteren Anweisungen.');
+        } else {
+          if (confirm('Möchtest du die Zwei-Faktor-Authentifizierung wirklich deaktivieren?')) {
+            alert('2FA wurde deaktiviert');
+          } else {
+            e.target.checked = true;
+          }
+        }
+      });
+    </script>
+    <script src="/js/i18n.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('language') || 'de';
+        i18n.setLanguage(savedLang);
+        document.querySelectorAll('.lang-switch').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.lang === savedLang);
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.lang-switch').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+          });
+        });
+      });
+    </script>
+    <style>
+      .lang-switch {
+        background: transparent !important;
+        border: 1.5px solid var(--border) !important;
+        color: var(--text-secondary) !important;
+      }
+      .lang-switch:hover {
+        border-color: var(--accent) !important;
+        color: var(--accent) !important;
+        background: rgba(0, 0, 0, 0.05) !important;
+      }
+      .lang-switch.active {
+        background: transparent !important;
+        border: 1.5px solid var(--accent) !important;
+        color: var(--accent) !important;
+        font-weight: 700 !important;
+      }
+    </style>
+  </body>
+</html>

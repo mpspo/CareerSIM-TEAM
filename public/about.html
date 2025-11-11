@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Über uns - CareerSIM</title>
+  <meta name="description" content="Erfahren Sie mehr über CareerSIM und unsere Mission, Bewerbungsprozesse mit KI-Technologie zu revolutionieren." />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .about-hero {
+      padding: 120px 0 80px;
+      background: var(--bg);
+      text-align: center;
+    }
+    .about-content {
+      max-width: 800px;
+      margin: 80px auto;
+      padding: 0 24px;
+    }
+    .about-content h2 {
+      font-size: 36px;
+      font-weight: 800;
+      margin-bottom: 24px;
+      margin-top: 60px;
+    }
+    .about-content p {
+      font-size: 18px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 24px;
+    }
+
+    /* Footer */
+    .footer {
+      background: #000000;
+      padding: 80px 0 30px;
+      border-top: 1px solid var(--border);
+    }
+    .footer-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
+      gap: 60px;
+      margin-bottom: 60px;
+      padding-bottom: 60px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .footer-brand {
+      max-width: 300px;
+    }
+    .footer-logo {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .footer-tagline {
+      color: rgba(255, 255, 255, 0.6);
+      line-height: 1.6;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    .footer-social {
+      display: flex;
+      gap: 12px;
+    }
+    .footer-social-link {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .footer-social-link:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #000;
+    }
+    .footer-col h4 {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .footer-links li {
+      margin-bottom: 12px;
+    }
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+    .footer-newsletter h4 {
+      margin-bottom: 12px;
+    }
+    .footer-newsletter p {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 13px;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .newsletter-form {
+      display: flex;
+      gap: 8px;
+    }
+    .newsletter-input {
+      flex: 1;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+    .newsletter-input:focus {
+      outline: none;
+      border-color: var(--accent);
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .newsletter-input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+    .newsletter-btn {
+      padding: 12px 24px;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+    .newsletter-btn:hover {
+      background: #333333;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--shadow);
+    }
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 30px;
+    }
+    .footer-bottom-left {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 13px;
+    }
+    .footer-bottom-links {
+      display: flex;
+      gap: 24px;
+    }
+    .footer-bottom-links a {
+      color: rgba(255, 255, 255, 0.4);
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.2s;
+    }
+    .footer-bottom-links a:hover {
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <nav class="navbar">
+      <div class="navbar-container">
+        <div class="navbar-brand">
+          <a href="/" class="navbar-logo">
+            <img src="/images/logo-icon.svg" alt="CareerSIM Logo" style="width: 40px; height: 40px; border-radius: 10px;" />
+            <span class="navbar-logo-text">CareerSIM</span>
+          </a>
+        </div>
+        <div class="navbar-menu">
+          <div class="navbar-links">
+            <a href="/" class="navbar-link" data-i18n="nav_home">Startseite</a>
+            <a href="/features-new.html" class="navbar-link" data-i18n="nav_features">Funktionen</a>
+            <a href="/pricing.html" class="navbar-link" data-i18n="nav_pricing">Preise</a>
+            <a href="/about.html" class="navbar-link" data-i18n="nav_about" style="color: var(--accent);">Über uns</a>
+            <a href="/contact.html" class="navbar-link" data-i18n="nav_contact">Kontakt</a>
+          </div>
+        </div>
+        <div class="navbar-cta">
+          <div class="lang-switcher" style="display: flex; gap: 8px; align-items: center; margin-right: 16px;">
+            <button class="lang-switch active" data-lang="de" onclick="i18n.setLanguage('de')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">DE</button>
+            <button class="lang-switch" data-lang="en" onclick="i18n.setLanguage('en')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">EN</button>
+          </div>
+          <a href="/login.html" class="navbar-btn-login" data-i18n="nav_login">Anmelden</a>
+          <a href="/pricing.html" class="navbar-btn-start" data-i18n="nav_signup">Registrieren</a>
+        </div>
+      </div>
+    </nav>
+
+    <section class="about-hero">
+      <h1 style="font-size: 56px; font-weight: 800; margin-bottom: 24px;">Über CareerSIM</h1>
+      <p style="font-size: 20px; color: var(--text-secondary); max-width: 700px; margin: 0 auto;">
+        Wir revolutionieren die Bewerbungsvorbereitung mit künstlicher Intelligenz
+      </p>
+    </section>
+
+    <div class="about-content">
+      <h2>Unsere Mission</h2>
+      <p>
+        CareerSIM wurde mit der Vision gegründet, jedem die Möglichkeit zu geben, sich optimal auf Bewerbungsgespräche vorzubereiten. 
+        Wir glauben, dass der Zugang zu hochwertiger Karriereberatung nicht vom Geldbeutel abhängen sollte.
+      </p>
+      <p>
+        Mit modernster KI-Technologie machen wir professionelle Interview-Vorbereitung zugänglich, erschwinglich und effektiv. 
+        Unsere Plattform nutzt fortschrittliche Algorithmen, um realistische Interview-Szenarien zu erstellen und personalisiertes Feedback zu geben.
+      </p>
+
+      <h2>Was uns antreibt</h2>
+      <p>
+        Jedes Jahr scheitern Millionen qualifizierter Kandidaten an Bewerbungsgesprächen - nicht weil sie nicht geeignet wären, 
+        sondern weil sie nicht ausreichend vorbereitet waren. Diese Lücke wollen wir schließen.
+      </p>
+      <p>
+        Unsere KI-gestützte Plattform bietet:
+      </p>
+      <ul style="font-size: 18px; color: var(--text-secondary); line-height: 1.8; margin-bottom: 24px;">
+        <li>Unbegrenztes Training rund um die Uhr</li>
+        <li>Sofortiges, detailliertes Feedback</li>
+        <li>Personalisierte Lernpfade</li>
+        <li>Unternehmens-spezifische Vorbereitung</li>
+        <li>Performance-Tracking und Analytics</li>
+      </ul>
+
+      <h2>Unsere Werte</h2>
+      <p>
+        <strong>Zugänglichkeit:</strong> Hochwertige Karriereberatung sollte für jeden erschwinglich sein. 
+        Deshalb bieten wir spezielle Studententarife ab 3€ pro Monat an.
+      </p>
+      <p>
+        <strong>Innovation:</strong> Wir nutzen die neuesten Entwicklungen in KI und Machine Learning, 
+        um die beste Interview-Vorbereitung zu bieten.
+      </p>
+      <p>
+        <strong>Erfolg:</strong> Der Erfolg unserer Nutzer ist unser Erfolg. Über 10.000 Studierende 
+        haben bereits ihre Traumjobs mit CareerSIM erreicht.
+      </p>
+
+      <h2>Das Team</h2>
+      <p>
+        CareerSIM wurde von einem Team erfahrener Karriereberater, Software-Entwickler und KI-Experten entwickelt. 
+        Gemeinsam bringen wir jahrzehntelange Erfahrung in Recruiting, Personalentwicklung und künstlicher Intelligenz mit.
+      </p>
+
+      <div style="text-align: center; margin-top: 60px;">
+        <a href="/contact.html" class="cta-primary" style="display: inline-block; padding: 16px 40px;">
+          Kontakt aufnehmen
+        </a>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-top">
+          <!-- Brand Column -->
+          <div class="footer-brand">
+            <div class="footer-logo" style="display: flex; align-items: center; gap: 8px;">
+              <img src="/images/logo-icon.svg" alt="CareerSIM" style="width: 32px; height: 32px; border-radius: 8px;" />
+              <span>CareerSIM</span>
+            </div>
+            <p class="footer-tagline">
+              KI-gestützte Interview-Vorbereitung für deinen Karriere-Erfolg. 
+              Meistere Bewerbungsgespräche mit modernster Technologie.
+            </p>
+            <div class="footer-social">
+              <a href="#" class="footer-social-link" aria-label="LinkedIn">in</a>
+              <a href="#" class="footer-social-link" aria-label="Twitter">𝕏</a>
+              <a href="#" class="footer-social-link" aria-label="Instagram">📷</a>
+              <a href="#" class="footer-social-link" aria-label="Facebook">f</a>
+            </div>
+          </div>
+
+          <!-- Product Column -->
+          <div class="footer-col">
+            <h4>Produkt</h4>
+            <ul class="footer-links">
+              <li><a href="/features-new.html">KI-Interview</a></li>
+              <li><a href="/features-new.html">KI-Karriereberatung</a></li>
+              <li><a href="/pricing.html">Preise</a></li>
+              <li><a href="/dashboard.html">Dashboard</a></li>
+            </ul>
+          </div>
+
+          <!-- Solutions Column -->
+          <div class="footer-col">
+            <h4>Lösungen</h4>
+            <ul class="footer-links">
+              <li><a href="/students.html">Für Studierende</a></li>
+              <li><a href="/universities.html">Für Hochschulen</a></li>
+              <li><a href="/companies.html">Für Unternehmen</a></li>
+            </ul>
+          </div>
+
+          <!-- Company Column -->
+          <div class="footer-col">
+            <h4>Unternehmen</h4>
+            <ul class="footer-links">
+              <li><a href="/about.html">Über uns</a></li>
+              <li><a href="/contact.html">Kontakt</a></li>
+              <li><a href="/privacy.html">Datenschutz</a></li>
+              <li><a href="/terms.html">AGB</a></li>
+            </ul>
+          </div>
+
+          <!-- Newsletter Column -->
+          <div class="footer-newsletter">
+            <h4>Stay connected</h4>
+            <p>Get the latest platform updates.</p>
+            <form class="newsletter-form" onsubmit="event.preventDefault(); alert('✓ Danke für deine Anmeldung!');">
+              <input type="email" class="newsletter-input" placeholder="Deine E-Mail" required />
+              <button type="submit" class="newsletter-btn">Subscribe</button>
+            </form>
+            <p style="margin-top: 12px; font-size: 12px;">
+              Read our <a href="/privacy.html" style="color: var(--accent); text-decoration: underline;">privacy</a> for more info.
+            </p>
+          </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="footer-bottom">
+          <div class="footer-bottom-left">
+            © 2025 CareerSIM. Alle Rechte vorbehalten.
+          </div>
+          <div class="footer-bottom-links">
+            <a href="mailto:contact@careersim.com">contact@careersim.com</a>
+            <a href="#">Dribbble</a>
+            <a href="#">LinkedIn</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="/js/i18n.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedLang = localStorage.getItem('language') || 'de';
+      i18n.setLanguage(savedLang);
+      document.querySelectorAll('.lang-switch').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === savedLang);
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.lang-switch').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        });
+      });
+    });
+  </script>
+  <style>
+    .lang-switch {
+      background: transparent !important;
+      border: 1.5px solid var(--border) !important;
+      color: var(--text-secondary) !important;
+    }
+    .lang-switch:hover {
+      border-color: var(--accent) !important;
+      color: var(--accent) !important;
+      background: rgba(0, 0, 0, 0.05) !important;
+    }
+    .lang-switch.active {
+      background: transparent !important;
+      border: 1.5px solid var(--accent) !important;
+      color: var(--accent) !important;
+      font-weight: 700 !important;
+    }
+  </style>
+</body>
+</html>

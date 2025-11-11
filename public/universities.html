@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CareerSIM für Hochschulen - Enterprise KI-Interview Training</title>
+  <meta name="description" content="KI-gestützte Interview-Vorbereitung für Ihre Studierenden. Integration in Career Services und Hochschulsysteme." />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .uni-hero {
+      padding: 120px 0 80px;
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+    .uni-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+    .uni-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .uni-title {
+      font-size: 56px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 24px;
+      color: var(--text-primary);
+    }
+    .uni-desc {
+      font-size: 20px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+    .uni-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    .uni-stat {
+      text-align: center;
+      padding: 20px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      box-shadow: 0 2px 8px var(--shadow);
+    }
+    .uni-stat-number {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .uni-stat-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .uni-image {
+      width: 100%;
+      height: 400px;
+      background: var(--bg-secondary);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 100px;
+    }
+    .benefits-section {
+      padding: 100px 0;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-left: 24px;
+      padding-right: 24px;
+    }
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      margin-top: 48px;
+    }
+    .benefit-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px var(--shadow);
+    }
+    .benefit-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--accent);
+      box-shadow: 0 8px 24px var(--shadow);
+    }
+    .benefit-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    .benefit-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .benefit-desc {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .integration-section {
+      padding: 80px 0;
+      background: var(--bg-secondary);
+    }
+    .integration-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .integration-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+      margin-top: 48px;
+    }
+    .integration-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 2px 8px var(--shadow);
+    }
+    .integration-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    .integration-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .integration-desc {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .integration-features {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .integration-feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    @media (max-width: 768px) {
+      .uni-grid {
+        grid-template-columns: 1fr;
+      }
+      .uni-title {
+        font-size: 36px;
+      }
+      .uni-stats {
+        grid-template-columns: 1fr;
+      }
+      .benefits-grid {
+        grid-template-columns: 1fr;
+      }
+      .integration-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="navbar-container">
+        <div class="navbar-brand">
+          <a href="/" class="navbar-logo">
+            <img src="/images/logo-icon.svg" alt="CareerSIM Logo" style="width: 40px; height: 40px; border-radius: 10px;" />
+            <span class="navbar-logo-text">CareerSIM</span>
+          </a>
+        </div>
+
+        <div class="navbar-menu">
+          <div class="navbar-links">
+            <a href="/" class="navbar-link" data-i18n="nav_home">Startseite</a>
+            <a href="/features-new.html" class="navbar-link" data-i18n="nav_features">Funktionen</a>
+            <a href="/pricing.html" class="navbar-link" data-i18n="nav_pricing">Preise</a>
+            <a href="/about.html" class="navbar-link" data-i18n="nav_about">Über uns</a>
+            <a href="/contact.html" class="navbar-link" data-i18n="nav_contact">Kontakt</a>
+          </div>
+        </div>
+
+        <div class="navbar-cta">
+          <div class="lang-switcher" style="display: flex; gap: 8px; align-items: center; margin-right: 16px;">
+            <button class="lang-switch active" data-lang="de" onclick="i18n.setLanguage('de')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">DE</button>
+            <button class="lang-switch" data-lang="en" onclick="i18n.setLanguage('en')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">EN</button>
+          </div>
+          <a href="/login.html" class="navbar-btn-login" data-i18n="nav_login">Anmelden</a>
+          <a href="/contact.html" class="navbar-btn-start">Demo buchen</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="uni-hero">
+      <div class="uni-content">
+        <div class="uni-grid">
+          <div>
+            <h1 class="uni-title">KI-gestützte Interview-Vorbereitung für Ihre Hochschule</h1>
+            <p class="uni-desc">
+              Bereiten Sie Ihre Studierenden optimal auf den Berufseinstieg vor. CareerSIM integriert sich nahtlos in Ihre Career Services und unterstützt mit modernster KI-Technologie.
+            </p>
+            <div class="uni-stats">
+              <div class="uni-stat">
+                <div class="uni-stat-number">50+</div>
+                <div class="uni-stat-label">Hochschulen</div>
+              </div>
+              <div class="uni-stat">
+                <div class="uni-stat-number">15.000+</div>
+                <div class="uni-stat-label">Studierende</div>
+              </div>
+              <div class="uni-stat">
+                <div class="uni-stat-number">95%</div>
+                <div class="uni-stat-label">Zufriedenheit</div>
+              </div>
+            </div>
+            <div style="display: flex; gap: 16px;">
+              <a href="/contact.html" class="cta-primary" style="display: inline-block; padding: 16px 40px;">
+                Demo vereinbaren
+              </a>
+              <a href="#benefits" class="cta-secondary" style="display: inline-block; padding: 16px 40px;">
+                Mehr erfahren
+              </a>
+            </div>
+          </div>
+          <div class="uni-image">
+            🏫
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits-section" id="benefits">
+      <div style="text-align: center; margin-bottom: 48px;">
+        <h2 class="section-title">Vorteile für Ihre Hochschule</h2>
+        <p class="section-subtitle">Modernste Technologie für erstklassige Career Services</p>
+      </div>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-icon">🎓</div>
+          <h3 class="benefit-title">Bessere Vermittlungsquoten</h3>
+          <p class="benefit-desc">
+            Ihre Studierenden sind besser vorbereitet und erhalten mehr Jobangebote. Steigern Sie Ihre Erfolgsstatistiken.
+          </p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">📊</div>
+          <h3 class="benefit-title">Detaillierte Analytics</h3>
+          <p class="benefit-desc">
+            Erhalten Sie Einblicke in die Performance Ihrer Studierenden und optimieren Sie Ihre Career Services.
+          </p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🔗</div>
+          <h3 class="benefit-title">Nahtlose Integration</h3>
+          <p class="benefit-desc">
+            Integration via SSO, LMS-Anbindung (Moodle, Canvas) und API-Schnittstellen für Ihre bestehenden Systeme.
+          </p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">💼</div>
+          <h3 class="benefit-title">Unternehmenspartnerschaften</h3>
+          <p class="benefit-desc">
+            Zugang zu unserem Netzwerk von 500+ Top-Unternehmen und deren spezifischen Interview-Anforderungen.
+          </p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🎯</div>
+          <h3 class="benefit-title">Individuelles Branding</h3>
+          <p class="benefit-desc">
+            White-Label-Lösung mit Ihrem Hochschul-Logo und CI für eine nahtlose Nutzererfahrung.
+          </p>
+        </div>
+        <div class="benefit-card">
+          <div class="benefit-icon">🛡️</div>
+          <h3 class="benefit-title">DSGVO-konform</h3>
+          <p class="benefit-desc">
+            Höchste Datenschutzstandards, Server in Deutschland, volle DSGVO-Compliance und ISO-Zertifizierung.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Integration Section -->
+    <section class="integration-section">
+      <div class="integration-container">
+        <div style="text-align: center; margin-bottom: 48px;">
+          <h2 class="section-title">Flexible Integrationsmöglichkeiten</h2>
+          <p class="section-subtitle">Passen Sie CareerSIM an Ihre Infrastruktur an</p>
+        </div>
+        <div class="integration-grid">
+          <div class="integration-card">
+            <div class="integration-icon">🔐</div>
+            <h3 class="integration-title">Single Sign-On (SSO)</h3>
+            <p class="integration-desc">
+              Nahtloser Login über Ihre bestehende Authentifizierungsinfrastruktur
+            </p>
+            <div class="integration-features">
+              <div class="integration-feature">✓ SAML 2.0 Support</div>
+              <div class="integration-feature">✓ OAuth 2.0 / OpenID Connect</div>
+              <div class="integration-feature">✓ LDAP / Active Directory</div>
+              <div class="integration-feature">✓ Shibboleth Integration</div>
+            </div>
+          </div>
+          <div class="integration-card">
+            <div class="integration-icon">📚</div>
+            <h3 class="integration-title">LMS Integration</h3>
+            <p class="integration-desc">
+              Direkter Zugang aus Ihrem Learning Management System
+            </p>
+            <div class="integration-features">
+              <div class="integration-feature">✓ Moodle Plugin</div>
+              <div class="integration-feature">✓ Canvas LTI Integration</div>
+              <div class="integration-feature">✓ Blackboard Integration</div>
+              <div class="integration-feature">✓ ILIAS Anbindung</div>
+            </div>
+          </div>
+          <div class="integration-card">
+            <div class="integration-icon">🔌</div>
+            <h3 class="integration-title">API & Webhooks</h3>
+            <p class="integration-desc">
+              Vollständige REST API für individuelle Integrationen
+            </p>
+            <div class="integration-features">
+              <div class="integration-feature">✓ RESTful API Zugang</div>
+              <div class="integration-feature">✓ Webhook Notifications</div>
+              <div class="integration-feature">✓ Umfangreiche Dokumentation</div>
+              <div class="integration-feature">✓ Entwickler Support</div>
+            </div>
+          </div>
+          <div class="integration-card">
+            <div class="integration-icon">📊</div>
+            <h3 class="integration-title">Reporting & Analytics</h3>
+            <p class="integration-desc">
+              Detaillierte Einblicke und Exportmöglichkeiten
+            </p>
+            <div class="integration-features">
+              <div class="integration-feature">✓ Admin Dashboard</div>
+              <div class="integration-feature">✓ CSV/Excel Export</div>
+              <div class="integration-feature">✓ Custom Reports</div>
+              <div class="integration-feature">✓ Nutzungsstatistiken</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="benefits-section">
+      <div style="text-align: center; margin-bottom: 48px;">
+        <h2 class="section-title">Flexible Lizenzmodelle</h2>
+        <p class="section-subtitle">Maßgeschneiderte Lösungen für jede Hochschulgröße</p>
+      </div>
+      <div style="max-width: 800px; margin: 0 auto; padding: 0 24px;">
+        <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 40px; margin-bottom: 24px; box-shadow: 0 2px 8px var(--shadow);">
+          <h3 style="font-size: 24px; margin-bottom: 16px;">Campus-Lizenz</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 24px;">Unbegrenzter Zugang für alle Studierenden Ihrer Hochschule</p>
+          <ul style="color: var(--text-secondary); line-height: 2;">
+            <li>✓ Alle Features inklusive</li>
+            <li>✓ Dedizierter Account Manager</li>
+            <li>✓ Individuelle Schulungen</li>
+            <li>✓ Priority Support (24/7)</li>
+            <li>✓ Custom Branding & White-Label</li>
+            <li>✓ API Zugang & Integration Support</li>
+          </ul>
+        </div>
+        <div style="text-align: center;">
+          <p style="color: var(--text-secondary); margin-bottom: 24px;">
+            Preis auf Anfrage, abhängig von Studierendenzahl und Anforderungen
+          </p>
+          <a href="/contact.html" class="cta-primary" style="display: inline-block; padding: 16px 48px; font-size: 18px;">
+            Angebot anfordern
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="cta-container">
+        <h2 class="cta-title">Bereit für die Zukunft Ihrer Career Services?</h2>
+        <p class="cta-desc">
+          Vereinbaren Sie eine persönliche Demo und erfahren Sie, wie CareerSIM Ihre Hochschule unterstützen kann.
+        </p>
+        <a href="/contact.html" class="cta-primary" style="display: inline-block; padding: 16px 48px; font-size: 18px;">
+          Demo vereinbaren
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-top">
+          <!-- Brand Column -->
+          <div class="footer-brand">
+            <div class="footer-logo" style="display: flex; align-items: center; gap: 8px;">
+              <img src="/images/logo-icon.svg" alt="CareerSIM" style="width: 32px; height: 32px; border-radius: 8px;" />
+              <span>CareerSIM</span>
+            </div>
+            <p class="footer-tagline">
+              KI-gestützte Interview-Vorbereitung für deinen Karriere-Erfolg. 
+              Meistere Bewerbungsgespräche mit modernster Technologie.
+            </p>
+            <div class="footer-social">
+              <a href="#" class="footer-social-link" aria-label="LinkedIn">in</a>
+              <a href="#" class="footer-social-link" aria-label="Twitter">𝕏</a>
+              <a href="#" class="footer-social-link" aria-label="Instagram">📷</a>
+              <a href="#" class="footer-social-link" aria-label="Facebook">f</a>
+            </div>
+          </div>
+
+          <!-- Product Column -->
+          <div class="footer-col">
+            <h4>Produkt</h4>
+            <ul class="footer-links">
+              <li><a href="/features-new.html">KI-Interview</a></li>
+              <li><a href="/features-new.html">KI-Karriereberatung</a></li>
+              <li><a href="/pricing.html">Preise</a></li>
+              <li><a href="/dashboard.html">Dashboard</a></li>
+            </ul>
+          </div>
+
+          <!-- Solutions Column -->
+          <div class="footer-col">
+            <h4>Lösungen</h4>
+            <ul class="footer-links">
+              <li><a href="/students.html">Für Studierende</a></li>
+              <li><a href="/universities.html">Für Hochschulen</a></li>
+              <li><a href="/companies.html">Für Unternehmen</a></li>
+            </ul>
+          </div>
+
+          <!-- Company Column -->
+          <div class="footer-col">
+            <h4>Unternehmen</h4>
+            <ul class="footer-links">
+              <li><a href="/about.html">Über uns</a></li>
+              <li><a href="/contact.html">Kontakt</a></li>
+              <li><a href="/privacy.html">Datenschutz</a></li>
+              <li><a href="/terms.html">AGB</a></li>
+            </ul>
+          </div>
+
+          <!-- Newsletter Column -->
+          <div class="footer-newsletter">
+            <h4>Stay connected</h4>
+            <p>Get the latest platform updates.</p>
+            <form class="newsletter-form" onsubmit="event.preventDefault(); alert('✓ Danke für deine Anmeldung!');">
+              <input type="email" class="newsletter-input" placeholder="Deine E-Mail" required />
+              <button type="submit" class="newsletter-btn">Subscribe</button>
+            </form>
+            <p style="margin-top: 12px; font-size: 12px;">
+              Read our <a href="/privacy.html" style="color: var(--accent); text-decoration: underline;">privacy</a> for more info.
+            </p>
+          </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="footer-bottom">
+          <div class="footer-bottom-left">
+            © 2025 CareerSIM. Alle Rechte vorbehalten.
+          </div>
+          <div class="footer-bottom-links">
+            <a href="mailto:contact@careersim.com">contact@careersim.com</a>
+            <a href="#">Dribbble</a>
+            <a href="#">LinkedIn</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="/js/i18n.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedLang = localStorage.getItem('language') || 'de';
+      i18n.setLanguage(savedLang);
+      document.querySelectorAll('.lang-switch').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === savedLang);
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.lang-switch').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        });
+      });
+    });
+  </script>
+  <style>
+    .lang-switch {
+      background: transparent !important;
+      border: 1.5px solid var(--border) !important;
+      color: var(--text-secondary) !important;
+    }
+    .lang-switch:hover {
+      border-color: var(--accent) !important;
+      color: var(--accent) !important;
+      background: rgba(0, 0, 0, 0.05) !important;
+    }
+    .lang-switch.active {
+      background: transparent !important;
+      border: 1.5px solid var(--accent) !important;
+      color: var(--accent) !important;
+      font-weight: 700 !important;
+    }
+  </style>
+</body>
+</html>

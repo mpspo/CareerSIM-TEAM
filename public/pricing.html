@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pricing - CareerSIM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      .pricing-hero {
+        text-align: center;
+        padding: 80px 20px 40px;
+      }
+      .pricing-hero h1 {
+        font-size: 48px;
+        margin-bottom: 16px;
+      }
+      .pricing-hero p {
+        font-size: 18px;
+        color: var(--text-secondary);
+        max-width: 600px;
+        margin: 0 auto 40px;
+      }
+      .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 24px;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px 80px;
+      }
+      .pricing-card {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 32px;
+        position: relative;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px var(--shadow);
+      }
+      .pricing-card:hover {
+        transform: translateY(-8px);
+        border-color: var(--accent);
+        box-shadow: 0 8px 24px var(--shadow);
+      }
+      .pricing-card.popular {
+        border: 2px solid var(--accent);
+        box-shadow: 0 8px 24px var(--shadow);
+      }
+      .pricing-badge {
+        position: absolute;
+        top: -12px;
+        right: 24px;
+        background: var(--accent);
+        color: #ffffff;
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+      .pricing-card h3 {
+        font-size: 24px;
+        margin-bottom: 12px;
+        color: var(--text-primary);
+      }
+      .pricing-price {
+        font-size: 48px;
+        font-weight: 700;
+        color: var(--accent);
+        margin-bottom: 8px;
+      }
+      .pricing-price span {
+        font-size: 18px;
+        color: var(--text-secondary);
+        font-weight: 400;
+      }
+      .pricing-description {
+        color: var(--text-secondary);
+        font-size: 14px;
+        margin-bottom: 24px;
+        min-height: 60px;
+      }
+      .pricing-features {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 24px 0;
+      }
+      .pricing-features li {
+        padding: 10px 0;
+        color: var(--text-secondary);
+        font-size: 14px;
+        display: flex;
+        align-items: start;
+        gap: 10px;
+      }
+      .pricing-features li::before {
+        content: '✓';
+        color: var(--accent);
+        font-weight: 700;
+        font-size: 16px;
+      }
+      .pricing-btn {
+        width: 100%;
+        padding: 14px;
+        background: var(--accent);
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        display: block;
+        text-align: center;
+        box-shadow: 0 2px 8px var(--shadow-md);
+      }
+      .pricing-btn:hover {
+        background: var(--accent-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 16px var(--shadow-lg);
+      }
+      .pricing-btn.secondary {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--text-primary);
+      }
+      .pricing-btn.secondary:hover {
+        background: var(--bg-secondary);
+        border-color: var(--accent);
+      }
+
+      /* Footer */
+      .footer {
+        background: #000000;
+        padding: 80px 0 30px;
+        border-top: 1px solid var(--border);
+      }
+      .footer-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 40px;
+      }
+      .footer-top {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr;
+        gap: 60px;
+        margin-bottom: 60px;
+        padding-bottom: 60px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .footer-brand {
+        max-width: 300px;
+      }
+      .footer-logo {
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--accent);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+      .footer-tagline {
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 1.6;
+        font-size: 14px;
+        margin-bottom: 20px;
+      }
+      .footer-social {
+        display: flex;
+        gap: 12px;
+      }
+      .footer-social-link {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: rgba(255, 255, 255, 0.6);
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+      .footer-social-link:hover {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #000;
+      }
+      .footer-col h4 {
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .footer-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .footer-links li {
+        margin-bottom: 12px;
+      }
+      .footer-links a {
+        color: rgba(255, 255, 255, 0.6);
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.2s;
+      }
+      .footer-links a:hover {
+        color: var(--accent);
+      }
+      .footer-newsletter h4 {
+        margin-bottom: 12px;
+      }
+      .footer-newsletter p {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 13px;
+        margin-bottom: 16px;
+        line-height: 1.5;
+      }
+      .newsletter-form {
+        display: flex;
+        gap: 8px;
+      }
+      .newsletter-input {
+        flex: 1;
+        padding: 12px 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+        color: #fff;
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
+      .newsletter-input:focus {
+        outline: none;
+        border-color: var(--accent);
+        background: rgba(255, 255, 255, 0.08);
+      }
+      .newsletter-input::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+      }
+      .newsletter-btn {
+        padding: 12px 24px;
+        background: var(--accent);
+        color: #000;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+      }
+      .newsletter-btn:hover {
+        background: #333333;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px var(--shadow);
+      }
+      .footer-bottom {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 30px;
+      }
+      .footer-bottom-left {
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 13px;
+      }
+      .footer-bottom-links {
+        display: flex;
+        gap: 24px;
+      }
+      .footer-bottom-links a {
+        color: rgba(255, 255, 255, 0.4);
+        text-decoration: none;
+        font-size: 13px;
+        transition: color 0.2s;
+      }
+      .footer-bottom-links a:hover {
+        color: var(--accent);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!-- Navigation -->
+      <nav class="navbar">
+        <div class="navbar-container">
+          <div class="navbar-brand">
+            <a href="/" class="navbar-logo">
+              <img src="/images/logo-icon.svg" alt="CareerSIM Logo" style="width: 40px; height: 40px; border-radius: 10px;" />
+              <span class="navbar-logo-text">CareerSIM</span>
+            </a>
+          </div>
+          <div class="navbar-menu">
+            <div class="navbar-links">
+              <a href="/" class="navbar-link" data-i18n="nav_home">Startseite</a>
+              <a href="/features-new.html" class="navbar-link" data-i18n="nav_features">Funktionen</a>
+              <a href="/pricing.html" class="navbar-link" data-i18n="nav_pricing">Preise</a>
+              <a href="/about.html" class="navbar-link" data-i18n="nav_about">Über uns</a>
+              <a href="/contact.html" class="navbar-link" data-i18n="nav_contact">Kontakt</a>
+            </div>
+          </div>
+          <div class="navbar-cta">
+            <div class="lang-switcher" style="display: flex; gap: 8px; align-items: center; margin-right: 16px;">
+              <button class="lang-switch active" data-lang="de" onclick="i18n.setLanguage('de')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">DE</button>
+              <button class="lang-switch" data-lang="en" onclick="i18n.setLanguage('en')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">EN</button>
+            </div>
+            <a href="/login.html" class="navbar-btn-login" data-i18n="nav_login">Anmelden</a>
+            <a href="/pricing.html" class="navbar-btn-start" data-i18n="nav_signup">Registrieren</a>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Pricing Hero -->
+      <div class="pricing-hero">
+        <h1 data-i18n="pricing_hero_title">Wähle deinen Plan</h1>
+        <p data-i18n="pricing_hero_subtitle">Flexible Preismodelle für jeden Bedarf. Starte noch heute und verbessere deine Interview-Skills.</p>
+      </div>
+
+      <!-- Pricing Grid -->
+      <div class="pricing-grid">
+        <!-- Single Interview -->
+        <div class="pricing-card">
+          <h3 data-i18n="pricing_single">Einzelnes Interview</h3>
+          <div class="pricing-price"><span data-i18n="pricing_single_price">3€</span></div>
+          <div class="pricing-description" data-i18n="pricing_single_desc">Perfekt zum Testen und für gelegentliche Übung.</div>
+          <ul class="pricing-features">
+            <li data-i18n="pricing_single_feature1">1 vollständiges Interview</li>
+            <li data-i18n="pricing_single_feature2">KI-gestütztes Feedback</li>
+            <li data-i18n="pricing_single_feature3">Speech Recognition</li>
+            <li data-i18n="pricing_single_feature4">Interview-Transkript</li>
+            <li data-i18n="pricing_single_feature5">7 Tage Zugriff auf Ergebnisse</li>
+          </ul>
+          <a href="/payment.html?plan=single" class="pricing-btn" data-i18n="pricing_single_cta">Jetzt kaufen</a>
+        </div>
+
+        <!-- Monthly -->
+        <div class="pricing-card">
+          <h3 data-i18n="pricing_monthly">Monats-Abo</h3>
+          <div class="pricing-price"><span data-i18n="pricing_monthly_price">9€</span> <span data-i18n="pricing_monthly_period">/Monat</span></div>
+          <div class="pricing-description" data-i18n="pricing_monthly_desc">Ideal für kurze Bewerbungsphasen und intensive Vorbereitung.</div>
+          <ul class="pricing-features">
+            <li data-i18n="pricing_monthly_feature1">Unbegrenzte Interviews</li>
+            <li data-i18n="pricing_monthly_feature2">Alle Features inklusive</li>
+            <li data-i18n="pricing_monthly_feature3">Dashboard & Analytics</li>
+            <li data-i18n="pricing_monthly_feature4">Fortschritts-Tracking</li>
+            <li data-i18n="pricing_monthly_feature5">Prioritäts-Support</li>
+            <li data-i18n="pricing_monthly_feature6">Monatlich kündbar</li>
+          </ul>
+          <a href="/payment.html?plan=monthly" class="pricing-btn" data-i18n="pricing_monthly_cta">Jetzt starten</a>
+        </div>
+
+        <!-- Semester - Most Popular -->
+        <div class="pricing-card popular">
+          <div class="pricing-badge" data-i18n="pricing_popular">Beliebt</div>
+          <h3 data-i18n="pricing_semester">Semester-Abo</h3>
+          <div class="pricing-price"><span data-i18n="pricing_semester_price">49€</span> <span data-i18n="pricing_semester_period">/6 Monate</span></div>
+          <div class="pricing-description" data-i18n="pricing_semester_desc">Beste Wahl für Studenten während Praktikums- und Bewerbungsphasen.</div>
+          <ul class="pricing-features">
+            <li data-i18n="pricing_semester_feature1">Unbegrenzte Interviews (6 Monate)</li>
+            <li data-i18n="pricing_semester_feature2">Alle Premium-Features</li>
+            <li data-i18n="pricing_semester_feature3">Dashboard & Analytics</li>
+            <li><strong data-i18n="pricing_semester_feature4">Pause-Funktion für Auslandssemester</strong></li>
+            <li data-i18n="pricing_semester_feature5">Interview-Historie exportieren</li>
+            <li data-i18n="pricing_semester_feature6">Prioritäts-Support</li>
+            <li data-i18n="pricing_semester_feature7">Spare 27€ vs. Monatlich</li>
+          </ul>
+          <a href="/payment.html?plan=semester" class="pricing-btn" data-i18n="pricing_semester_cta">Jetzt starten</a>
+        </div>
+
+        <!-- Yearly -->
+        <div class="pricing-card">
+          <h3 data-i18n="pricing_yearly">Jahres-Abo</h3>
+          <div class="pricing-price"><span data-i18n="pricing_yearly_price">89€</span> <span data-i18n="pricing_yearly_period">/Jahr</span></div>
+          <div class="pricing-description" data-i18n="pricing_yearly_desc">Maximale Flexibilität für das gesamte Studienjahr und langfristige Karriereplanung.</div>
+          <ul class="pricing-features">
+            <li data-i18n="pricing_yearly_feature1">Unbegrenzte Interviews (12 Monate)</li>
+            <li data-i18n="pricing_yearly_feature2">Alle Premium-Features</li>
+            <li data-i18n="pricing_yearly_feature3">Erweiterte Analytics</li>
+            <li><strong data-i18n="pricing_yearly_feature4">Pause-Funktion jederzeit</strong></li>
+            <li data-i18n="pricing_yearly_feature5">1-zu-1 Coaching-Session (1x)</li>
+            <li data-i18n="pricing_yearly_feature6">Lebenslanger Zugriff auf Transkripte</li>
+            <li data-i18n="pricing_yearly_feature7">VIP Support</li>
+            <li data-i18n="pricing_yearly_feature8">Spare 19€ vs. Monatlich</li>
+          </ul>
+          <a href="/payment.html?plan=yearly" class="pricing-btn" data-i18n="pricing_yearly_cta">Jetzt starten</a>
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <div style="max-width: 800px; margin: 0 auto 80px; padding: 0 20px;">
+        <h2 style="text-align: center; margin-bottom: 32px;" data-i18n="pricing_faq_title">Häufig gestellte Fragen</h2>
+        <div style="background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 32px; box-shadow: 0 2px 8px var(--shadow);">
+          <div style="margin-bottom: 24px;">
+            <h4 style="color: var(--accent); margin-bottom: 8px;" data-i18n="pricing_faq1_q">Was bedeutet "Pause-Funktion"?</h4>
+            <p style="color: var(--text-secondary); font-size: 14px;" data-i18n="pricing_faq1_a">Bei Semester- und Jahres-Abos kannst du dein Abo für bis zu 3 Monate pausieren, z.B. während eines Auslandssemesters oder Praktikums. Die Laufzeit wird automatisch verlängert.</p>
+          </div>
+          <div style="margin-bottom: 24px;">
+            <h4 style="color: var(--accent); margin-bottom: 8px;" data-i18n="pricing_faq2_q">Kann ich jederzeit kündigen?</h4>
+            <p style="color: var(--text-secondary); font-size: 14px;" data-i18n="pricing_faq2_a">Ja! Das Monats-Abo ist monatlich kündbar. Bei Semester- und Jahres-Abos erhältst du die volle Laufzeit, eine vorzeitige Kündigung ist ohne Erstattung möglich.</p>
+          </div>
+          <div>
+            <h4 style="color: var(--accent); margin-bottom: 8px;" data-i18n="pricing_faq3_q">Welche Bezahlmethoden werden akzeptiert?</h4>
+            <p style="color: var(--text-secondary); font-size: 14px;" data-i18n="pricing_faq3_a">Wir akzeptieren Kreditkarten (Visa, Mastercard), PayPal, SEPA-Lastschrift und Sofortüberweisung.</p>
+          </div>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <div class="footer-container">
+          <div class="footer-top">
+            <!-- Brand Column -->
+            <div class="footer-brand">
+              <div class="footer-logo" style="display: flex; align-items: center; gap: 8px;">
+                <img src="/images/logo-icon.svg" alt="CareerSIM" style="width: 32px; height: 32px; border-radius: 8px;" />
+                <span>CareerSIM</span>
+              </div>
+              <p class="footer-tagline">
+                KI-gestützte Interview-Vorbereitung für deinen Karriere-Erfolg. 
+                Meistere Bewerbungsgespräche mit modernster Technologie.
+              </p>
+              <div class="footer-social">
+                <a href="#" class="footer-social-link" aria-label="LinkedIn">in</a>
+                <a href="#" class="footer-social-link" aria-label="Twitter">𝕏</a>
+                <a href="#" class="footer-social-link" aria-label="Instagram">📷</a>
+                <a href="#" class="footer-social-link" aria-label="Facebook">f</a>
+              </div>
+            </div>
+
+            <!-- Product Column -->
+            <div class="footer-col">
+              <h4>Produkt</h4>
+              <ul class="footer-links">
+                <li><a href="/features-new.html">KI-Interview</a></li>
+                <li><a href="/features-new.html">KI-Karriereberatung</a></li>
+                <li><a href="/pricing.html">Preise</a></li>
+                <li><a href="/dashboard.html">Dashboard</a></li>
+              </ul>
+            </div>
+
+            <!-- Solutions Column -->
+            <div class="footer-col">
+              <h4>Lösungen</h4>
+              <ul class="footer-links">
+                <li><a href="/students.html">Für Studierende</a></li>
+                <li><a href="/universities.html">Für Hochschulen</a></li>
+                <li><a href="/companies.html">Für Unternehmen</a></li>
+              </ul>
+            </div>
+
+            <!-- Company Column -->
+            <div class="footer-col">
+              <h4>Unternehmen</h4>
+              <ul class="footer-links">
+                <li><a href="/about.html">Über uns</a></li>
+                <li><a href="/contact.html">Kontakt</a></li>
+                <li><a href="/privacy.html">Datenschutz</a></li>
+                <li><a href="/terms.html">AGB</a></li>
+              </ul>
+            </div>
+
+            <!-- Newsletter Column -->
+            <div class="footer-newsletter">
+              <h4>Stay connected</h4>
+              <p>Get the latest platform updates.</p>
+              <form class="newsletter-form" onsubmit="event.preventDefault(); alert('✓ Danke für deine Anmeldung!');">
+                <input type="email" class="newsletter-input" placeholder="Deine E-Mail" required />
+                <button type="submit" class="newsletter-btn">Subscribe</button>
+              </form>
+              <p style="margin-top: 12px; font-size: 12px;">
+                Read our <a href="/privacy.html" style="color: var(--accent); text-decoration: underline;">privacy</a> for more info.
+              </p>
+            </div>
+          </div>
+
+          <!-- Bottom Bar -->
+          <div class="footer-bottom">
+            <div class="footer-bottom-left">
+              © 2025 CareerSIM. Alle Rechte vorbehalten.
+            </div>
+            <div class="footer-bottom-links">
+              <a href="mailto:contact@careersim.com">contact@careersim.com</a>
+              <a href="#">Dribbble</a>
+              <a href="#">LinkedIn</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script src="/js/i18n.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('language') || 'de';
+        i18n.setLanguage(savedLang);
+        document.querySelectorAll('.lang-switch').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.lang === savedLang);
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.lang-switch').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+          });
+        });
+      });
+    </script>
+    <style>
+      .lang-switch {
+        background: transparent !important;
+        border: 1.5px solid var(--border) !important;
+        color: var(--text-secondary) !important;
+      }
+      .lang-switch:hover {
+        border-color: var(--accent) !important;
+        color: var(--accent) !important;
+        background: rgba(0, 0, 0, 0.05) !important;
+      }
+      .lang-switch.active {
+        background: transparent !important;
+        border: 1.5px solid var(--accent) !important;
+        color: var(--accent) !important;
+        font-weight: 700 !important;
+      }
+    </style>
+  </body>
+</html>

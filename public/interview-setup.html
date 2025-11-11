@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Interview Vorbereitung - CareerSIM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      .setup-container {
+        min-height: 100vh;
+        padding: 100px 20px 80px;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      .setup-header {
+        text-align: center;
+        margin-bottom: 60px;
+      }
+      .setup-header h1 {
+        font-size: 48px;
+        margin-bottom: 16px;
+      }
+      .setup-header p {
+        font-size: 18px;
+        color: var(--text-secondary);
+      }
+      .setup-steps {
+        display: flex;
+        justify-content: center;
+        gap: 24px;
+        margin-bottom: 60px;
+      }
+      .step {
+        flex: 1;
+        max-width: 200px;
+        text-align: center;
+        opacity: 0.4;
+        transition: all 0.3s ease;
+      }
+      .step.active {
+        opacity: 1;
+      }
+      .step-number {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: var(--border);
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 12px;
+        font-weight: 700;
+        font-size: 20px;
+      }
+      .step.active .step-number {
+        background: var(--accent);
+        color: #ffffff;
+      }
+      .setup-card {
+        background: var(--bg);
+        border: 2px solid var(--border);
+        border-radius: 16px;
+        padding: 40px;
+        margin-bottom: 32px;
+        box-shadow: 0 4px 16px var(--shadow);
+      }
+      .setup-card h2 {
+        font-size: 32px;
+        margin-bottom: 24px;
+      }
+      .option-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin-bottom: 32px;
+      }
+      .option-btn {
+        padding: 20px;
+        background: var(--bg-secondary);
+        border: 2px solid var(--border);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+      }
+      .option-btn:hover {
+        border-color: var(--accent);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px var(--shadow);
+      }
+      .option-btn.selected {
+        border-color: var(--accent);
+        background: rgba(0, 0, 0, 0.02);
+      }
+      .option-icon {
+        font-size: 32px;
+        margin-bottom: 8px;
+      }
+      .option-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+      .option-desc {
+        font-size: 12px;
+        color: var(--text-secondary);
+      }
+      .interview-structure {
+        background: var(--bg-secondary);
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 32px;
+      }
+      .structure-item {
+        display: flex;
+        align-items: start;
+        gap: 16px;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .structure-item:last-child {
+        border-bottom: none;
+      }
+      .structure-number {
+        background: var(--accent);
+        color: #ffffff;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      .structure-content h4 {
+        font-size: 16px;
+        margin-bottom: 4px;
+      }
+      .structure-content p {
+        font-size: 14px;
+        color: var(--text-secondary);
+        margin: 0;
+      }
+      .action-buttons {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+      }
+      .btn-primary {
+        padding: 16px 48px;
+        background: var(--accent);
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 18px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .btn-primary:hover {
+        background: var(--accent-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px var(--shadow);
+      }
+      .btn-primary:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .btn-secondary {
+        padding: 16px 32px;
+        background: transparent;
+        color: var(--text-primary);
+        border: 2px solid var(--border);
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 18px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .btn-secondary:hover {
+        border-color: var(--accent);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <nav class="navbar">
+        <div class="navbar-container">
+          <div class="navbar-brand">
+            <a href="/" class="navbar-logo">
+              <img src="/images/logo-icon.svg" alt="CareerSIM Logo" style="width: 40px; height: 40px; border-radius: 10px;" />
+              <span class="navbar-logo-text">CareerSIM</span>
+            </a>
+          </div>
+          <div class="navbar-menu">
+            <div class="navbar-links">
+              <a href="/dashboard.html" class="navbar-link">Dashboard</a>
+              <a href="/interview.html" class="navbar-link" style="color: var(--accent);">Interview Simulation</a>
+              <a href="/career-advice.html" class="navbar-link">KI Karriereberatung</a>
+              <a href="/cv-rating.html" class="navbar-link">CV Rating</a>
+              <a href="/account-settings.html" class="navbar-link">Account Settings</a>
+            </div>
+          </div>
+          <div class="navbar-cta">
+            <button id="logout-btn" class="navbar-btn-login">Logout</button>
+          </div>
+        </div>
+      </nav>
+
+      <div class="setup-container">
+        <div class="setup-header">
+          <h1>🎯 Interview Vorbereitung</h1>
+          <p>Wähle deine Branche und Position für ein personalisiertes Interview-Erlebnis</p>
+        </div>
+
+        <div class="setup-steps">
+          <div class="step active" id="step-1">
+            <div class="step-number">1</div>
+            <div>Branche wählen</div>
+          </div>
+          <div class="step" id="step-2">
+            <div class="step-number">2</div>
+            <div>Position wählen</div>
+          </div>
+          <div class="step" id="step-3">
+            <div class="step-number">3</div>
+            <div>Struktur & Start</div>
+          </div>
+        </div>
+
+        <!-- Step 1: Industry Selection -->
+        <div class="setup-card" id="industry-selection">
+          <h2>Wähle deine Branche</h2>
+          <div class="option-grid">
+            <div class="option-btn" onclick="selectIndustry('tech')">
+              <div class="option-icon">💻</div>
+              <div class="option-title">Tech & IT</div>
+              <div class="option-desc">Software, Data, Cloud</div>
+            </div>
+            <div class="option-btn" onclick="selectIndustry('finance')">
+              <div class="option-icon">💰</div>
+              <div class="option-title">Finance & Banking</div>
+              <div class="option-desc">Investment, Consulting</div>
+            </div>
+            <div class="option-btn" onclick="selectIndustry('marketing')">
+              <div class="option-icon">📱</div>
+              <div class="option-title">Marketing & Sales</div>
+              <div class="option-desc">Digital, B2B, B2C</div>
+            </div>
+            <div class="option-btn" onclick="selectIndustry('engineering')">
+              <div class="option-icon">⚙️</div>
+              <div class="option-title">Engineering</div>
+              <div class="option-desc">Mechanical, Electrical</div>
+            </div>
+            <div class="option-btn" onclick="selectIndustry('healthcare')">
+              <div class="option-icon">🏥</div>
+              <div class="option-title">Healthcare</div>
+              <div class="option-desc">Medical, Pharma</div>
+            </div>
+            <div class="option-btn" onclick="selectIndustry('consulting')">
+              <div class="option-icon">💼</div>
+              <div class="option-title">Consulting</div>
+              <div class="option-desc">Strategy, Management</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Position Selection (hidden initially) -->
+        <div class="setup-card" id="position-selection" style="display: none;">
+          <h2>Wähle deine Position</h2>
+          <div class="option-grid" id="position-options">
+            <!-- Will be populated based on industry -->
+          </div>
+        </div>
+
+        <!-- Step 3: Interview Structure (hidden initially) -->
+        <div class="setup-card" id="structure-overview" style="display: none;">
+          <h2>Interview-Struktur</h2>
+          <p style="color: var(--text-secondary); margin-bottom: 32px;">
+            Dein Interview wird folgendermaßen strukturiert sein:
+          </p>
+          
+          <div class="interview-structure">
+            <div class="structure-item">
+              <div class="structure-number">1</div>
+              <div class="structure-content">
+                <h4>Kennenlernen & Einstieg (5 Min.)</h4>
+                <p>Vorstellung, Motivation und erste Fragen zur Person</p>
+              </div>
+            </div>
+            <div class="structure-item">
+              <div class="structure-number">2</div>
+              <div class="structure-content">
+                <h4>CV & Werdegang (10 Min.)</h4>
+                <p>Fragen zu deinem Lebenslauf, Ausbildung und bisherigen Erfahrungen</p>
+              </div>
+            </div>
+            <div class="structure-item">
+              <div class="structure-number">3</div>
+              <div class="structure-content">
+                <h4>Fachliche Fragen (15 Min.)</h4>
+                <p>Technische oder fachspezifische Fragen zur Position</p>
+              </div>
+            </div>
+            <div class="structure-item">
+              <div class="structure-number">4</div>
+              <div class="structure-content">
+                <h4>Situative Aufgaben (10 Min.)</h4>
+                <p>Fallstudien und Problemlösungsszenarien</p>
+              </div>
+            </div>
+            <div class="structure-item">
+              <div class="structure-number">5</div>
+              <div class="structure-content">
+                <h4>Deine Fragen & Abschluss (5 Min.)</h4>
+                <p>Zeit für deine Fragen und Verabschiedung</p>
+              </div>
+            </div>
+          </div>
+
+          <div style="background: #eff6ff; border-left: 3px solid #3b82f6; padding: 16px; border-radius: 8px; margin-top: 24px;">
+            <strong>💡 Tipp:</strong> Bereite Notizen vor und halte deinen Lebenslauf bereit. Das Interview dauert ca. 45 Minuten.
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button class="btn-secondary" id="back-btn" style="display: none;" onclick="goBack()">← Zurück</button>
+          <button class="btn-primary" id="start-btn" disabled onclick="startInterview()">Interview starten →</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let selectedIndustry = null;
+      let selectedPosition = null;
+      let currentStep = 1;
+
+      const positions = {
+        tech: [
+          { id: 'software-engineer', icon: '👨‍💻', title: 'Software Engineer', desc: 'Full Stack, Frontend, Backend' },
+          { id: 'data-scientist', icon: '📊', title: 'Data Scientist', desc: 'ML, AI, Analytics' },
+          { id: 'product-manager', icon: '🎯', title: 'Product Manager', desc: 'Tech Products' },
+          { id: 'devops', icon: '🔧', title: 'DevOps Engineer', desc: 'Cloud, Infrastructure' }
+        ],
+        finance: [
+          { id: 'analyst', icon: '📈', title: 'Financial Analyst', desc: 'Investment, Corporate' },
+          { id: 'consultant', icon: '💼', title: 'Financial Consultant', desc: 'Advisory' },
+          { id: 'trader', icon: '💹', title: 'Trader', desc: 'Markets, Trading' }
+        ],
+        marketing: [
+          { id: 'marketing-manager', icon: '📱', title: 'Marketing Manager', desc: 'Digital, Content' },
+          { id: 'social-media', icon: '📲', title: 'Social Media Manager', desc: 'Community, Content' },
+          { id: 'sales', icon: '💼', title: 'Sales Manager', desc: 'B2B, B2C' }
+        ],
+        engineering: [
+          { id: 'mechanical', icon: '⚙️', title: 'Mechanical Engineer', desc: 'Design, Production' },
+          { id: 'electrical', icon: '⚡', title: 'Electrical Engineer', desc: 'Electronics, Power' }
+        ],
+        healthcare: [
+          { id: 'medical', icon: '🏥', title: 'Medical Professional', desc: 'Clinical, Practice' },
+          { id: 'pharma', icon: '💊', title: 'Pharma Specialist', desc: 'Research, Development' }
+        ],
+        consulting: [
+          { id: 'strategy', icon: '🎯', title: 'Strategy Consultant', desc: 'Corporate Strategy' },
+          { id: 'management', icon: '💼', title: 'Management Consultant', desc: 'Operations, Change' }
+        ]
+      };
+
+      function selectIndustry(industry) {
+        selectedIndustry = industry;
+        document.querySelectorAll('#industry-selection .option-btn').forEach(btn => btn.classList.remove('selected'));
+        event.target.closest('.option-btn').classList.add('selected');
+        
+        // Show position selection
+        const positionSelection = document.getElementById('position-selection');
+        const positionOptions = document.getElementById('position-options');
+        
+        positionOptions.innerHTML = '';
+        positions[industry].forEach(pos => {
+          const btn = document.createElement('div');
+          btn.className = 'option-btn';
+          btn.onclick = () => selectPosition(pos.id);
+          btn.innerHTML = `
+            <div class="option-icon">${pos.icon}</div>
+            <div class="option-title">${pos.title}</div>
+            <div class="option-desc">${pos.desc}</div>
+          `;
+          positionOptions.appendChild(btn);
+        });
+        
+        positionSelection.style.display = 'block';
+        document.getElementById('step-2').classList.add('active');
+        document.getElementById('back-btn').style.display = 'inline-block';
+        currentStep = 2;
+      }
+
+      function selectPosition(position) {
+        selectedPosition = position;
+        document.querySelectorAll('#position-selection .option-btn').forEach(btn => btn.classList.remove('selected'));
+        event.target.closest('.option-btn').classList.add('selected');
+        
+        // Show structure overview
+        document.getElementById('structure-overview').style.display = 'block';
+        document.getElementById('step-3').classList.add('active');
+        document.getElementById('start-btn').disabled = false;
+        currentStep = 3;
+        
+        // Scroll to structure
+        document.getElementById('structure-overview').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      function goBack() {
+        if (currentStep === 3) {
+          document.getElementById('structure-overview').style.display = 'none';
+          document.getElementById('step-3').classList.remove('active');
+          document.getElementById('start-btn').disabled = true;
+          currentStep = 2;
+        } else if (currentStep === 2) {
+          document.getElementById('position-selection').style.display = 'none';
+          document.getElementById('step-2').classList.remove('active');
+          document.getElementById('back-btn').style.display = 'none';
+          selectedIndustry = null;
+          selectedPosition = null;
+          document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+          currentStep = 1;
+        }
+      }
+
+      function startInterview() {
+        // Save selections to localStorage
+        localStorage.setItem('interviewIndustry', selectedIndustry);
+        localStorage.setItem('interviewPosition', selectedPosition);
+        
+        // Redirect to interview page
+        window.location.href = '/interview.html';
+      }
+
+      // Logout
+      document.getElementById('logout-btn')?.addEventListener('click', () => {
+        localStorage.removeItem('token');
+        window.location.href = '/login.html';
+      });
+    </script>
+  </body>
+</html>

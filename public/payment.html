@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Zahlung - CareerSIM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      .payment-container {
+        min-height: 100vh;
+        padding: 120px 20px 80px;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      .payment-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+      .payment-header h1 {
+        font-size: 36px;
+        margin-bottom: 12px;
+      }
+      .payment-grid {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 32px;
+        margin-top: 40px;
+      }
+      @media (max-width: 968px) {
+        .payment-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .payment-form {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 32px;
+        box-shadow: 0 2px 8px var(--shadow);
+      }
+      .order-summary {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 32px;
+        height: fit-content;
+        position: sticky;
+        top: 100px;
+        box-shadow: 0 2px 8px var(--shadow);
+      }
+      .form-section {
+        margin-bottom: 32px;
+      }
+      .form-section h3 {
+        font-size: 18px;
+        margin-bottom: 16px;
+        color: var(--text-primary);
+      }
+      .form-group {
+        margin-bottom: 16px;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--text-primary);
+        font-size: 14px;
+      }
+      .form-group input {
+        width: 100%;
+        padding: 12px 16px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text-primary);
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
+      .form-group input:focus {
+        outline: none;
+        border-color: var(--accent);
+        background: rgba(255, 255, 255, 0.05);
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+      }
+      .form-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 16px;
+      }
+      .payment-methods {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      .payment-method {
+        padding: 16px;
+        border: 2px solid var(--border);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.02);
+      }
+      .payment-method:hover {
+        border-color: var(--accent);
+        background: var(--bg-secondary);
+      }
+      .payment-method.active {
+        border-color: var(--accent);
+        background: var(--bg-secondary);
+      }
+      .payment-method-icon {
+        font-size: 32px;
+        margin-bottom: 8px;
+      }
+      .payment-method-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .summary-row:last-child {
+        border-bottom: none;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--accent);
+        margin-top: 12px;
+        padding-top: 20px;
+        border-top: 2px solid var(--border);
+      }
+      .pay-btn {
+        width: 100%;
+        padding: 16px;
+        background: var(--accent);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 18px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 24px;
+      }
+      .pay-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px var(--shadow);
+      }
+      .security-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 16px;
+        color: var(--text-secondary);
+        font-size: 12px;
+      }
+      .plan-badge {
+        display: inline-block;
+        background: linear-gradient(90deg, var(--accent), #60a5fa);
+        color: #042022;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <!-- Navigation -->
+      <nav class="navbar">
+        <div class="navbar-container">
+          <div class="navbar-brand">
+            <a href="/" class="navbar-logo">
+              <img src="/images/logo-icon.svg" alt="CareerSIM Logo" style="width: 40px; height: 40px; border-radius: 10px;" />
+              <span class="navbar-logo-text">CareerSIM</span>
+            </a>
+          </div>
+          <div class="navbar-menu">
+            <div class="navbar-links">
+              <a href="/" class="navbar-link" data-i18n="nav_home">Startseite</a>
+              <a href="/features-new.html" class="navbar-link" data-i18n="nav_features">Funktionen</a>
+              <a href="/pricing.html" class="navbar-link" data-i18n="nav_pricing">Preise</a>
+              <a href="/about.html" class="navbar-link" data-i18n="nav_about">Über uns</a>
+              <a href="/contact.html" class="navbar-link" data-i18n="nav_contact">Kontakt</a>
+            </div>
+          </div>
+          <div class="navbar-cta">
+            <div class="lang-switcher" style="display: flex; gap: 8px; align-items: center; margin-right: 16px;">
+              <button class="lang-switch active" data-lang="de" onclick="i18n.setLanguage('de')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">DE</button>
+              <button class="lang-switch" data-lang="en" onclick="i18n.setLanguage('en')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">EN</button>
+            </div>
+            <a href="/login.html" class="navbar-btn-login" data-i18n="nav_login">Anmelden</a>
+            <a href="/pricing.html" class="navbar-btn-start" data-i18n="nav_signup">Registrieren</a>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Payment Container -->
+      <div class="payment-container">
+        <div class="payment-header">
+          <h1>Sichere Zahlung</h1>
+          <p style="color: var(--text-secondary);">Deine Zahlung wird sicher verschlüsselt übertragen</p>
+        </div>
+
+        <div class="payment-grid">
+          <!-- Payment Form -->
+          <div class="payment-form">
+            <!-- Payment Method Selection -->
+            <div class="form-section">
+              <h3>Zahlungsmethode wählen</h3>
+              <div class="payment-methods">
+                <div class="payment-method active" data-method="card">
+                  <div class="payment-method-icon">💳</div>
+                  <div class="payment-method-name">Kreditkarte</div>
+                </div>
+                <div class="payment-method" data-method="paypal">
+                  <div class="payment-method-icon">🅿️</div>
+                  <div class="payment-method-name">PayPal</div>
+                </div>
+                <div class="payment-method" data-method="sepa">
+                  <div class="payment-method-icon">🏦</div>
+                  <div class="payment-method-name">SEPA</div>
+                </div>
+                <div class="payment-method" data-method="sofort">
+                  <div class="payment-method-icon">⚡</div>
+                  <div class="payment-method-name">Sofort</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card Payment Form -->
+            <div id="card-form" class="payment-method-form">
+              <div class="form-section">
+                <h3>Kreditkarten-Details</h3>
+                <div class="form-group">
+                  <label for="card-number">Kartennummer</label>
+                  <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19" />
+                </div>
+                <div class="form-group">
+                  <label for="card-name">Name auf der Karte</label>
+                  <input type="text" id="card-name" placeholder="Max Mustermann" />
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="card-expiry">Ablaufdatum</label>
+                    <input type="text" id="card-expiry" placeholder="MM/YY" maxlength="5" />
+                  </div>
+                  <div class="form-group">
+                    <label for="card-cvv">CVV</label>
+                    <input type="text" id="card-cvv" placeholder="123" maxlength="3" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-section">
+                <h3>Rechnungsadresse</h3>
+                <div class="form-group">
+                  <label for="email">E-Mail</label>
+                  <input type="email" id="email" placeholder="deine@email.de" />
+                </div>
+                <div class="form-group">
+                  <label for="address">Adresse</label>
+                  <input type="text" id="address" placeholder="Straße und Hausnummer" />
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="city">Stadt</label>
+                    <input type="text" id="city" placeholder="Berlin" />
+                  </div>
+                  <div class="form-group">
+                    <label for="zip">PLZ</label>
+                    <input type="text" id="zip" placeholder="10115" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- PayPal Form (hidden by default) -->
+            <div id="paypal-form" class="payment-method-form" style="display: none;">
+              <div class="form-section">
+                <p style="color: var(--text-secondary); margin-bottom: 24px;">Du wirst zu PayPal weitergeleitet, um die Zahlung abzuschließen.</p>
+                <div style="text-align: center; padding: 40px;">
+                  <div style="font-size: 64px; margin-bottom: 16px;">🅿️</div>
+                  <p style="color: var(--text-secondary);">PayPal - Sicher und schnell bezahlen</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- SEPA Form -->
+            <div id="sepa-form" class="payment-method-form" style="display: none;">
+              <div class="form-section">
+                <h3>SEPA-Lastschrift</h3>
+                <div class="form-group">
+                  <label for="iban">IBAN</label>
+                  <input type="text" id="iban" placeholder="DE89 3704 0044 0532 0130 00" />
+                </div>
+                <div class="form-group">
+                  <label for="account-holder">Kontoinhaber</label>
+                  <input type="text" id="account-holder" placeholder="Max Mustermann" />
+                </div>
+                <p style="font-size: 12px; color: var(--text-secondary); margin-top: 16px;">
+                  Mit der Angabe deiner IBAN ermächtigst du CareerSIM, Zahlungen von deinem Konto mittels Lastschrift einzuziehen.
+                </p>
+              </div>
+            </div>
+
+            <!-- Sofort Form -->
+            <div id="sofort-form" class="payment-method-form" style="display: none;">
+              <div class="form-section">
+                <p style="color: var(--text-secondary); margin-bottom: 24px;">Du wirst zu Sofortüberweisung weitergeleitet, um die Zahlung über dein Online-Banking abzuschließen.</p>
+                <div style="text-align: center; padding: 40px;">
+                  <div style="font-size: 64px; margin-bottom: 16px;">⚡</div>
+                  <p style="color: var(--text-secondary);">Sofortüberweisung - Direkter Banktransfer</p>
+                </div>
+              </div>
+            </div>
+
+            <button class="pay-btn" id="pay-button">Jetzt bezahlen</button>
+            <div class="security-badge">
+              <span>🔒</span>
+              <span>Sichere Verschlüsselung durch SSL/TLS</span>
+            </div>
+          </div>
+
+          <!-- Order Summary -->
+          <div class="order-summary">
+            <span class="plan-badge" id="plan-badge">MONAT</span>
+            <h3 style="margin-bottom: 24px;">Bestellübersicht</h3>
+            <div class="summary-row">
+              <span style="color: var(--text-secondary);">Plan:</span>
+              <span id="plan-name" style="color: var(--text-primary); font-weight: 600;">Monats-Abo</span>
+            </div>
+            <div class="summary-row">
+              <span style="color: var(--text-secondary);">Preis:</span>
+              <span id="plan-price" style="color: var(--text-primary); font-weight: 600;">9,00 €</span>
+            </div>
+            <div class="summary-row">
+              <span style="color: var(--text-secondary);">MwSt. (19%):</span>
+              <span id="plan-tax" style="color: var(--text-primary); font-weight: 600;">1,71 €</span>
+            </div>
+            <div class="summary-row">
+              <span>Gesamt:</span>
+              <span id="plan-total">10,71 €</span>
+            </div>
+
+            <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border);">
+              <h4 style="font-size: 14px; margin-bottom: 12px; color: var(--text-primary);">Enthaltene Features:</h4>
+              <ul id="features-list" style="list-style: none; padding: 0; margin: 0;">
+                <li style="padding: 6px 0; font-size: 13px; color: var(--text-secondary); display: flex; gap: 8px;">
+                  <span style="color: var(--accent);">✓</span>
+                  <span>Unbegrenzte Interviews</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="footer" style="margin-top: 80px;">
+        <div class="footer-container">
+          <div class="footer-top">
+            <!-- Brand Column -->
+            <div class="footer-brand">
+              <div class="footer-logo" style="display: flex; align-items: center; gap: 8px;">
+                <img src="/images/logo-icon.svg" alt="CareerSIM" style="width: 32px; height: 32px; border-radius: 8px;" />
+                <span>CareerSIM</span>
+              </div>
+              <p class="footer-tagline">
+                KI-gestützte Interview-Vorbereitung für deinen Karriere-Erfolg. 
+                Meistere Bewerbungsgespräche mit modernster Technologie.
+              </p>
+              <div class="footer-social">
+                <a href="#" class="footer-social-link" aria-label="LinkedIn">in</a>
+                <a href="#" class="footer-social-link" aria-label="Twitter">𝕏</a>
+                <a href="#" class="footer-social-link" aria-label="Instagram">📷</a>
+                <a href="#" class="footer-social-link" aria-label="Facebook">f</a>
+              </div>
+            </div>
+
+            <!-- Product Column -->
+            <div class="footer-col">
+              <h4>Produkt</h4>
+              <ul class="footer-links">
+                <li><a href="/features-new.html">KI-Interview</a></li>
+                <li><a href="/features-new.html">KI-Karriereberatung</a></li>
+                <li><a href="/pricing.html">Preise</a></li>
+                <li><a href="/dashboard.html">Dashboard</a></li>
+              </ul>
+            </div>
+
+            <!-- Solutions Column -->
+            <div class="footer-col">
+              <h4>Lösungen</h4>
+              <ul class="footer-links">
+                <li><a href="/students.html">Für Studierende</a></li>
+                <li><a href="/universities.html">Für Hochschulen</a></li>
+                <li><a href="/companies.html">Für Unternehmen</a></li>
+              </ul>
+            </div>
+
+            <!-- Company Column -->
+            <div class="footer-col">
+              <h4>Unternehmen</h4>
+              <ul class="footer-links">
+                <li><a href="/about.html">Über uns</a></li>
+                <li><a href="/contact.html">Kontakt</a></li>
+                <li><a href="/privacy.html">Datenschutz</a></li>
+                <li><a href="/terms.html">AGB</a></li>
+              </ul>
+            </div>
+
+            <!-- Newsletter Column -->
+            <div class="footer-newsletter">
+              <h4>Stay connected</h4>
+              <p>Get the latest platform updates.</p>
+              <form class="newsletter-form" onsubmit="event.preventDefault(); alert('✓ Danke für deine Anmeldung!');">
+                <input type="email" class="newsletter-input" placeholder="Deine E-Mail" required />
+                <button type="submit" class="newsletter-btn">Subscribe</button>
+              </form>
+              <p style="margin-top: 12px; font-size: 12px;">
+                Read our <a href="/privacy.html" style="color: var(--accent); text-decoration: underline;">privacy</a> for more info.
+              </p>
+            </div>
+          </div>
+
+          <!-- Bottom Bar -->
+          <div class="footer-bottom">
+            <div class="footer-bottom-left">
+              © 2025 CareerSIM. Alle Rechte vorbehalten.
+            </div>
+            <div class="footer-bottom-links">
+              <a href="mailto:contact@careersim.com">contact@careersim.com</a>
+              <a href="#">Dribbble</a>
+              <a href="#">LinkedIn</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      // Get plan from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const plan = urlParams.get('plan') || 'monthly';
+
+      const plans = {
+        single: {
+          name: 'Einzelnes Interview',
+          badge: 'EINMALIG',
+          price: 3.00,
+          features: ['1 vollständiges Interview', 'KI-Feedback', 'Speech Recognition', '7 Tage Zugriff']
+        },
+        monthly: {
+          name: 'Monats-Abo',
+          badge: 'MONAT',
+          price: 9.00,
+          features: ['Unbegrenzte Interviews', 'Alle Features', 'Dashboard & Analytics', 'Prioritäts-Support']
+        },
+        semester: {
+          name: 'Semester-Abo',
+          badge: 'SEMESTER',
+          price: 49.00,
+          features: ['Unbegrenzte Interviews (6 Monate)', 'Pause-Funktion', 'Export-Funktion', 'Prioritäts-Support']
+        },
+        yearly: {
+          name: 'Jahres-Abo',
+          badge: 'JAHR',
+          price: 89.00,
+          features: ['Unbegrenzte Interviews (12 Monate)', 'Pause-Funktion', '1-zu-1 Coaching', 'VIP Support']
+        }
+      };
+
+      const selectedPlan = plans[plan];
+      const tax = selectedPlan.price * 0.19;
+      const total = selectedPlan.price + tax;
+
+      // Update summary
+      document.getElementById('plan-badge').textContent = selectedPlan.badge;
+      document.getElementById('plan-name').textContent = selectedPlan.name;
+      document.getElementById('plan-price').textContent = selectedPlan.price.toFixed(2) + ' €';
+      document.getElementById('plan-tax').textContent = tax.toFixed(2) + ' €';
+      document.getElementById('plan-total').textContent = total.toFixed(2) + ' €';
+
+      // Update features
+      const featuresList = document.getElementById('features-list');
+      featuresList.innerHTML = selectedPlan.features.map(f => 
+        `<li style="padding: 6px 0; font-size: 13px; color: var(--text-secondary); display: flex; gap: 8px;">
+          <span style="color: var(--accent);">✓</span>
+          <span>${f}</span>
+        </li>`
+      ).join('');
+
+      // Payment method switching
+      document.querySelectorAll('.payment-method').forEach(method => {
+        method.addEventListener('click', () => {
+          document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('active'));
+          method.classList.add('active');
+          
+          const selectedMethod = method.dataset.method;
+          document.querySelectorAll('.payment-method-form').forEach(form => form.style.display = 'none');
+          document.getElementById(selectedMethod + '-form').style.display = 'block';
+        });
+      });
+
+      // Format card number
+      document.getElementById('card-number')?.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\s/g, '');
+        let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+        e.target.value = formattedValue;
+      });
+
+      // Format expiry
+      document.getElementById('card-expiry')?.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length >= 2) {
+          value = value.slice(0, 2) + '/' + value.slice(2, 4);
+        }
+        e.target.value = value;
+      });
+
+      // Pay button
+      document.getElementById('pay-button').addEventListener('click', () => {
+        // Simulate payment processing
+        const button = document.getElementById('pay-button');
+        button.textContent = 'Verarbeite Zahlung...';
+        button.disabled = true;
+
+        setTimeout(() => {
+          alert('✅ Zahlung erfolgreich!\n\nDu wirst zum Dashboard weitergeleitet.');
+          window.location.href = '/dashboard.html';
+        }, 2000);
+      });
+    </script>
+    <script src="/js/i18n.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('language') || 'de';
+        i18n.setLanguage(savedLang);
+        document.querySelectorAll('.lang-switch').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.lang === savedLang);
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.lang-switch').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+          });
+        });
+      });
+    </script>
+    <style>
+      .lang-switch {
+        background: transparent !important;
+        border: 1.5px solid var(--border) !important;
+        color: var(--text-secondary) !important;
+      }
+      .lang-switch:hover {
+        border-color: var(--accent) !important;
+        color: var(--accent) !important;
+        background: rgba(0, 0, 0, 0.05) !important;
+      }
+      .lang-switch.active {
+        background: transparent !important;
+        border: 1.5px solid var(--accent) !important;
+        color: var(--accent) !important;
+        font-weight: 700 !important;
+      }
+    </style>
+  </body>
+</html>

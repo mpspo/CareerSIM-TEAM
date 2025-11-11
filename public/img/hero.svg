@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="hgrad" x1="0" x2="1">
+      <stop offset="0" stop-color="#2dd4bf"/>
+      <stop offset="1" stop-color="#60a5fa"/>
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="#041022" rx="20"/>
+  <g transform="translate(60,60)">
+    <rect x="0" y="0" width="680" height="400" rx="16" fill="rgba(255,255,255,0.02)"/>
+    <g transform="translate(28,28)">
+      <rect x="0" y="0" width="260" height="120" rx="10" fill="url(#hgrad)" opacity="0.95" />
+      <rect x="300" y="0" width="340" height="120" rx="10" fill="#0b1220" stroke="rgba(255,255,255,0.02)"/>
+      <circle cx="180" cy="220" r="80" fill="#0a2b36" />
+      <rect x="320" y="180" width="220" height="140" rx="12" fill="#042235"/>
+    </g>
+  </g>
+  <text x="80" y="470" font-family="Arial" font-size="18" fill="#7fd3cc">Simulierter Interview-Canvas</text>
+</svg>
