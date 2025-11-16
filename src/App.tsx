@@ -4,12 +4,11 @@ import { supabase } from './clients/SupabaseClient';
 import { MainLayout } from './components/common/MainLayout';
 import { CareerDashboard } from './components/dashboard/CareerDashboard';
 import { InterviewSetup } from './components/interview/InterviewSetup';
+import { InterviewSession } from './components/interview/InterviewSession';
+import { FeedbackView } from './components/interview/FeedbackView';
 
 // Components (will be created in next phases)
 // import Dashboard from './components/dashboard/Dashboard';
-// import InterviewSetup from './components/interview/setup/SetupWizard';
-// import InterviewSession from './components/interview/session/InterviewSession';
-// import FeedbackView from './components/interview/feedback/FeedbackView';
 // import Login from './components/auth/Login';
 
 function App() {
@@ -97,14 +96,16 @@ function App() {
 
               <Route path="/interview/setup" element={<InterviewSetup />} />
 
+              <Route path="/interview/session" element={<InterviewSession />} />
+
               <Route
                 path="/interview/session/:id"
-                element={<div>Interview Session (Coming Soon)</div>}
+                element={<div>Interview Session (Legacy Route)</div>}
               />
 
               <Route
                 path="/interview/feedback/:id"
-                element={<div>Feedback View (Coming Soon)</div>}
+                element={<FeedbackView />}
               />
 
               <Route
