@@ -686,8 +686,30 @@ function generateFallbackAnalysis(interview, user) {
   };
 }
 
+// OpenAI Realtime API Session Token Endpoint - NO AUTH REQUIRED FOR TESTING
+app.post('/api/realtime/session', async (req, res) => {
+  console.log('Realtime session request received');
+  
+  if (!process.env.OPENAI_API_KEY) {
+    console.error('OpenAI API key not configured');
+    return res.status(503).json({ error: 'OpenAI API key not configured' });
+  }
+
+  try {
+    console.log('Returning API key for Realtime connection');
+    // Return the API key for client-side use (in production, use ephemeral tokens)
+    return res.json({
+      apiKey: process.env.OPENAI_API_KEY
+    });
+  } catch (error) {
+    console.error('Realtime session error:', error);
+    return res.status(500).json({ error: 'Failed to create Realtime session', details: error.message });
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 CareerSIM Server läuft auf http://localhost:${PORT}`);
   console.log(`📡 OpenAI Integration: ${openai ? '✅ Aktiviert' : '❌ Nicht konfiguriert'}`);
+  console.log(`🎤 Realtime API: ${openai ? '✅ Bereit' : '❌ Nicht verfügbar'}`);
 });

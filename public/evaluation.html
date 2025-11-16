@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Auswertung - CareerSIM</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .evaluation-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .header p {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .content {
+      padding: 40px;
+    }
+
+    .summary-section {
+      margin-bottom: 40px;
+      padding-bottom: 40px;
+      border-bottom: 2px solid #e5e5e6;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .summary-card {
+      background: #f7f7f8;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .summary-card .label {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 8px;
+    }
+
+    .summary-card .value {
+      font-size: 24px;
+      font-weight: 600;
+      color: #202123;
+    }
+
+    .scorecard-section {
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      color: #202123;
+    }
+
+    .score-item {
+      margin-bottom: 24px;
+    }
+
+    .score-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .score-label {
+      font-size: 16px;
+      font-weight: 500;
+      color: #202123;
+    }
+
+    .score-value {
+      font-size: 20px;
+      font-weight: 600;
+      color: #667eea;
+    }
+
+    .score-bar {
+      height: 12px;
+      background: #e5e5e6;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .score-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      border-radius: 6px;
+      transition: width 1s ease-out;
+    }
+
+    .overall-score {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 32px;
+      border-radius: 16px;
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .overall-score .label {
+      font-size: 16px;
+      opacity: 0.9;
+      margin-bottom: 12px;
+    }
+
+    .overall-score .value {
+      font-size: 64px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .overall-score .subtitle {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+    .feedback-section {
+      background: #f7f7f8;
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 40px;
+    }
+
+    .feedback-section h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #202123;
+    }
+
+    .feedback-text {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #4b5563;
+      white-space: pre-wrap;
+    }
+
+    .actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      padding-top: 20px;
+    }
+
+    .btn {
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #667eea;
+      border: 2px solid #667eea;
+    }
+
+    .btn-secondary:hover {
+      background: #f7f7f8;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid #e5e5e6;
+      border-top-color: #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-size: 16px;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <div class="evaluation-container">
+    <div class="header">
+      <h1>🎯 Interview Auswertung</h1>
+      <p id="interview-info">Ihre Leistung im Detail</p>
+    </div>
+
+    <div class="content" id="content">
+      <div class="loading">
+        <div class="spinner"></div>
+        <div class="loading-text">Auswertung wird erstellt...</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Get interview data from sessionStorage
+    const interviewData = JSON.parse(sessionStorage.getItem('interviewEvaluation') || '{}');
+    const interviewConfig = JSON.parse(sessionStorage.getItem('interviewConfig') || '{}');
+
+    console.log('Interview Data:', interviewData);
+    console.log('Interview Config:', interviewConfig);
+
+    function displayEvaluation() {
+      const content = document.getElementById('content');
+      const infoEl = document.getElementById('interview-info');
+
+      // Update header info
+      infoEl.textContent = `${interviewConfig.company?.name || 'Interview'} - ${interviewConfig.industry || ''} - ${new Date(interviewData.date).toLocaleDateString('de-DE')}`;
+
+      // Build evaluation HTML
+      let html = `
+        <!-- Summary Section -->
+        <div class="summary-section">
+          <div class="summary-grid">
+            <div class="summary-card">
+              <div class="label">Unternehmen</div>
+              <div class="value">${interviewConfig.company?.name || 'N/A'}</div>
+            </div>
+            <div class="summary-card">
+              <div class="label">Dauer</div>
+              <div class="value">${interviewData.duration || '0'} Min</div>
+            </div>
+            <div class="summary-card">
+              <div class="label">Phase</div>
+              <div class="value">${interviewData.completedPhases || 0}/4</div>
+            </div>
+            <div class="summary-card">
+              <div class="label">Datum</div>
+              <div class="value">${new Date(interviewData.date).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overall Score -->
+        <div class="overall-score">
+          <div class="label">Gesamtbewertung</div>
+          <div class="value">${interviewData.scores?.overall || 0}<span style="font-size: 32px; opacity: 0.7;">/10</span></div>
+          <div class="subtitle">${getScoreLabel(interviewData.scores?.overall || 0)}</div>
+        </div>
+
+        <!-- Detailed Scores -->
+        <div class="scorecard-section">
+          <h2 class="section-title">Detaillierte Bewertung</h2>
+          ${renderScoreItem('Fachkompetenz', interviewData.scores?.technical || 0)}
+          ${renderScoreItem('Kommunikation', interviewData.scores?.communication || 0)}
+          ${renderScoreItem('Problem-Solving', interviewData.scores?.problemSolving || 0)}
+          ${renderScoreItem('Cultural Fit', interviewData.scores?.culturalFit || 0)}
+        </div>
+
+        <!-- AI Feedback -->
+        ${interviewData.aiFeedback ? `
+          <div class="feedback-section">
+            <h3>💬 Feedback des Interviewers</h3>
+            <div class="feedback-text">${interviewData.aiFeedback}</div>
+          </div>
+        ` : ''}
+
+        <!-- Actions -->
+        <div class="actions">
+          <a href="/dashboard.html" class="btn btn-primary">Zum Dashboard</a>
+          <a href="/interview-config.html" class="btn btn-secondary">Neues Interview</a>
+        </div>
+      `;
+
+      content.innerHTML = html;
+
+      // Animate score bars
+      setTimeout(() => {
+        document.querySelectorAll('.score-fill').forEach(fill => {
+          const width = fill.style.width;
+          fill.style.width = '0%';
+          setTimeout(() => {
+            fill.style.width = width;
+          }, 100);
+        });
+      }, 200);
+    }
+
+    function renderScoreItem(label, score) {
+      const percentage = (score / 10) * 100;
+      return `
+        <div class="score-item">
+          <div class="score-header">
+            <span class="score-label">${label}</span>
+            <span class="score-value">${score}/10</span>
+          </div>
+          <div class="score-bar">
+            <div class="score-fill" style="width: ${percentage}%"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function getScoreLabel(score) {
+      if (score >= 9) return '🌟 Ausgezeichnet';
+      if (score >= 8) return '🎯 Sehr gut';
+      if (score >= 7) return '✅ Gut';
+      if (score >= 6) return '👍 Befriedigend';
+      if (score >= 5) return '📝 Ausreichend';
+      return '📉 Verbesserungsbedarf';
+    }
+
+    // Display evaluation when page loads
+    if (interviewData.scores) {
+      displayEvaluation();
+    } else {
+      // If no data, wait a bit and try again (in case it's being saved)
+      setTimeout(() => {
+        const updatedData = JSON.parse(sessionStorage.getItem('interviewEvaluation') || '{}');
+        if (updatedData.scores) {
+          displayEvaluation();
+        } else {
+          document.getElementById('content').innerHTML = `
+            <div style="text-align: center; padding: 60px 20px;">
+              <h2 style="font-size: 24px; margin-bottom: 16px; color: #202123;">Keine Auswertungsdaten gefunden</h2>
+              <p style="color: #6b7280; margin-bottom: 32px;">Das Interview wurde möglicherweise nicht vollständig abgeschlossen.</p>
+              <a href="/dashboard.html" class="btn btn-primary">Zum Dashboard</a>
+            </div>
+          `;
+        }
+      }, 2000);
+    }
+  </script>
+</body>
+</html>

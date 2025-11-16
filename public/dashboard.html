@@ -390,14 +390,14 @@
         <div class="navbar-container">
           <div class="navbar-brand">
             <a href="/" class="navbar-logo">
-              <img src="/images/logo-icon.svg" alt="CareerSIM Logo" style="width: 40px; height: 40px; border-radius: 10px;" />
+              <img src="/images/CareerSIM Logo.png" alt="CareerSIM Logo" style="width: 40px; height: 40px; border-radius: 10px;" />
               <span class="navbar-logo-text">CareerSIM</span>
             </a>
           </div>
           <div class="navbar-menu">
             <div class="navbar-links">
               <a href="/dashboard.html" class="navbar-link" style="color: var(--accent);" data-i18n="nav_dashboard">Dashboard</a>
-              <a href="/interview.html" class="navbar-link" data-i18n="nav_start_interview">Interview Simulation</a>
+              <a href="/interview-config.html" class="navbar-link" data-i18n="nav_start_interview">🎤 Interview Simulation</a>
               <a href="/career-advice.html" class="navbar-link">KI Karriereberatung</a>
               <a href="/cv-rating.html" class="navbar-link">CV Rating</a>
               <a href="/account-settings.html" class="navbar-link">Account Settings</a>
@@ -426,6 +426,13 @@
 
         <!-- Main Feature Cards -->
         <div class="main-features">
+          <div class="feature-card" onclick="window.location.href='/interview-config.html'">
+            <div class="feature-icon">🎤</div>
+            <h3>🔥 KI-Interview Simulation (NEU)</h3>
+            <p>Professionelles Interview-Training mit KI! Realistische Video-Interview-Simulation mit Chat, CV-Upload und Phasen-basiertem Training. OpenAI-Style Design.</p>
+            <a href="/interview-config.html" class="feature-btn">🎤 Interview starten →</a>
+          </div>
+          
           <div class="feature-card" onclick="window.location.href='/interview-preparation.html'">
             <div class="feature-icon">🎯</div>
             <h3>KI-Interview Simulation</h3>
@@ -516,7 +523,7 @@
             <!-- Brand Column -->
             <div class="footer-brand">
               <div class="footer-logo" style="display: flex; align-items: center; gap: 8px;">
-                <img src="/images/logo-icon.svg" alt="CareerSIM" style="width: 32px; height: 32px; border-radius: 8px;" />
+                <img src="/images/CareerSIM Logo.png" alt="CareerSIM" style="width: 32px; height: 32px; border-radius: 8px;" />
                 <span>CareerSIM</span>
               </div>
               <p class="footer-tagline">
@@ -614,33 +621,30 @@
       // Load dashboard data
       async function loadDashboard() {
         try {
-          // Try new user stats endpoint first
-          let data;
-          try {
-            const statsData = await api('/user/stats', {
-              headers: { 'x-auth-token': token }
-            });
-            
-            const username = localStorage.getItem('cs_username') || 'User';
-            const study = localStorage.getItem('cs_study') || '—';
-            const target = localStorage.getItem('cs_target') || '—';
-            
-            data = {
-              username,
-              study,
-              target,
-              stats: {
-                totalInterviews: statsData.totalInterviews,
-                averageScore: statsData.averageScore
-              },
-              interviews: statsData.interviews
-            };
-          } catch (e) {
-            // Fallback to old dashboard endpoint
-            data = await api('/dashboard', {
-              headers: { 'x-auth-token': token }
-            });
-          }
+          // Get data from localStorage
+          const username = localStorage.getItem('cs_username') || 'User';
+          const study = localStorage.getItem('cs_study') || '—';
+          const target = localStorage.getItem('cs_target') || '—';
+          
+          // Get interview history from localStorage
+          const interviewHistory = JSON.parse(localStorage.getItem('interviewHistory') || '[]');
+          
+          // Calculate stats
+          const totalInterviews = interviewHistory.length;
+          const averageScore = totalInterviews > 0 
+            ? Math.round(interviewHistory.reduce((sum, i) => sum + (i.scores?.overall || 0), 0) / totalInterviews)
+            : 0;
+          
+          const data = {
+            username,
+            study,
+            target,
+            stats: {
+              totalInterviews,
+              averageScore
+            },
+            interviews: interviewHistory
+          };
 
           // Update header
           document.getElementById('username').textContent = data.username;
@@ -688,50 +692,53 @@
                 <div class="empty-state-icon">🎤</div>
                 <h3>Noch keine Interviews</h3>
                 <p>Starte dein erstes Interview und sammle wertvolles Feedback!</p>
-                <a href="/interview.html" class="action-btn" style="margin-top: 16px;">Jetzt starten</a>
+                <a href="/interview-config.html" class="action-btn" style="margin-top: 16px;">Jetzt starten</a>
               </div>
             `;
           } else {
+            const tableHTML = `
+                        } else {
             const tableHTML = `
               <table class="interview-table">
                 <thead>
                   <tr>
                     <th>Datum</th>
                     <th>Unternehmen</th>
-                    <th>Fragen</th>
+                    <th>Branche</th>
                     <th>Dauer</th>
+                    <th>Phasen</th>
                     <th>Score</th>
-                    <th>Aktion</th>
+                    <th>Aktionen</th>
                   </tr>
                 </thead>
                 <tbody>
-                  ${data.interviews.map(interview => {
+                  ${data.interviews.map((interview, index) => {
                     const date = new Date(interview.date).toLocaleDateString('de-DE', {
                       day: '2-digit',
                       month: '2-digit',
-                      year: 'numeric'
+                      year: '2-digit'
                     });
-                    
-                    let scoreClass = 'score-poor';
-                    if (interview.score >= 80) scoreClass = 'score-excellent';
-                    else if (interview.score >= 60) scoreClass = 'score-good';
-                    else if (interview.score >= 40) scoreClass = 'score-average';
-
+                    const overallScore = interview.scores?.overall || 0;
+                    const scoreClass = overallScore >= 8 ? 'excellent' : overallScore >= 6 ? 'good' : 'average';
                     return `
                       <tr>
                         <td>${date}</td>
                         <td><strong>${interview.company}</strong></td>
-                        <td>${interview.questionsCount} Fragen</td>
+                        <td>${interview.industry || '—'}</td>
                         <td>${interview.duration} Min</td>
-                        <td><span class="score-badge ${scoreClass}">${interview.score}/100</span></td>
+                        <td>${interview.completedPhases || 0}/4</td>
+                        <td><span class="score-badge ${scoreClass}">${overallScore}/10</span></td>
                         <td>
-                          <a href="/interview-results.html?id=${interview.id}" class="action-btn" style="padding: 6px 12px; font-size: 13px; text-decoration: none;">Details</a>
+                          <button onclick="viewInterviewDetails(${index})" class="action-btn" style="padding: 6px 12px; font-size: 13px; border: none; cursor: pointer;">Details</button>
                         </td>
                       </tr>
                     `;
                   }).join('')}
                 </tbody>
               </table>
+            `;
+            content.innerHTML = tableHTML;
+          }
             `;
             content.innerHTML = tableHTML;
           }
@@ -743,8 +750,17 @@
         }
       }
 
-      function viewDetails(interviewId) {
-        alert(`Interview Details für ${interviewId} werden geladen...\n\nDiese Funktion wird bald verfügbar sein!`);
+      function viewInterviewDetails(index) {
+        // Get interview from history
+        const history = JSON.parse(localStorage.getItem('interviewHistory') || '[]');
+        const interview = history[index];
+        
+        if (interview) {
+          // Save to sessionStorage for evaluation page
+          sessionStorage.setItem('interviewEvaluation', JSON.stringify(interview));
+          // Redirect to evaluation page
+          window.location.href = '/evaluation.html';
+        }
       }
 
       // Load on page load

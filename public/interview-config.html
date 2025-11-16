@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Setup - CareerSIM</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .setup-container {
+      background: white;
+      border-radius: 20px;
+      padding: 48px;
+      max-width: 900px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .setup-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .setup-header h1 {
+      font-size: 32px;
+      color: #202123;
+      margin-bottom: 12px;
+    }
+
+    .setup-header p {
+      color: #6b7280;
+      font-size: 16px;
+    }
+
+    .back-to-dashboard {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: #f7f7f8;
+      border: 2px solid #e5e5e6;
+      border-radius: 10px;
+      color: #667eea;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .back-to-dashboard:hover {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+      transform: translateX(-4px);
+    }
+
+    .back-to-dashboard .arrow {
+      font-size: 20px;
+      transition: transform 0.2s;
+    }
+
+    .back-to-dashboard:hover .arrow {
+      transform: translateX(-4px);
+    }
+
+    .step {
+      margin-bottom: 40px;
+      display: none;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    .step-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #202123;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .step-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #667eea;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .industry-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .industry-card {
+      padding: 24px;
+      border: 2px solid #e5e5e6;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-align: center;
+    }
+
+    .industry-card:hover {
+      border-color: #667eea;
+      background: #f7f7f8;
+      transform: translateY(-2px);
+    }
+
+    .industry-card.selected {
+      border-color: #667eea;
+      background: #eef2ff;
+    }
+
+    .industry-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .industry-name {
+      font-size: 18px;
+      font-weight: 600;
+      color: #202123;
+    }
+
+    .company-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .company-card {
+      padding: 20px;
+      border: 2px solid #e5e5e6;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .company-card:hover {
+      border-color: #667eea;
+      background: #f7f7f8;
+      transform: translateY(-2px);
+    }
+
+    .company-card.selected {
+      border-color: #667eea;
+      background: #eef2ff;
+    }
+
+    .company-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #202123;
+      margin-bottom: 8px;
+    }
+
+    .company-type {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .interview-preview {
+      background: #f7f7f8;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .preview-section {
+      margin-bottom: 20px;
+    }
+
+    .preview-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .preview-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #667eea;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .preview-value {
+      font-size: 15px;
+      color: #202123;
+      line-height: 1.6;
+    }
+
+    .phase-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .phase-item {
+      padding: 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: #202123;
+    }
+
+    .phase-time {
+      color: #6b7280;
+      font-size: 13px;
+      margin-left: auto;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      padding: 12px 32px;
+      border-radius: 8px;
+      border: none;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-secondary {
+      background: #f0f0f1;
+      color: #202123;
+    }
+
+    .btn-secondary:hover {
+      background: #e5e5e6;
+    }
+
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #5568d3;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Interview History */
+    .history-section {
+      background: #f7f7f8;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+
+    .history-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #202123;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .history-empty {
+      color: #6b7280;
+      font-size: 14px;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .history-item {
+      background: white;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: all 0.3s;
+    }
+
+    .history-item:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .history-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
+    .history-info {
+      flex: 1;
+    }
+
+    .history-company {
+      font-weight: 600;
+      color: #202123;
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .history-meta {
+      color: #6b7280;
+      font-size: 13px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .history-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #e0e7ff;
+      color: #667eea;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .history-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .history-btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      border: none;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .history-btn-primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .history-btn-primary:hover {
+      background: #5568d3;
+    }
+
+    .history-btn-secondary {
+      background: #f0f0f1;
+      color: #202123;
+    }
+
+    .history-btn-secondary:hover {
+      background: #e5e5e6;
+    }
+
+    .attempt-count {
+      background: #10b981;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* CV & Job Ad Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .modal-title {
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border: none;
+      background: #f0f0f1;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .modal-close:hover {
+      background: #e5e5e6;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .form-textarea {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e5e5e6;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 150px;
+    }
+
+    .form-textarea:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .upload-btn {
+      width: 100%;
+      padding: 12px;
+      background: #f0f0f1;
+      border: 2px dashed #e5e5e6;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .upload-btn:hover {
+      border-color: #667eea;
+      background: #f7f7f8;
+    }
+
+    .cv-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: #10b981;
+      color: white;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="setup-container">
+    <div class="setup-header">
+      <div style="display: flex; justify-content: flex-start; margin-bottom: 20px;">
+        <a href="/dashboard.html" class="back-to-dashboard">
+          <span class="arrow">←</span>
+          <span>Zurück zum Dashboard</span>
+        </a>
+      </div>
+      <h1>🎯 Interview-Simulation Setup</h1>
+      <p>Wähle deine Branche und Zielunternehmen für ein realistisches Interview</p>
+    </div>
+
+    <!-- Interview History -->
+    <div class="history-section" id="history-section" style="display: none;">
+      <div class="history-title">
+        📚 Letzte Interviews
+      </div>
+      <div id="history-container"></div>
+    </div>
+
+    <!-- Step 1: Interview Type Selection -->
+    <div class="step active" id="step-1">
+      <div class="step-title">
+        <span class="step-number">1</span>
+        Wähle deinen Interview-Typ
+      </div>
+
+      <p style="color: #6b7280; margin-bottom: 24px; text-align: center;">
+        Möchtest du für eine vorgefertigte Position bei einem spezifischen Unternehmen üben oder eine eigene Stellenanzeige verwenden?
+      </p>
+      
+      <div class="industry-grid">
+        <div class="industry-card" id="preset-interview-card">
+          <div class="industry-icon">🏢</div>
+          <div class="industry-name">Vorgefertigte Position</div>
+          <div style="font-size: 13px; color: #6b7280; margin-top: 8px;">
+            Wähle Branche & Unternehmen
+          </div>
+        </div>
+        
+        <div class="industry-card" id="custom-interview-card">
+          <div class="industry-icon">✏️</div>
+          <div class="industry-name">Eigene Stellenanzeige</div>
+          <div style="font-size: 13px; color: #6b7280; margin-top: 8px;">
+            Füge deine eigene Job Description ein
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-primary" id="btn-next-1" disabled>Weiter →</button>
+      </div>
+    </div>
+
+    <!-- Step 1a: Industry Selection (only for preset) -->
+    <div class="step" id="step-1a">
+      <div class="step-title">
+        <span class="step-number">1.1</span>
+        Wähle deine Branche
+      </div>
+      
+      <div class="industry-grid">
+        <div class="industry-card" data-industry="finance">
+          <div class="industry-icon">💼</div>
+          <div class="industry-name">Finance</div>
+        </div>
+        
+        <div class="industry-card" data-industry="tech">
+          <div class="industry-icon">💻</div>
+          <div class="industry-name">Tech</div>
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-secondary" id="btn-back-1a">← Zurück</button>
+        <button class="btn btn-primary" id="btn-next-1a" disabled>Weiter →</button>
+      </div>
+    </div>
+
+    <!-- Step 1b: Custom Job Ad Input (only for custom) -->
+    <div class="step" id="step-1b">
+      <div class="step-title">
+        <span class="step-number">1.1</span>
+        Stellenanzeige eingeben
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Stellenanzeige/Job Description:</label>
+        <textarea class="form-textarea" id="custom-job-input" placeholder="Füge hier die Stellenanzeige ein...
+
+Beispiel:
+Wir suchen einen Junior Financial Analyst für unser Team in München.
+
+Anforderungen:
+- Abgeschlossenes Studium in BWL/Finance
+- Erste Erfahrung in der Finanzanalyse
+- Sehr gute Excel-Kenntnisse
+- Analytisches Denken und Teamfähigkeit
+
+Aufgaben:
+- Finanzmodelle erstellen
+- Reports und Präsentationen
+- Marktanalysen durchführen
+
+Unternehmen: TechCorp GmbH
+Branche: Technology Consulting"></textarea>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-secondary" id="btn-back-1b">← Zurück</button>
+        <button class="btn btn-primary" id="btn-next-1b" disabled>Weiter →</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Company Selection -->
+    <div class="step" id="step-2">
+      <div class="step-title">
+        <span class="step-number">2</span>
+        Wähle dein Zielunternehmen
+      </div>
+      
+      <div class="company-grid" id="company-grid"></div>
+
+      <div class="btn-group">
+        <button class="btn btn-secondary" id="btn-back-2">← Zurück</button>
+        <button class="btn btn-primary" id="btn-next-2" disabled>Weiter →</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Interview Preview -->
+    <div class="step" id="step-3">
+      <div class="step-title">
+        <span class="step-number">3</span>
+        Interview-Übersicht
+      </div>
+
+      <div class="interview-preview">
+        <div class="preview-section">
+          <div class="preview-label">Interviewer</div>
+          <div class="preview-value">
+            <strong>Sam Altman</strong> - HR Department
+          </div>
+        </div>
+
+        <div class="preview-section">
+          <div class="preview-label">Unternehmen</div>
+          <div class="preview-value" id="preview-company">-</div>
+        </div>
+
+        <div class="preview-section">
+          <div class="preview-label">Interview-Dauer</div>
+          <div class="preview-value" id="preview-duration">45 Minuten</div>
+        </div>
+
+        <div class="preview-section">
+          <div class="preview-label">Interview-Ablauf</div>
+          <ul class="phase-list" id="preview-phases"></ul>
+        </div>
+
+        <div class="preview-section">
+          <div class="preview-label">Bewertung</div>
+          <div class="preview-value">
+            Am Ende erhältst du eine detaillierte Scorecard mit Feedback zu deiner Performance in allen Interview-Phasen.
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-section" id="preview-job-section">
+        <div class="preview-label">Stellenanzeige</div>
+        <div class="preview-value" id="preview-job-ad">-</div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-secondary" id="btn-cv-upload">� CV hochladen (optional)</button>
+      </div>
+
+      <div style="text-align: center; margin: 20px 0;">
+        <div id="cv-status-indicator"></div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-secondary" id="btn-back-3">← Zurück</button>
+        <button class="btn btn-primary" id="btn-start">🎤 Interview starten</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CV Upload Modal -->
+  <div class="modal-overlay" id="cv-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">📄 Lebenslauf hochladen</h3>
+        <button class="modal-close" onclick="closeModal('cv-modal')">×</button>
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">Lebenslauf als Text einfügen:</label>
+        <textarea class="form-textarea" id="cv-text" placeholder="Füge hier deinen Lebenslauf ein oder eine Zusammenfassung deiner Erfahrungen...
+
+Beispiel:
+- Bachelor in BWL, Universität XYZ (2020-2023)
+- Praktikum bei Company ABC (6 Monate)
+- Kenntnisse: Excel, Python, Projektmanagement
+- Sprachen: Deutsch (Muttersprache), Englisch (fließend)"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Oder PDF/DOC hochladen (coming soon):</label>
+        <div class="upload-btn">
+          📎 Datei auswählen
+        </div>
+      </div>
+
+      <div class="btn-group" style="margin-top: 24px;">
+        <button class="btn btn-secondary" onclick="closeModal('cv-modal')">Abbrechen</button>
+        <button class="btn btn-primary" onclick="saveCVText()">✓ Speichern</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Load and display interview history
+    function loadInterviewHistory() {
+      const history = JSON.parse(localStorage.getItem('interviewHistory') || '[]');
+      const historySection = document.getElementById('history-section');
+      const historyContainer = document.getElementById('history-container');
+      
+      if (history.length === 0) {
+        historySection.style.display = 'none';
+        return;
+      }
+      
+      historySection.style.display = 'block';
+      historyContainer.innerHTML = '';
+      
+      // Group interviews by company and count attempts
+      const companyAttempts = {};
+      history.forEach(interview => {
+        const key = interview.companyId;
+        if (!companyAttempts[key]) {
+          companyAttempts[key] = [];
+        }
+        companyAttempts[key].push(interview);
+      });
+      
+      // Show last 5 unique companies
+      const displayedCompanies = new Set();
+      history.forEach(interview => {
+        if (displayedCompanies.size >= 5) return;
+        if (displayedCompanies.has(interview.companyId)) return;
+        
+        displayedCompanies.add(interview.companyId);
+        const attempts = companyAttempts[interview.companyId];
+        const attemptCount = attempts.length;
+        
+        const date = new Date(interview.date);
+        const dateStr = date.toLocaleDateString('de-DE', { day: '2-digit', month: 'short' });
+        
+        const item = document.createElement('div');
+        item.className = 'history-item';
+        item.innerHTML = `
+          <div class="history-icon">💼</div>
+          <div class="history-info">
+            <div class="history-company">${interview.company}</div>
+            <div class="history-meta">
+              <span>📅 ${dateStr}</span>
+              <span>⏱️ ${interview.duration} Min</span>
+              ${attemptCount > 1 ? `<span class="attempt-count">Versuch ${attemptCount}</span>` : ''}
+            </div>
+          </div>
+          <div class="history-actions">
+            ${attemptCount >= 2 ? `<button class="history-btn history-btn-secondary" onclick="viewProgress('${interview.companyId}')">📊 Fortschritt</button>` : ''}
+            <button class="history-btn history-btn-primary" onclick="retryInterview('${interview.companyId}')">🔄 Wiederholen</button>
+          </div>
+        `;
+        
+        historyContainer.appendChild(item);
+      });
+    }
+
+    // Retry an interview with same config
+    window.retryInterview = function(companyId) {
+      const history = JSON.parse(localStorage.getItem('interviewHistory') || '[]');
+      const lastInterview = history.find(h => h.companyId === companyId);
+      
+      if (!lastInterview) return;
+      
+      // Use the saved config
+      sessionStorage.setItem('interviewConfig', JSON.stringify(lastInterview.config));
+      window.location.href = '/interview.html';
+    };
+
+    // View progress across multiple attempts
+    window.viewProgress = function(companyId) {
+      // Store company ID for progress page
+      sessionStorage.setItem('progressCompanyId', companyId);
+      // TODO: Create progress view page
+      alert('Fortschrittsansicht wird bald verfügbar sein!');
+    };
+
+    const companies = {
+      finance: [
+        { id: 'goldman', name: 'Goldman Sachs', type: 'Investment Bank', duration: 60 },
+        { id: 'jpmorgan', name: 'JP Morgan', type: 'Investment Bank', duration: 60 },
+        { id: 'deutsche', name: 'Deutsche Bank', type: 'Investment Bank', duration: 50 },
+        { id: 'big4', name: 'Big4 (PwC, EY, KPMG, Deloitte)', type: 'Consulting & Audit', duration: 45 },
+        { id: 'mckinsey', name: 'McKinsey & Company', type: 'Strategy Consulting', duration: 60 },
+        { id: 'bain', name: 'Bain & Company', type: 'Strategy Consulting', duration: 60 },
+        { id: 'bcg', name: 'Boston Consulting Group', type: 'Strategy Consulting', duration: 60 }
+      ],
+      tech: [
+        { id: 'google', name: 'Google', type: 'Tech Giant', duration: 45 },
+        { id: 'meta', name: 'Meta', type: 'Tech Giant', duration: 45 },
+        { id: 'apple', name: 'Apple', type: 'Tech Giant', duration: 45 },
+        { id: 'microsoft', name: 'Microsoft', type: 'Tech Giant', duration: 45 }
+      ]
+    };
+
+    const interviewPhases = {
+      goldman: [
+        { name: 'Begrüßung & Unternehmensvorstellung', duration: 5 },
+        { name: 'Lebenslauf Deep-Dive', duration: 15 },
+        { name: 'Technical/Finance Fragen', duration: 20 },
+        { name: 'Case Study', duration: 15 },
+        { name: 'Fragen & Abschluss', duration: 5 }
+      ],
+      jpmorgan: [
+        { name: 'Begrüßung & Unternehmenskultur', duration: 5 },
+        { name: 'Background & Motivation', duration: 15 },
+        { name: 'Technical Skills Assessment', duration: 20 },
+        { name: 'Behavioral Questions', duration: 15 },
+        { name: 'Q&A & Next Steps', duration: 5 }
+      ],
+      deutsche: [
+        { name: 'Vorstellung', duration: 5 },
+        { name: 'Werdegang-Analyse', duration: 12 },
+        { name: 'Fachliche Kompetenzen', duration: 18 },
+        { name: 'Situative Fragen', duration: 10 },
+        { name: 'Abschluss', duration: 5 }
+      ],
+      big4: [
+        { name: 'Kennenlernen', duration: 5 },
+        { name: 'CV Review', duration: 10 },
+        { name: 'Technical Knowledge', duration: 15 },
+        { name: 'Competency Questions', duration: 10 },
+        { name: 'Case Discussion', duration: 5 }
+      ],
+      mckinsey: [
+        { name: 'Introduction', duration: 5 },
+        { name: 'Personal Experience Interview', duration: 15 },
+        { name: 'Case Interview', duration: 30 },
+        { name: 'Your Questions', duration: 10 }
+      ],
+      bain: [
+        { name: 'Warm-up & Company Intro', duration: 5 },
+        { name: 'Fit Interview', duration: 15 },
+        { name: 'Case Study Challenge', duration: 30 },
+        { name: 'Closing & Questions', duration: 10 }
+      ],
+      bcg: [
+        { name: 'Opening', duration: 5 },
+        { name: 'Behavioral Interview', duration: 15 },
+        { name: 'Business Case', duration: 30 },
+        { name: 'Wrap-up', duration: 10 }
+      ]
+    };
+
+    let interviewType = null; // 'preset' or 'custom'
+    let selectedIndustry = null;
+    let selectedCompany = null;
+    let customJobText = '';
+
+    // Step 1: Interview Type Selection
+    document.getElementById('preset-interview-card').addEventListener('click', () => {
+      document.getElementById('preset-interview-card').classList.add('selected');
+      document.getElementById('custom-interview-card').classList.remove('selected');
+      interviewType = 'preset';
+      document.getElementById('btn-next-1').disabled = false;
+    });
+
+    document.getElementById('custom-interview-card').addEventListener('click', () => {
+      document.getElementById('custom-interview-card').classList.add('selected');
+      document.getElementById('preset-interview-card').classList.remove('selected');
+      interviewType = 'custom';
+      document.getElementById('btn-next-1').disabled = false;
+    });
+
+    document.getElementById('btn-next-1').addEventListener('click', () => {
+      if (interviewType === 'preset') {
+        showStep('1a');
+      } else {
+        showStep('1b');
+      }
+    });
+
+    // Step 1a: Industry Selection (for preset)
+    document.querySelectorAll('[data-industry]').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('[data-industry]').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        selectedIndustry = card.dataset.industry;
+        document.getElementById('btn-next-1a').disabled = false;
+      });
+    });
+
+    document.getElementById('btn-back-1a').addEventListener('click', () => showStep(1));
+    document.getElementById('btn-next-1a').addEventListener('click', () => {
+      showStep(2);
+      loadCompanies();
+    });
+
+    // Step 1b: Custom Job Ad Input
+    const customJobInput = document.getElementById('custom-job-input');
+    customJobInput.addEventListener('input', () => {
+      document.getElementById('btn-next-1b').disabled = !customJobInput.value.trim();
+    });
+
+    document.getElementById('btn-back-1b').addEventListener('click', () => showStep(1));
+    document.getElementById('btn-next-1b').addEventListener('click', () => {
+      customJobText = customJobInput.value.trim();
+      // For custom interviews, go directly to preview
+      showStep(3);
+      loadPreview();
+    });
+
+    // Step 2: Company Selection
+    function loadCompanies() {
+      const grid = document.getElementById('company-grid');
+      grid.innerHTML = '';
+      
+      companies[selectedIndustry].forEach(company => {
+        const card = document.createElement('div');
+        card.className = 'company-card';
+        card.dataset.companyId = company.id;
+        card.innerHTML = `
+          <div class="company-name">${company.name}</div>
+          <div class="company-type">${company.type}</div>
+        `;
+        
+        card.addEventListener('click', () => {
+          document.querySelectorAll('.company-card').forEach(c => c.classList.remove('selected'));
+          card.classList.add('selected');
+          selectedCompany = company;
+          document.getElementById('btn-next-2').disabled = false;
+        });
+        
+        grid.appendChild(card);
+      });
+    }
+
+    document.getElementById('btn-back-2').addEventListener('click', () => showStep('1a'));
+    document.getElementById('btn-next-2').addEventListener('click', () => {
+      showStep(3);
+      loadPreview();
+    });
+
+    // Step 3: Preview
+    function loadPreview() {
+      const jobAdPreview = document.getElementById('preview-job-ad');
+      const jobSection = document.getElementById('preview-job-section');
+      
+      if (interviewType === 'preset') {
+        // Show company info for preset interviews
+        document.getElementById('preview-company').textContent = selectedCompany.name;
+        document.getElementById('preview-duration').textContent = `${selectedCompany.duration} Minuten`;
+        
+        const phasesList = document.getElementById('preview-phases');
+        phasesList.innerHTML = '';
+        
+        const phases = interviewPhases[selectedCompany.id] || interviewPhases.goldman;
+        phases.forEach((phase, index) => {
+          const li = document.createElement('li');
+          li.className = 'phase-item';
+          li.innerHTML = `
+            <span>${index + 1}. ${phase.name}</span>
+            <span class="phase-time">${phase.duration} Min</span>
+          `;
+          phasesList.appendChild(li);
+        });
+
+        jobAdPreview.textContent = `Vorgefertigte Position für ${selectedCompany.name}`;
+        jobSection.style.display = 'block';
+      } else {
+        // For custom interviews, show generic info
+        document.getElementById('preview-company').textContent = 'Generisches Interview';
+        document.getElementById('preview-duration').textContent = '45 Minuten';
+        
+        const phasesList = document.getElementById('preview-phases');
+        phasesList.innerHTML = '';
+        const defaultPhases = [
+          { name: 'Selbstvorstellung & Motivation', duration: 5 },
+          { name: 'Fachliche Fragen', duration: 15 },
+          { name: 'Situative/Verhaltensfragen', duration: 15 },
+          { name: 'Rückblick & Abschlussbewertung', duration: 8 }
+        ];
+        
+        defaultPhases.forEach((phase, index) => {
+          const li = document.createElement('li');
+          li.className = 'phase-item';
+          li.innerHTML = `
+            <span>${index + 1}. ${phase.name}</span>
+            <span class="phase-time">${phase.duration} Min</span>
+          `;
+          phasesList.appendChild(li);
+        });
+
+        jobAdPreview.textContent = 'Eigene Stellenanzeige';
+        jobSection.style.display = 'block';
+      }
+    }
+
+    document.getElementById('btn-back-3').addEventListener('click', () => {
+      if (interviewType === 'preset') {
+        showStep(2);
+      } else {
+        showStep('1b');
+      }
+    });
+    document.getElementById('btn-start').addEventListener('click', () => {
+      // Get CV from localStorage
+      const cv_summary = localStorage.getItem('cv_summary') || 'Kein Lebenslauf vorhanden. Der Kandidat wird gebeten, seinen Hintergrund zu beschreiben.';
+      
+      let config;
+      
+      if (interviewType === 'preset') {
+        // Preset interview with company selection
+        const job_ad = `Position bei ${selectedCompany.name} in der Branche ${selectedIndustry}.\n\nWir suchen einen motivierten ${selectedCompany.type === 'Investment Bank' ? 'Analyst' : 'Berater'} für unser Team.`;
+        
+        config = {
+          industry: selectedIndustry,
+          company: selectedCompany,
+          phases: interviewPhases[selectedCompany.id] || interviewPhases.goldman,
+          interviewer: {
+            name: 'Sam Altman',
+            role: 'HR Department',
+            company: selectedCompany.name
+          },
+          cv_summary: cv_summary,
+          job_ad: job_ad
+        };
+      } else {
+        // Custom interview with own job ad
+        config = {
+          industry: 'Custom',
+          company: {
+            id: 'custom',
+            name: 'Generisches Interview',
+            type: 'Generic Company',
+            duration: 45
+          },
+          phases: [
+            { name: 'Selbstvorstellung & Motivation', duration: 5 },
+            { name: 'Fachliche Fragen', duration: 15 },
+            { name: 'Situative/Verhaltensfragen', duration: 15 },
+            { name: 'Rückblick & Abschlussbewertung', duration: 8 }
+          ],
+          interviewer: {
+            name: 'Sam Altman',
+            role: 'HR Department',
+            company: 'dem Unternehmen'
+          },
+          cv_summary: cv_summary,
+          job_ad: customJobText
+        };
+      }
+      
+      sessionStorage.setItem('interviewConfig', JSON.stringify(config));
+      window.location.href = '/interview.html';
+    });
+
+    // CV Modal Function
+    document.getElementById('btn-cv-upload').addEventListener('click', () => {
+      document.getElementById('cv-modal').classList.add('active');
+      // Load existing CV if available
+      const existingCV = localStorage.getItem('cv_summary');
+      if (existingCV) {
+        document.getElementById('cv-text').value = existingCV;
+      }
+    });
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('active');
+    }
+
+    function saveCVText() {
+      const cvText = document.getElementById('cv-text').value.trim();
+      if (cvText) {
+        localStorage.setItem('cv_summary', cvText);
+        updateStatusIndicators();
+        closeModal('cv-modal');
+        alert('✅ CV erfolgreich gespeichert!');
+      } else {
+        alert('⚠️ Bitte füge deinen Lebenslauf ein.');
+      }
+    }
+
+
+
+    function updateStatusIndicators() {
+      const cvStatus = document.getElementById('cv-status-indicator');
+      
+      if (cvStatus && localStorage.getItem('cv_summary')) {
+        cvStatus.innerHTML = '<div class="cv-status">✓ CV gespeichert</div>';
+      }
+    }
+
+    function showStep(stepNumber) {
+      document.querySelectorAll('.step').forEach(step => step.classList.remove('active'));
+      document.getElementById(`step-${stepNumber}`).classList.add('active');
+      
+      // Update status indicators when showing step 3
+      if (stepNumber === 3) {
+        updateStatusIndicators();
+      }
+    }
+
+    // Close modal when clicking outside
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.remove('active');
+        }
+      });
+    });
+
+    // Load history on page load
+    loadInterviewHistory();
+  </script>
+</body>
+</html>

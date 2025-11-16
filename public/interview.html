@@ -1,358 +1,2204 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="de">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Interview - CareerSIM</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/styles.css" />
-  </head>
-  <body>
-    <div id="app">
-      <!-- Navigation -->
-      <nav class="navbar">
-        <div class="navbar-container">
-          <div class="navbar-brand">
-            <a href="/" class="navbar-logo">
-              <img src="/images/logo-icon.svg" alt="CareerSIM Logo" style="width: 40px; height: 40px; border-radius: 10px;" />
-              <span class="navbar-logo-text">CareerSIM</span>
-            </a>
-          </div>
-          <div class="navbar-menu">
-            <div class="navbar-links">
-              <a href="/dashboard.html" class="navbar-link" data-i18n="nav_dashboard">Dashboard</a>
-              <a href="/interview.html" class="navbar-link" style="color: var(--accent);" data-i18n="nav_start_interview">Interview Simulation</a>
-              <a href="/career-advice.html" class="navbar-link">KI Karriereberatung</a>
-              <a href="/cv-rating.html" class="navbar-link">CV Rating</a>
-              <a href="/account-settings.html" class="navbar-link">Account Settings</a>
-            </div>
-          </div>
-          <div class="navbar-cta">
-            <div class="lang-switcher" style="display: flex; gap: 8px; align-items: center; margin-right: 16px;">
-              <button class="lang-switch active" data-lang="de" onclick="i18n.setLanguage('de')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">DE</button>
-              <button class="lang-switch" data-lang="en" onclick="i18n.setLanguage('en')" style="padding: 6px 12px; background: transparent; border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; transition: all 0.3s ease; font-size: 13px; font-weight: 600;">EN</button>
-            </div>
-            <button id="logout-btn" class="navbar-btn-login" data-i18n="nav_logout">Logout</button>
-          </div>
-        </div>
-      </nav>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KI Interview - CareerSIM</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-      <main class="container" style="max-width: 100%; padding: 0;">
-        <!-- Interview Interface - Video Call Style -->
-        <div id="interview" style="margin-top: 0;">
-          <div class="topbar">
-            <span>🎥 <strong data-i18n="interview_title">KI-Interview Simulator</strong> - Video Call</span>
-            <div style="display: flex; gap: 12px; align-items: center;">
-              <span style="font-size: 13px; color: var(--text-secondary);" id="timer">00:00</span>
-              <button class="video-control-btn" title="Vollbild" onclick="toggleFullscreen()">⛶</button>
-            </div>
-          </div>
-          <div class="meeting">
-            <!-- Left: Video Panel -->
-            <div class="video-panel">
-              <div class="video remote">
-                <div style="position: absolute; top: 12px; left: 12px; background: rgba(255,255,255,0.9); padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; color: var(--text-primary);">
-                  🤖 KI-Interviewer
-                </div>
-                <div style="text-align: center;">
-                  <div style="font-size: 80px; margin-bottom: 8px;">👔</div>
-                  <div style="font-size: 14px; color: var(--text-secondary);">
-                    <span data-i18n="interview_ai_name">Dr. Sarah Schmidt</span>
-                  </div>
-                </div>
-                <div class="video-controls">
-                  <button class="video-control-btn" id="btn-mic-toggle" title="Mikrofon">🎤</button>
-                  <button class="video-control-btn" title="Kamera">📹</button>
-                  <button class="video-control-btn danger" onclick="endInterview()" title="Interview verlassen">📞</button>
-                </div>
-              </div>
-              <div class="video local">
-                <div style="position: absolute; top: 12px; left: 12px; background: rgba(255,255,255,0.9); padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; color: var(--text-primary);">
-                  👤 <span data-i18n="interview_you">Du</span>
-                </div>
-                <div style="text-align: center;">
-                  <div style="font-size: 48px; margin-bottom: 8px;">🧑‍💼</div>
-                  <div style="font-size: 13px; color: var(--text-secondary);" data-i18n="interview_camera_placeholder">
-                    Kamera aktivieren
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!-- Right: Chat/Q&A Panel -->
-            <div class="side-panel">
-              <div style="margin-bottom: 16px;">
-                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;" data-i18n="interview_protocol">Interview-Protokoll</h3>
-                <p style="font-size: 13px; color: var(--text-secondary); margin: 0;" data-i18n="interview_protocol_desc">
-                  Fragen und Antworten werden hier protokolliert
-                </p>
-              </div>
-              
-              <!-- Question Box -->
-              <div class="card" id="question-box" style="min-height: 120px; background: #eff6ff; border-left: 3px solid #3b82f6;">
-                <div class="chat-label" style="color: #3b82f6;">📋 <span data-i18n="interview_current_question">Aktuelle Frage</span></div>
-                <div class="chat-text" data-i18n="interview_start_prompt">
-                  Klicke auf "Interview starten" um zu beginnen...
-                </div>
-              </div>
-              
-              <!-- Voice Input -->
-              <div class="voice-row">
-                <button id="btn-mic" class="mic" data-i18n="interview_mic_on">🎤 Mikro an</button>
-                <div id="transcript" data-i18n="interview_listening">—</div>
-              </div>
-              
-              <!-- Answer Textarea -->
-              <textarea id="answer" placeholder="Deine Antwort eingeben..." data-i18n-placeholder="interview_answer_placeholder"></textarea>
-              
-              <!-- Controls -->
-              <div class="controls">
-                <button id="btn-start" data-i18n="interview_start">Interview starten</button>
-                <button id="btn-send" data-i18n="interview_send">Antwort senden</button>
-                <button id="btn-end" data-i18n="interview_end">Interview beenden</button>
-              </div>
-              
-              <!-- Feedback/Rating -->
-              <div id="feedback" class="card" style="min-height: 100px; background: #f0fdf4; border-left: 3px solid var(--accent);">
-                <div class="chat-label" style="color: var(--accent);">✨ <span data-i18n="interview_feedback">KI-Feedback</span></div>
-                <div class="chat-text" style="color: var(--text-secondary); font-size: 13px;" data-i18n="interview_feedback_waiting">
-                  Feedback erscheint hier nach deiner Antwort...
-                </div>
-              </div>
-              
-              <!-- Rating Bars -->
-              <div style="margin-top: 16px; padding: 16px; background: var(--bg-secondary); border-radius: 8px; border: 1px solid var(--border);">
-                <div style="font-weight: 600; font-size: 13px; margin-bottom: 12px; color: var(--text-primary);">
-                  📊 <span data-i18n="interview_performance">Bewertungskriterien</span>
-                </div>
-                <div style="display: flex; flex-direction: column; gap: 8px;">
-                  <div>
-                    <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
-                      <span data-i18n="interview_criteria_content">Inhalt</span>
-                      <span id="rating-content">—</span>
-                    </div>
-                    <div style="height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;">
-                      <div id="bar-content" style="height: 100%; width: 0%; background: var(--accent); transition: width 0.5s ease;"></div>
-                    </div>
-                  </div>
-                  <div>
-                    <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
-                      <span data-i18n="interview_criteria_structure">Struktur</span>
-                      <span id="rating-structure">—</span>
-                    </div>
-                    <div style="height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;">
-                      <div id="bar-structure" style="height: 100%; width: 0%; background: #3b82f6; transition: width 0.5s ease;"></div>
-                    </div>
-                  </div>
-                  <div>
-                    <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
-                      <span data-i18n="interview_criteria_language">Sprache</span>
-                      <span id="rating-language">—</span>
-                    </div>
-                    <div style="height: 6px; background: var(--border); border-radius: 3px; overflow: hidden;">
-                      <div id="bar-language" style="height: 100%; width: 0%; background: #8b5cf6; transition: width 0.5s ease;"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background: #f7f7f8;
+      color: #202123;
+      overflow: hidden;
+    }
+
+    .interview-container {
+      display: flex;
+      height: 100vh;
+      gap: 1px;
+      background: #e5e5e6;
+    }
+
+    /* Left side - Video Grid */
+    .video-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: white;
+    }
+
+    .video-box {
+      flex: 1;
+      background: #18181b;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .video-box video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .video-placeholder {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px;
+    }
+
+    .ai-logo {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Ready Player Me Avatar */
+    #avatar-container {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    #avatar-canvas {
+      width: 100%;
+      height: 100%;
+    }
+
+    .video-label {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .status-indicator {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* Timeline */
+    .timeline-container {
+      height: 60px;
+      background: white;
+      border-top: 1px solid #e5e5e6;
+      padding: 12px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow: visible; /* Allow tooltips to show above timeline */
+      position: relative;
+      z-index: 10;
+    }
+
+    .timeline-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .timeline-timer {
+      font-weight: 600;
+      color: #202123;
+      font-size: 14px;
+    }
+
+    .timeline-bar {
+      width: 100%;
+      height: 24px;
+      background: transparent;
+      border-radius: 6px;
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      overflow: visible; /* Changed from hidden to visible for tooltips */
+    }
+
+    .timeline-phase-segment {
+      height: 100%;
+      position: relative;
+      border-right: 2px solid white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: white;
+      transition: all 0.2s;
+      cursor: pointer;
+      overflow: visible; /* Allow tooltip to show outside */
+    }
+
+    .timeline-phase-segment:last-child {
+      border-right: none;
+    }
+
+    .timeline-phase-segment:hover {
+      filter: brightness(1.1);
+      transform: scaleY(1.05);
+    }
+
+    .timeline-phase-segment.phase-1 { background: #667eea; }
+    .timeline-phase-segment.phase-2 { background: #10b981; }
+    .timeline-phase-segment.phase-3 { background: #f59e0b; }
+    .timeline-phase-segment.phase-4 { background: #ec4899; }
+    .timeline-phase-segment.phase-5 { background: #8b5cf6; }
+
+    /* Phase Hover Tooltip - OpenAI Design */
+    .phase-tooltip {
+      position: absolute;
+      bottom: 35px;
+      left: 50%;
+      transform: translateX(-50%) translateY(0);
+      background: #202123;
+      color: white;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.2s;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .phase-tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-top-color: #202123;
+    }
+
+    .timeline-phase-segment:hover .phase-tooltip {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-5px);
+    }
+
+    .phase-tooltip-title {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .phase-tooltip-duration {
+      font-size: 11px;
+      opacity: 0.7;
+    }
+
+    .timeline-progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.2);
+      pointer-events: none;
+      transition: width 0.3s;
+      z-index: 1;
+    }
+
+    .timeline-marker {
+      position: absolute;
+      top: 50%;
+      width: 16px;
+      height: 16px;
+      background: white;
+      border: 3px solid #667eea;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      z-index: 2;
+    }
+
+    /* Control Bar */
+    .controls {
+      height: 80px;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 0 24px;
+      border-top: 1px solid #e5e5e6;
+    }
+
+    .control-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: none;
+      background: #f0f0f1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      transition: all 0.2s;
+    }
+
+    .control-btn:hover {
+      background: #e5e5e6;
+      transform: scale(1.05);
+    }
+
+    .control-btn.active {
+      background: #10b981;
+      color: white;
+    }
+
+    .control-btn.danger {
+      background: #ef4444;
+      color: white;
+    }
+
+    .control-btn.danger:hover {
+      background: #dc2626;
+    }
+
+    /* Right side - Chat */
+    .chat-section {
+      width: 400px;
+      background: white;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-header {
+      height: 60px;
+      border-bottom: 1px solid #e5e5e6;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      font-weight: 600;
+      font-size: 16px;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .message {
+      display: flex;
+      gap: 12px;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .message.ai {
+      flex-direction: row;
+    }
+
+    .message.user {
+      flex-direction: row-reverse;
+    }
+
+    .message-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      padding: 8px;
+    }
+
+    .message-avatar img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .message.user .message-avatar {
+      background: #667eea;
+      color: white;
+      font-size: 18px;
+    }
+
+    .message-content {
+      max-width: 75%;
+      background: #f0f0f1;
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .message.user .message-content {
+      background: #667eea;
+      color: white;
+    }
+
+    .chat-input-area {
+      border-top: 1px solid #e5e5e6;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .quick-questions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .quick-question-btn {
+      padding: 6px 12px;
+      background: #f0f0f1;
+      border: 1px solid #e5e5e6;
+      border-radius: 16px;
+      font-size: 12px;
+      color: #202123;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .quick-question-btn:hover {
+      background: #667eea;
+      color: white;
+      border-color: #667eea;
+    }
+
+    .chat-input-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid #e5e5e6;
+      border-radius: 12px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+      background: white;
+    }
+
+    .chat-input:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .chat-input::placeholder {
+      color: #9ca3af;
+    }
+
+    .send-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: none;
+      background: #667eea;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .send-btn:hover {
+      background: #5568d3;
+    }
+
+    .send-btn:disabled {
+      background: #e5e5e6;
+      cursor: not-allowed;
+    }
+
+    /* Phase Indicator */
+    .phase-indicator {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    /* Loading dots animation */
+    .typing-indicator {
+      display: inline-flex;
+      gap: 4px;
+      padding: 12px 16px;
+    }
+
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #9ca3af;
+      animation: typing 1.4s infinite;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+      0%, 60%, 100% {
+        transform: translateY(0);
+        opacity: 0.7;
+      }
+      30% {
+        transform: translateY(-10px);
+        opacity: 1;
+      }
+    }
+
+    /* Loading */
+    .loading {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Modal for CV Upload */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 500px;
+      width: 90%;
+    }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .upload-area {
+      border: 2px dashed #e5e5e6;
+      border-radius: 12px;
+      padding: 40px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin: 20px 0;
+    }
+
+    .upload-area:hover {
+      border-color: #667eea;
+      background: #f7f7f8;
+    }
+
+    .upload-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    .modal-btn {
+      padding: 10px 24px;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .modal-btn.primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .modal-btn.primary:hover {
+      background: #5568d3;
+    }
+
+    .modal-btn.secondary {
+      background: #f0f0f1;
+      color: #202123;
+    }
+
+    .modal-btn.secondary:hover {
+      background: #e5e5e6;
+    }
+  </style>
+</head>
+<body>
+  <div class="interview-container">
+    <!-- Video Section -->
+    <div class="video-section">
+      <!-- AI Interviewer Video -->
+      <div class="video-box">
+        <div class="video-placeholder">
+          <img src="/images/CareerSIM Logo.png" alt="CareerSIM" style="width: 100%; height: 100%; object-fit: contain;">
         </div>
-      </main>
+        <div class="video-label" id="interviewer-label">Sam Altman - HR Department</div>
+        <div class="status-indicator">
+          <div class="status-dot"></div>
+          <span id="status-text">Verbunden</span>
+        </div>
+        <div class="phase-indicator" id="phase-indicator">Phase 1: Begrüßung</div>
+      </div>
+
+      <!-- User Video -->
+      <div class="video-box">
+        <video id="user-video" autoplay muted></video>
+        <div class="video-label">Dein Video</div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="timeline-container">
+        <div class="timeline-info">
+          <span class="timeline-timer" id="timeline-timer">00:00 / 45:00</span>
+          <span id="timeline-phase">Phase 1/5</span>
+        </div>
+        <div class="timeline-bar" id="timeline-bar">
+          <!-- Phase segments will be dynamically added here -->
+          <div class="timeline-progress" id="timeline-progress"></div>
+          <div class="timeline-marker" id="timeline-marker"></div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+            <!-- Controls -->
+      <div class="controls">
+        <button class="control-btn active" id="btn-mic" title="Mikrofon">
+          🎤
+        </button>
+        <button class="control-btn active" id="btn-camera" title="Kamera">
+          📹
+        </button>
+        <button class="control-btn" id="btn-pause" title="Pausieren">
+          ⏸️
+        </button>
+        <button class="control-btn danger" id="btn-end" title="Interview beenden">
+          ⏹️
+        </button>
+      </div>
     </div>
 
-    <script src="/js/i18n.js"></script>
-    <script>
-      // Check auth
-      const token = localStorage.getItem('cs_token');
-      if (!token) {
-        window.location.href = '/login.html';
+    <!-- Chat Section -->
+    <div class="chat-section">
+      <div class="chat-header">
+        💬 Interview-Chat
+      </div>
+      <div class="chat-messages" id="chat-messages">
+        <div class="message ai">
+          <div class="message-avatar">
+            <img src="/images/CareerSIM Logo.png" alt="AI">
+          </div>
+          <div class="message-content">
+            Willkommen zum KI-Interview! Ich bin dein virtueller Interviewer. Lass uns mit einer kurzen Vorstellung beginnen. Bitte erzähle mir etwas über dich.
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-area">
+        <!-- Quick Question Buttons -->
+        <div class="quick-questions" id="quick-questions">
+          <button class="quick-question-btn" data-question="Kannst du die Frage bitte nochmal wiederholen?">
+            🔄 Frage wiederholen
+          </button>
+          <button class="quick-question-btn" data-question="Kannst du das bitte nochmal erklären?">
+            💡 Erklärung
+          </button>
+          <button class="quick-question-btn" data-question="Kannst du mir mehr Details zur Case Study geben?">
+            📋 Case Details
+          </button>
+          <button class="quick-question-btn case-study-only" data-question="Wie viel Zeit habe ich noch für die Case Study?" style="display: none;">
+            ⏱️ Zeit
+          </button>
+        </div>
+        
+        <!-- Chat Input -->
+        <div class="chat-input-row">
+          <input 
+            type="text" 
+            class="chat-input" 
+            id="chat-input" 
+            placeholder="💬 Frage zur Case Study stellen oder Frage wiederholen lassen..."
+          >
+          <button class="send-btn" id="send-btn">
+            ➤
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * CareerSIM - KI-Interview Simulator mit strukturierten Phasen
+     * ============================================================
+     * 
+     * FUNKTIONSÜBERSICHT:
+     * ------------------
+     * 1. Phasenbasiertes Interview-System:
+     *    - Phase 1: Selbstvorstellung & Motivation (3 Fragen)
+     *    - Phase 2: Fachliche Fragen (3 Fragen)
+     *    - Phase 3: Situative/Verhaltensfragen (STAR-Methode, 3 Fragen)
+     *    - Phase 4: Rückblick & Abschlussbewertung (2 Fragen)
+     * 
+     * 2. Dynamisches Prompt-Management:
+     *    - Automatischer Phase-Wechsel nach N Fragen
+     *    - CV-Summary und Job-Ad Integration
+     *    - Company-Profil (Name, Branche, Ton)
+     *    - Real-time System Prompt Updates
+     * 
+     * 3. OpenAI Realtime API (gpt-4o-mini-realtime-preview-2024-12-17):
+     *    - Echo Voice mit optimierten Turn-Detection Settings:
+     *      * Threshold: 0.65
+     *      * Prefix Padding: 300ms
+     *      * Silence Duration: 1180ms
+     *    - Bidirektionales Audio-Streaming
+     *    - Whisper-1 Transkription
+     * 
+     * 4. Interview-Kontrolle:
+     *    - Pause/Resume (Ctrl+P)
+     *    - Mute/Unmute (Ctrl+M)
+     *    - Emergency Stop (ESC)
+     *    - Sprache wechseln (optional)
+     * 
+     * 5. Erweiterbarkeit:
+     *    - Branchenspezifische Module
+     *    - Employer Branding Content
+     *    - Custom Voice/Tone pro Unternehmen
+     *    - Analytics & Performance Tracking
+     * 
+     * VARIABLEN:
+     * ----------
+     * - cv_summary: Lebenslauf als Text (aus localStorage oder Config)
+     * - job_ad: Stellenanzeige (aus localStorage oder Config)
+     * - company_profile: { name, type, industry, tone }
+     * - currentPhase: Aktuelle Phase (0-3)
+     * - questionCount: Anzahl gestellter Fragen in aktueller Phase
+     * 
+     * API-MODELL: gpt-4o-mini-realtime-preview-2024-12-17
+     */
+
+    // Load interview configuration
+    const interviewConfig = JSON.parse(sessionStorage.getItem('interviewConfig') || '{}');
+    if (!interviewConfig.company) {
+      // Redirect to setup if no config
+      window.location.href = '/interview-config.html';
+    }
+
+    // Set default CV and Job Ad if not provided (can be updated later)
+    if (!interviewConfig.cv_summary) {
+      interviewConfig.cv_summary = localStorage.getItem('cv_summary') || 
+        'Noch kein Lebenslauf hochgeladen. Der Kandidat wird gebeten, seinen Hintergrund mündlich zu beschreiben.';
+    }
+    
+    if (!interviewConfig.job_ad) {
+      interviewConfig.job_ad = localStorage.getItem('job_ad') || 
+        `Position bei ${interviewConfig.company?.name || 'unserem Unternehmen'} in der Branche ${interviewConfig.industry || 'Finance'}.
+        Wir suchen einen motivierten Kandidaten mit relevanter Erfahrung.`;
+    }
+    
+    if (!interviewConfig.company?.tone) {
+      interviewConfig.company.tone = 'professionell und freundlich';
+    }
+
+    // Helper functions to update CV/Job Ad (for future profile page integration)
+    window.updateCVSummary = function(cvText) {
+      localStorage.setItem('cv_summary', cvText);
+      interviewConfig.cv_summary = cvText;
+      console.log('✅ CV Summary updated');
+    };
+
+    window.updateJobAd = function(jobText) {
+      localStorage.setItem('job_ad', jobText);
+      interviewConfig.job_ad = jobText;
+      console.log('✅ Job Ad updated');
+    };
+
+    // State
+    let ws = null;
+    let audioContext = null;
+    let mediaStream = null;
+    let audioWorklet = null;
+    let isMicMuted = false;
+    let isCameraOff = false;
+    let isPaused = false;
+    let currentPhase = 0;
+    let questionCount = 0; // Track questions asked in current phase
+    let selectedFile = null;
+    let audioQueue = [];
+    let isPlaying = false;
+    let nextStartTime = 0;
+    
+    // Timer state
+    let interviewStartTime = null;
+    let elapsedSeconds = 0;
+    let timerInterval = null;
+    const totalDurationMinutes = interviewConfig.company?.duration || 45;
+    const totalDurationSeconds = totalDurationMinutes * 60;
+
+    // Get phases from config or use defaults
+    const configPhases = interviewConfig.phases || [
+      { name: 'Selbstvorstellung & Motivation', duration: 5 },
+      { name: 'Fachliche Fragen', duration: 15 },
+      { name: 'Situative/Verhaltensfragen', duration: 15 },
+      { name: 'Rückblick & Abschlussbewertung', duration: 8 }
+    ];
+
+    // Interview Phase Configuration
+    const interviewPhases = [
+      {
+        name: configPhases[0]?.name || 'Selbstvorstellung & Motivation',
+        duration: configPhases[0]?.duration || 5,
+        questionCount: 3,
+        questionTypes: ['Erzählen Sie mir etwas über sich', 'Warum interessieren Sie sich für diese Position?', 'Was motiviert Sie?']
+      },
+      {
+        name: configPhases[1]?.name || 'Fachliche Fragen',
+        duration: configPhases[1]?.duration || 15,
+        questionCount: 3,
+        questionTypes: ['Technisches Wissen', 'Branchenspezifische Expertise', 'Problemlösungskompetenz']
+      },
+      {
+        name: configPhases[2]?.name || 'Situative/Verhaltensfragen',
+        duration: configPhases[2]?.duration || 15,
+        questionCount: 3,
+        questionTypes: ['STAR-Methode Szenarien', 'Teamwork & Konfliktlösung', 'Leadership & Initiative']
+      },
+      {
+        name: configPhases[3]?.name || 'Rückblick & Abschlussbewertung',
+        duration: configPhases[3]?.duration || 8,
+        questionCount: 2,
+        questionTypes: ['Ihre Fragen an uns', 'Zusammenfassung & nächste Schritte']
+      }
+    ];
+
+    // Build phase-specific system prompt
+    function buildPhasePrompt(phaseIndex, context) {
+      const { cv_summary, job_ad, company_profile, phases, currentQuestion } = context;
+      const phase = interviewPhases[phaseIndex] || interviewPhases[0];
+      
+      let basePrompt = `Du bist ${interviewConfig.interviewer.name}, ein erfahrener Interviewer aus der ${interviewConfig.interviewer.role} bei ${company_profile.name}.
+
+⚡ WICHTIG: Sei KURZ, PRÄZISE und DIREKT. Keine langen Monologe!
+
+UNTERNEHMENSKONTEXT:
+- Unternehmen: ${company_profile.name}
+- Branche: ${company_profile.type}
+- Ton: ${company_profile.tone}
+
+KANDIDATEN-CV:
+${cv_summary}
+
+STELLENANZEIGE:
+${job_ad}
+
+AKTUELLE INTERVIEW-PHASE: ${phaseIndex + 1}/${interviewPhases.length} - ${phase.name}
+Fragen in dieser Phase: ${currentQuestion}/${phase.questionCount}
+
+`;
+
+      // Phase-specific instructions
+      switch (phaseIndex) {
+        case 0: // Selbstvorstellung & Motivation
+          basePrompt += `ANWEISUNGEN FÜR PHASE 1:
+- Begrüße den Kandidaten herzlich und stelle dich vor
+- Stelle ${phase.questionCount} Fragen zu Hintergrund, Motivation und Interesse
+- Gehe auf Details aus dem CV ein
+- Schaffe eine angenehme, offene Atmosphäre
+- Fragen: ${phase.questionTypes.join(', ')}
+- Nach ${phase.questionCount} Fragen: Leite zur nächsten Phase über`;
+          break;
+          
+        case 1: // Fachliche Fragen
+          basePrompt += `ANWEISUNGEN FÜR PHASE 2:
+- Stelle ${phase.questionCount} tiefgehende fachliche Fragen basierend auf der Stellenanzeige
+- Prüfe technisches Wissen und Branchenkenntnisse
+- Fordere konkrete Beispiele und Erfahrungen
+- Bewerte die fachliche Kompetenz kritisch aber fair
+- Fokusbereiche: ${phase.questionTypes.join(', ')}
+- Nach ${phase.questionCount} Fragen: Wechsle zu situativen Fragen`;
+          break;
+          
+        case 2: // Situative/Verhaltensfragen
+          basePrompt += `ANWEISUNGEN FÜR PHASE 3:
+- Stelle ${phase.questionCount} situative Fragen nach der STAR-Methode
+- Frage nach konkreten Situationen (Situation, Task, Action, Result)
+- Bewerte Soft Skills: Teamfähigkeit, Problemlösung, Leadership
+- Achte auf authentische Antworten
+- Themenbereiche: ${phase.questionTypes.join(', ')}
+- Nach ${phase.questionCount} Fragen: Bereite den Abschluss vor`;
+          break;
+          
+        case 3: // Rückblick & Abschluss
+          basePrompt += `ANWEISUNGEN FÜR PHASE 4:
+- Frage, ob der Kandidat Fragen hat
+- Gib einen kurzen Rückblick auf das Gespräch
+- Erkläre die nächsten Schritte im Bewerbungsprozess
+- Bedanke dich für die Zeit und verabschiede dich professionell
+- Erstelle eine finale Bewertung (wird nach dem Interview angezeigt)`;
+          break;
       }
 
-      const api = (path, opts = {}) => fetch('/api' + path, opts).then(r => r.json());
-      const $ = id => document.getElementById(id);
+      basePrompt += `
 
-      let recognition;
-      let synth = window.speechSynthesis;
-      let isListening = false;
+WICHTIGE REGELN:
+1. Sprich natürlich und authentisch wie ein echter Interviewer
+2. Stelle EINE Frage nach der anderen, warte auf die Antwort
+3. Gehe auf die Antworten ein, stelle Nachfragen bei Unklarheiten
+4. Halte die Phase-Struktur ein: ${phase.questionCount} Fragen pro Phase
+5. Wenn ${phase.questionCount} Fragen beantwortet wurden, wechsle automatisch zur nächsten Phase
+6. Nutze einen ${company_profile.tone}en Ton
+7. Beziehe dich konkret auf den CV und die Stellenanzeige
+8. Am Ende der letzten Phase: Gib eine detaillierte Bewertung (1-10 Punkte) für:
+   - Fachkompetenz
+   - Kommunikation
+   - Problem-Solving
+   - Cultural Fit
+   - Gesamteindruck
 
-      // Logout
-      $('logout-btn').addEventListener('click', () => {
-        localStorage.clear();
-        window.location.href = '/';
+INHALTLICHE FRAGEN DES KANDIDATEN (erkennbar an [CLARIFICATION] Tag):
+- Wenn der Kandidat um Wiederholung bittet: Wiederhole die letzte Frage in 1-2 Sätzen
+- Bei Fragen zur Case Study/Aufgabe: Gib präzise Erklärung in MAX 2-3 Sätzen
+- Bei Verständnisfragen: Kläre KURZ und verständlich in 1-2 Sätzen
+- Bei Zeitfragen: Sage nur die verbleibende Zeit, keine langen Erklärungen
+- Solche Klärungsfragen zählen NICHT als Interview-Fragen
+- Nach der Klärung: Kehre SOFORT zur eigentlichen Interview-Frage zurück
+- WICHTIG: Halte Clarifications EXTREM KURZ (max 2-3 Sätze)!
+
+GESCHWINDIGKEIT:
+- Stelle Fragen KURZ und DIREKT (max 2-3 Sätze pro Frage)
+- Keine langen Einleitungen oder Erklärungen
+- Komme schnell auf den Punkt
+- Bei Phase-Wechsel: SOFORT neue Frage stellen, keine Überleitungen
+
+Aktuelle Frage: ${currentQuestion + 1} von ${phase.questionCount} in Phase ${phaseIndex + 1}`;
+
+      return basePrompt;
+    }
+
+    // Update system prompt when phase changes
+    function updateSystemPrompt() {
+      if (!ws || ws.readyState !== WebSocket.OPEN) return;
+      
+      const systemPrompt = buildPhasePrompt(currentPhase, {
+        cv_summary: interviewConfig.cv_summary || localStorage.getItem('cv_summary') || 'Kein Lebenslauf vorhanden',
+        job_ad: interviewConfig.job_ad || localStorage.getItem('job_ad') || 'Keine Stellenanzeige vorhanden',
+        company_profile: {
+          name: interviewConfig.company.name,
+          type: interviewConfig.company.type,
+          industry: interviewConfig.industry,
+          tone: interviewConfig.company.tone || 'professionell und freundlich'
+        },
+        phases: interviewPhases,
+        currentQuestion: questionCount
       });
 
-      // Speech recognition setup
-      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        recognition = new SpeechRecognition();
-        recognition.continuous = true;
-        recognition.interimResults = false;
-        recognition.lang = 'de-DE';
-        recognition.onresult = (e) => {
-          const transcript = Array.from(e.results).map(r => r[0].transcript).join(' ');
-          $('transcript').textContent = transcript;
-          $('answer').value = transcript;
+      ws.send(JSON.stringify({
+        type: 'session.update',
+        session: {
+          instructions: systemPrompt
+        }
+      }));
+      
+      console.log(`📝 Updated to Phase ${currentPhase + 1}, Question ${questionCount + 1}`);
+    }
+
+    const API_BASE = window.location.origin;
+    
+    // Build interview instructions for AI
+    const phases = interviewConfig.phases || [];
+    let phaseInstructions = `Du bist ${interviewConfig.interviewer.name} und arbeitest in der ${interviewConfig.interviewer.role} bei ${interviewConfig.company.name}.\n\n`;
+    phaseInstructions += `Führe ein ${totalDurationMinutes}-minütiges Interview durch mit folgenden Phasen:\n\n`;
+    phases.forEach((phase, idx) => {
+      phaseInstructions += `Phase ${idx + 1} (${phase.duration} Min): ${phase.name}\n`;
+    });
+    phaseInstructions += `\nWichtig:\n- Stelle dich zu Beginn vor: "Hallo, ich bin ${interviewConfig.interviewer.name} aus der ${interviewConfig.interviewer.role} bei ${interviewConfig.company.name}."\n`;
+    phaseInstructions += `- Erzähle kurz über ${interviewConfig.company.name} und die Unternehmenskultur\n`;
+    phaseInstructions += `- Folge strikt dem Interview-Ablauf und achte auf die Zeit\n`;
+    phaseInstructions += `- Am Ende gib eine detaillierte Scorecard mit Bewertung (1-10) für: Fachkompetenz, Kommunikation, Problem-Solving, Cultural Fit, Gesamteindruck\n`;
+    phaseInstructions += `- Beende das Interview nach ${totalDurationMinutes} Minuten automatisch mit der Scorecard`;
+
+    // UI Elements
+    const chatMessages = document.getElementById('chat-messages');
+    const chatInput = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('send-btn');
+    const btnMic = document.getElementById('btn-mic');
+    const btnCamera = document.getElementById('btn-camera');
+    const btnPause = document.getElementById('btn-pause');
+    const btnEnd = document.getElementById('btn-end');
+    const phaseIndicator = document.getElementById('phase-indicator');
+    const statusText = document.getElementById('status-text');
+    const userVideo = document.getElementById('user-video');
+    const timelineTimer = document.getElementById('timeline-timer');
+    const timelineProgress = document.getElementById('timeline-progress');
+    const timelineMarker = document.getElementById('timeline-marker');
+    const timelineBar = document.getElementById('timeline-bar');
+    const timelinePhase = document.getElementById('timeline-phase');
+
+    // Render timeline phase segments
+    function renderPhaseSegments() {
+      // Clear existing segments
+      const existingSegments = timelineBar.querySelectorAll('.timeline-phase-segment');
+      existingSegments.forEach(seg => seg.remove());
+
+      let cumulativePercent = 0;
+      interviewPhases.forEach((phase, i) => {
+        const phasePercent = (phase.duration / totalDurationMinutes) * 100;
+        
+        const segment = document.createElement('div');
+        segment.className = `timeline-phase-segment phase-${i + 1}`;
+        segment.style.width = `${phasePercent}%`;
+        segment.textContent = `${i + 1}`;
+        segment.dataset.phaseIndex = i;
+        
+        // Create beautiful tooltip in OpenAI design
+        const tooltip = document.createElement('div');
+        tooltip.className = 'phase-tooltip';
+        tooltip.innerHTML = `
+          <div class="phase-tooltip-title">Phase ${i + 1}: ${phase.name}</div>
+          <div class="phase-tooltip-duration">${phase.duration} Minuten • ${phase.questionCount} Fragen</div>
+        `;
+        segment.appendChild(tooltip);
+        
+        // Add click handler for each segment
+        segment.addEventListener('click', (e) => {
+          e.stopPropagation();
+          jumpToPhase(i);
+        });
+        
+        timelineBar.insertBefore(segment, timelineProgress);
+        cumulativePercent += phasePercent;
+      });
+    }
+
+    // Jump to specific phase
+    function jumpToPhase(phaseIndex) {
+      if (phaseIndex < 0 || phaseIndex >= interviewPhases.length) return;
+      
+      // Calculate time for this phase
+      let phaseStartTime = 0;
+      for (let i = 0; i < phaseIndex; i++) {
+        phaseStartTime += interviewPhases[i].duration * 60;
+      }
+      
+      // Update timer to phase start
+      elapsedSeconds = phaseStartTime;
+      interviewStartTime = Date.now() - (elapsedSeconds * 1000);
+      updateTimerDisplay();
+      
+      // Update current phase and question count
+      currentPhase = phaseIndex;
+      questionCount = 0;
+      updatePhase(phaseIndex);
+      
+      // Force AI to jump to this phase immediately with strong instruction
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        const phaseName = interviewPhases[phaseIndex].name;
+        const phaseQuestions = interviewPhases[phaseIndex].questionTypes || [];
+        
+        console.log(`🎯 Jumping to phase ${phaseIndex + 1}: ${phaseName}`);
+        
+        // STEP 1: IMMEDIATELY STOP ALL AUDIO PLAYBACK
+        audioQueue.length = 0;
+        isPlaying = false;
+        nextStartTime = 0;
+        
+        // Stop any current audio that's playing SYNCHRONOUSLY
+        if (audioContext) {
+          try {
+            audioContext.close();
+            audioContext = null;
+            console.log('🔇 Audio context closed');
+          } catch (e) {
+            console.error('Error closing audio:', e);
+          }
+        }
+        
+        // Recreate audio context immediately
+        try {
+          audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 24000 });
+          console.log('🔊 New audio context created');
+        } catch (e) {
+          console.error('Error creating audio context:', e);
+        }
+        
+        // STEP 2: Clear input audio buffer FIRST (this stops recording)
+        ws.send(JSON.stringify({ type: 'input_audio_buffer.clear' }));
+        
+        // STEP 3: Update session with new phase prompt IMMEDIATELY (no setTimeout)
+        const cv_summary = interviewConfig.cv_summary || localStorage.getItem('cv_summary') || 'Kein Lebenslauf vorhanden';
+        const job_ad = interviewConfig.job_ad || localStorage.getItem('job_ad') || 'Keine Stellenanzeige vorhanden';
+        const company_profile = {
+          name: interviewConfig.company.name,
+          type: interviewConfig.company.type,
+          industry: interviewConfig.industry,
+          tone: interviewConfig.company.tone || 'professionell und freundlich'
         };
-        recognition.onerror = (e) => {
-          console.error('Speech recognition error:', e.error);
-          $('transcript').textContent = 'Fehler: ' + e.error;
-          isListening = false;
-          $('btn-mic').textContent = '🎤 Mikro an';
-          $('btn-mic').classList.remove('on');
-        };
+        
+        const newSystemPrompt = buildPhasePrompt(phaseIndex, {
+          cv_summary,
+          job_ad,
+          company_profile,
+          phases: interviewPhases,
+          currentQuestion: 0
+        });
+        
+        ws.send(JSON.stringify({
+          type: 'session.update',
+          session: {
+            instructions: newSystemPrompt,
+            turn_detection: {
+              type: 'server_vad',
+              threshold: 0.65,
+              prefix_padding_ms: 300,
+              silence_duration_ms: 1180
+            }
+          }
+        }));
+        
+        // STEP 4: Send user message and trigger response IMMEDIATELY
+        // Don't mention "phase jump" to the AI, just tell them to start the new phase
+        ws.send(JSON.stringify({
+          type: 'conversation.item.create',
+          item: {
+            type: 'message',
+            role: 'user',
+            content: [{
+              type: 'input_text',
+              text: `Starte jetzt Phase ${phaseIndex + 1}: ${phaseName}. Stelle sofort die erste Frage dieser Phase, ohne Überleitung oder Erklärung.`
+            }]
+          }
+        }));
+        
+        // Force immediate response without delay
+        ws.send(JSON.stringify({ type: 'response.create' }));
+        
+        console.log(`✅ Phase ${phaseIndex + 1} started instantly`);
       }
+    }
 
-      $('btn-mic').onclick = () => {
-        if (!recognition) {
-          alert('Speech Recognition wird von deinem Browser nicht unterstützt.');
-          return;
-        }
-        if (isListening) {
-          recognition.stop();
-          isListening = false;
-          $('btn-mic').textContent = '🎤 Mikro an';
-          $('btn-mic').classList.remove('on');
-        } else {
-          recognition.start();
-          isListening = true;
-          $('btn-mic').textContent = '🔴 Aufnahme...';
-          $('btn-mic').classList.add('on');
-          $('transcript').textContent = 'Höre zu...';
-        }
-      };
-
-      function speakText(text) {
-        if (!synth) return;
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'de-DE';
-        synth.speak(utterance);
+    // Add message to chat
+    function addMessage(role, text) {
+      const message = document.createElement('div');
+      message.className = `message ${role}`;
+      
+      const avatar = document.createElement('div');
+      avatar.className = 'message-avatar';
+      
+      if (role === 'ai') {
+        const img = document.createElement('img');
+        img.src = '/images/CareerSIM Logo.png';
+        img.alt = 'AI';
+        avatar.appendChild(img);
+      } else {
+        avatar.textContent = '👤';
       }
+      
+      const content = document.createElement('div');
+      content.className = 'message-content';
+      content.textContent = text;
+      
+      message.appendChild(avatar);
+      message.appendChild(content);
+      chatMessages.appendChild(message);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
 
-      function toggleFullscreen() {
-        if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen();
-        } else {
-          document.exitFullscreen();
-        }
+    // Show typing indicator
+    function showTypingIndicator() {
+      const message = document.createElement('div');
+      message.className = 'message ai';
+      message.id = 'typing-indicator-msg';
+      
+      const avatar = document.createElement('div');
+      avatar.className = 'message-avatar';
+      const img = document.createElement('img');
+      img.src = '/images/CareerSIM Logo.png';
+      img.alt = 'AI';
+      avatar.appendChild(img);
+      
+      const content = document.createElement('div');
+      content.className = 'message-content';
+      content.innerHTML = '<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+      
+      message.appendChild(avatar);
+      message.appendChild(content);
+      chatMessages.appendChild(message);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Remove typing indicator
+    function removeTypingIndicator() {
+      const indicator = document.getElementById('typing-indicator-msg');
+      if (indicator) {
+        indicator.remove();
       }
+    }
 
-      function endInterview() {
-        if (confirm('Möchtest du das Interview wirklich beenden?')) {
-          window.location.href = '/dashboard.html';
-        }
+    // Update phase
+    function updatePhase(phase) {
+      currentPhase = phase;
+      const currentPhaseConfig = interviewPhases[phase] || interviewPhases[0];
+      const phaseName = `Phase ${phase + 1}: ${currentPhaseConfig.name}`;
+      
+      phaseIndicator.textContent = phaseName;
+      timelinePhase.textContent = `Phase ${phase + 1}/${interviewPhases.length} | Frage ${questionCount}/${currentPhaseConfig.questionCount}`;
+      
+      // Update phase indicator with visual feedback
+      phaseIndicator.style.background = getPhaseColor(phase);
+      phaseIndicator.style.animation = 'pulse 0.5s ease';
+      
+      // Show/hide time button only for Phase 2 (Case Study)
+      const timeButton = document.querySelector('.case-study-only');
+      if (timeButton) {
+        timeButton.style.display = (phase === 1) ? 'inline-flex' : 'none';
       }
+      
+      console.log(`📍 Phase Updated: ${phaseName} (${questionCount}/${currentPhaseConfig.questionCount} questions)`);
+    }
 
-      // Timer
-      let startTime = null;
-      setInterval(() => {
-        if (startTime) {
-          const elapsed = Math.floor((Date.now() - startTime) / 1000);
-          const mins = Math.floor(elapsed / 60).toString().padStart(2, '0');
-          const secs = (elapsed % 60).toString().padStart(2, '0');
-          $('timer').textContent = `${mins}:${secs}`;
+    // Get color for phase
+    function getPhaseColor(phaseIndex) {
+      const colors = [
+        'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', // Phase 1: Purple
+        'linear-gradient(135deg, #10b981 0%, #059669 100%)', // Phase 2: Green
+        'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', // Phase 3: Orange
+        'linear-gradient(135deg, #ec4899 0%, #be185d 100%)'  // Phase 4: Pink
+      ];
+      return colors[phaseIndex] || colors[0];
+    }
+
+    // Timer functions
+    function startTimer() {
+      interviewStartTime = Date.now();
+      timerInterval = setInterval(() => {
+        if (!isPaused) {
+          elapsedSeconds = Math.floor((Date.now() - interviewStartTime) / 1000);
+          updateTimerDisplay();
+          
+          // Auto-end interview when time is up
+          if (elapsedSeconds >= totalDurationSeconds) {
+            endInterviewWithScore();
+          }
         }
       }, 1000);
+    }
 
-      $('btn-start').onclick = async () => {
-        const res = await api('/interview/start', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json', 'x-auth-token': token},
-          body: JSON.stringify({})
-        });
-        if (res.interviewId) {
-          window.__interview = { id: res.interviewId };
-          startTime = Date.now();
-          $('question-box').querySelector('.chat-text').textContent = res.question || 'Keine Frage';
-          $('feedback').querySelector('.chat-text').textContent = 'Warte auf deine Antwort...';
-          $('btn-start').disabled = true;
-          $('btn-start').textContent = '✅ Interview läuft';
-        } else {
-          alert(res.error || 'Fehler beim Starten');
+    function updateTimerDisplay() {
+      const elapsed = formatTime(elapsedSeconds);
+      const total = formatTime(totalDurationSeconds);
+      timelineTimer.textContent = `${elapsed} / ${total}`;
+      
+      const progress = (elapsedSeconds / totalDurationSeconds) * 100;
+      timelineProgress.style.width = `${Math.min(progress, 100)}%`;
+      timelineMarker.style.left = `${Math.min(progress, 100)}%`;
+    }
+
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    // Timeline scrubbing - calculate which phase to jump to
+    timelineBar.addEventListener('click', (e) => {
+      // Don't handle if clicked on a segment (segments have their own handlers)
+      if (e.target.classList.contains('timeline-phase-segment')) return;
+      
+      const rect = timelineBar.getBoundingClientRect();
+      const percent = (e.clientX - rect.left) / rect.width;
+      
+      // Calculate which phase this corresponds to
+      let cumulativeTime = 0;
+      let targetPhase = 0;
+      
+      for (let i = 0; i < interviewPhases.length; i++) {
+        const phaseEndTime = cumulativeTime + (interviewPhases[i].duration * 60);
+        const phaseEndPercent = phaseEndTime / totalDurationSeconds;
+        
+        if (percent <= phaseEndPercent) {
+          targetPhase = i;
+          break;
         }
+        cumulativeTime = phaseEndTime;
+      }
+      
+      if (targetPhase >= interviewPhases.length) targetPhase = interviewPhases.length - 1;
+      
+      // Jump to that phase
+      jumpToPhase(targetPhase);
+    });
+
+    let finalScorecard = null;
+    let awaitingScorecard = false;
+    let scorecardTimeout = null;
+
+    function endInterviewWithScore() {
+      statusText.textContent = 'Interview beendet';
+      
+      addMessage('ai', '🏁 Interview wird beendet...');
+      
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        awaitingScorecard = true;
+        
+        // Set timeout - if no scorecard after 5 seconds, proceed anyway
+        scorecardTimeout = setTimeout(() => {
+          if (awaitingScorecard) {
+            console.log('⏰ Scorecard timeout - proceeding with minimal data');
+            awaitingScorecard = false;
+            const minimalScorecard = {
+              scores: {
+                technical: 3,
+                communication: 3,
+                problemSolving: 3,
+                culturalFit: 3,
+                overall: 3
+              },
+              feedback: 'Interview wurde vorzeitig beendet. Zu wenig Informationen vom Kandidaten für eine vollständige Bewertung.'
+            };
+            addMessage('ai', '✅ Interview beendet.');
+            saveInterviewToHistory(minimalScorecard);
+          }
+        }, 5000);
+        
+        // Request final scorecard from AI in structured format
+        ws.send(JSON.stringify({
+          type: 'conversation.item.create',
+          item: {
+            type: 'message',
+            role: 'user',
+            content: [{
+              type: 'input_text',
+              text: `Das Interview ist nun beendet. Bitte gib jetzt die finale Scorecard mit detaillierter Bewertung.
+
+FORMAT (GENAU SO):
+Fachkompetenz: [Zahl]/10
+Kommunikation: [Zahl]/10
+Problem-Solving: [Zahl]/10
+Cultural Fit: [Zahl]/10
+Gesamteindruck: [Zahl]/10
+
+Feedback: [Dein detailliertes Feedback in 2-3 Sätzen]
+
+Verwende GENAU dieses Format!`
+            }]
+          }
+        }));
+        ws.send(JSON.stringify({ type: 'response.create' }));
+        
+        console.log('⏳ Waiting for AI scorecard...');
+      } else {
+        // No connection, save with low scores for early termination
+        const minimalScorecard = {
+          scores: {
+            technical: 3,
+            communication: 3,
+            problemSolving: 3,
+            culturalFit: 3,
+            overall: 3
+          },
+          feedback: 'Interview wurde vorzeitig beendet. Zu wenig Informationen vom Kandidaten für eine vollständige Bewertung.'
+        };
+        saveInterviewToHistory(minimalScorecard);
+        setTimeout(() => {
+          stopInterview();
+          window.location.href = '/evaluation.html';
+        }, 1000);
+      }
+    }
+
+    // Parse AI scorecard from text
+    function parseScorecard(text) {
+      console.log('Parsing scorecard from:', text);
+      
+      const scores = {
+        technical: 7,
+        communication: 7,
+        problemSolving: 7,
+        culturalFit: 7,
+        overall: 7
       };
-
-      $('btn-send').onclick = async () => {
-        const answer = $('answer').value.trim();
-        if (!window.__interview || !window.__interview.id) {
-          alert('Bitte starte zuerst ein Interview.');
-          return;
+      
+      let feedback = '';
+      
+      try {
+        // Extract scores using regex
+        const technicalMatch = text.match(/Fachkompetenz[:\s]+(\d+)\/10/i);
+        const communicationMatch = text.match(/Kommunikation[:\s]+(\d+)\/10/i);
+        const problemSolvingMatch = text.match(/Problem-Solving[:\s]+(\d+)\/10/i);
+        const culturalFitMatch = text.match(/Cultural Fit[:\s]+(\d+)\/10/i);
+        const overallMatch = text.match(/Gesamteindruck[:\s]+(\d+)\/10/i);
+        
+        if (technicalMatch) scores.technical = parseInt(technicalMatch[1]);
+        if (communicationMatch) scores.communication = parseInt(communicationMatch[1]);
+        if (problemSolvingMatch) scores.problemSolving = parseInt(problemSolvingMatch[1]);
+        if (culturalFitMatch) scores.culturalFit = parseInt(culturalFitMatch[1]);
+        if (overallMatch) scores.overall = parseInt(overallMatch[1]);
+        
+        // Extract feedback
+        const feedbackMatch = text.match(/Feedback[:\s]+(.+)/is);
+        if (feedbackMatch) {
+          feedback = feedbackMatch[1].trim();
+        } else {
+          // If no explicit feedback section, use the whole text
+          feedback = text;
         }
-        const res = await api('/interview/respond', {
+        
+        console.log('Parsed scores:', scores);
+        console.log('Parsed feedback:', feedback);
+      } catch (e) {
+        console.error('Error parsing scorecard:', e);
+      }
+      
+      return { scores, feedback };
+    }
+
+    // Save interview to history with scorecard
+    function saveInterviewToHistory(scorecard) {
+      const actualDuration = Math.floor(elapsedSeconds / 60);
+      
+      const evaluationData = {
+        id: Date.now(),
+        date: new Date().toISOString(),
+        company: interviewConfig.company.name,
+        companyId: interviewConfig.company.id,
+        industry: interviewConfig.industry,
+        duration: actualDuration,
+        completedPhases: currentPhase + 1,
+        scores: scorecard ? scorecard.scores : {
+          technical: 7,
+          communication: 7,
+          problemSolving: 7,
+          culturalFit: 7,
+          overall: 7
+        },
+        aiFeedback: scorecard ? scorecard.feedback : 'Keine Bewertung verfügbar.',
+        config: interviewConfig
+      };
+      
+      // Save to sessionStorage for evaluation page
+      sessionStorage.setItem('interviewEvaluation', JSON.stringify(evaluationData));
+      
+      // Get existing history
+      let history = JSON.parse(localStorage.getItem('interviewHistory') || '[]');
+      
+      // Add this interview
+      history.unshift(evaluationData);
+      
+      // Keep only last 20 interviews
+      if (history.length > 20) history = history.slice(0, 20);
+      
+      // Save back to localStorage
+      localStorage.setItem('interviewHistory', JSON.stringify(history));
+      
+      console.log('✅ Interview saved to history:', evaluationData);
+      
+      // Redirect to evaluation page
+      setTimeout(() => {
+        stopInterview();
+        window.location.href = '/evaluation.html';
+      }, 500);
+    }
+
+    // Initialize camera
+    async function initCamera() {
+      try {
+        mediaStream = await navigator.mediaDevices.getUserMedia({ 
+          video: true, 
+          audio: true 
+        });
+        userVideo.srcObject = mediaStream;
+      } catch (error) {
+        console.error('Kamera-Zugriff fehlgeschlagen:', error);
+        addMessage('ai', 'Hinweis: Kamera-Zugriff wurde verweigert. Das Interview kann trotzdem fortgesetzt werden.');
+      }
+    }
+
+    // Connect to OpenAI Realtime API
+    async function connectRealtimeAPI() {
+      try {
+        // Get API key from server
+        const response = await fetch(`${API_BASE}/api/realtime/session`, {
           method: 'POST',
-          headers: {'Content-Type': 'application/json', 'x-auth-token': token},
-          body: JSON.stringify({interviewId: window.__interview.id, answer})
+          headers: { 'Content-Type': 'application/json' }
         });
         
-        // Update feedback
-        $('feedback').querySelector('.chat-text').textContent = res.feedback || 'Feedback wird verarbeitet...';
-        if (res.feedback) speakText(res.feedback);
+        if (!response.ok) {
+          throw new Error('Failed to get API key');
+        }
         
-        // Update rating bars (simulated scores)
-        const contentScore = Math.floor(Math.random() * 30) + 70;
-        const structureScore = Math.floor(Math.random() * 30) + 65;
-        const languageScore = Math.floor(Math.random() * 30) + 75;
+        const { apiKey } = await response.json();
         
-        $('rating-content').textContent = contentScore + '/100';
-        $('bar-content').style.width = contentScore + '%';
-        $('rating-structure').textContent = structureScore + '/100';
-        $('bar-structure').style.width = structureScore + '%';
-        $('rating-language').textContent = languageScore + '/100';
-        $('bar-language').style.width = languageScore + '%';
-        
-        if (res.done) {
-          $('question-box').querySelector('.chat-text').textContent = 'Interview beendet. Analysiere deine Leistung...';
-          $('answer').value = '';
-          $('btn-send').disabled = true;
-          setTimeout(() => {
-            // Redirect to results page with interview ID
-            const interviewId = window.__interview?.id;
-            if (interviewId) {
-              window.location.href = `/interview-results.html?id=${interviewId}`;
-            } else {
-              window.location.href = '/interview-results.html';
+        // Connect WebSocket
+        const url = `wss://api.openai.com/v1/realtime?model=gpt-4o-mini-realtime-preview-2024-12-17`;
+        ws = new WebSocket(url, [
+          'realtime',
+          `openai-insecure-api-key.${apiKey}`,
+          'openai-beta.realtime-v1'
+        ]);
+
+        ws.addEventListener('open', () => {
+          console.log('✅ Connected to OpenAI Realtime API');
+          statusText.textContent = 'Verbunden';
+          
+          // Get CV and Job Ad from config or localStorage
+          const cv_summary = interviewConfig.cv_summary || localStorage.getItem('cv_summary') || 'Kein Lebenslauf vorhanden';
+          const job_ad = interviewConfig.job_ad || localStorage.getItem('job_ad') || 'Keine Stellenanzeige vorhanden';
+          const company_profile = {
+            name: interviewConfig.company.name,
+            type: interviewConfig.company.type,
+            industry: interviewConfig.industry,
+            tone: interviewConfig.company.tone || 'professionell und freundlich'
+          };
+
+          // Build structured phase-based system prompt
+          const systemPrompt = buildPhasePrompt(currentPhase, {
+            cv_summary,
+            job_ad,
+            company_profile,
+            phases: interviewPhases,
+            currentQuestion: questionCount
+          });
+          
+          // Configure session with Echo voice and advanced turn detection settings
+          ws.send(JSON.stringify({
+            type: 'session.update',
+            session: {
+              modalities: ['text', 'audio'],
+              instructions: systemPrompt,
+              voice: 'echo', // Echo voice as shown in screenshot
+              input_audio_format: 'pcm16',
+              output_audio_format: 'pcm16',
+              input_audio_transcription: { model: 'whisper-1' },
+              turn_detection: {
+                type: 'server_vad',
+                threshold: 0.65,           // From screenshot
+                prefix_padding_ms: 300,    // From screenshot
+                silence_duration_ms: 1180  // From screenshot (converted from 1180ms)
+              },
+              temperature: 0.8,
+              max_response_output_tokens: 4096
             }
-          }, 2000);
-        } else {
-          $('question-box').querySelector('.chat-text').textContent = res.nextQuestion || 'Nächste Frage wird geladen...';
-          $('answer').value = '';
-          $('transcript').textContent = '—';
-        }
-      };
+          }));
 
-      $('btn-end').onclick = endInterview;
-    </script>
-    <script src="/js/i18n.js"></script>
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const savedLang = localStorage.getItem('language') || 'de';
-        i18n.setLanguage(savedLang);
-        document.querySelectorAll('.lang-switch').forEach(btn => {
-          btn.classList.toggle('active', btn.dataset.lang === savedLang);
-          btn.addEventListener('click', () => {
-            document.querySelectorAll('.lang-switch').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+          console.log('🎙️ Starting audio capture...');
+          
+          // Start audio capture after session is configured
+          startAudioCapture().then(() => {
+            console.log('✅ Audio capture started');
+            
+            // Send initial greeting after audio is ready
+            setTimeout(() => {
+              if (!ws || ws.readyState !== WebSocket.OPEN) {
+                console.error('❌ WebSocket not open, cannot send greeting');
+                return;
+              }
+              
+              const phaseInfo = interviewPhases[currentPhase];
+              console.log(`📢 Sending greeting for phase: ${phaseInfo ? phaseInfo.name : 'Unknown'}`);
+              
+              const greetingText = currentPhase === 0 
+                ? `Beginne jetzt das Interview für ${company_profile.name}. Stelle dich als ${interviewConfig.interviewer.name} vor und beginne mit Phase 1: ${phaseInfo ? phaseInfo.name : 'Einleitung'}.`
+                : `Fortsetze das Interview bei Phase ${currentPhase + 1}: ${phaseInfo ? phaseInfo.name : 'nächste Phase'}.`;
+              
+              console.log('Greeting text:', greetingText);
+              
+              ws.send(JSON.stringify({
+                type: 'conversation.item.create',
+                item: {
+                  type: 'message',
+                  role: 'user',
+                  content: [{ type: 'input_text', text: greetingText }]
+                }
+              }));
+              
+              ws.send(JSON.stringify({ type: 'response.create' }));
+              console.log('✅ Greeting sent, waiting for AI response...');
+            }, 1000);
+          }).catch(err => {
+            console.error('❌ Audio capture failed:', err);
+            addMessage('ai', '⚠️ Audio capture failed, aber Chat funktioniert noch.');
           });
         });
+
+        ws.addEventListener('message', (event) => {
+          const data = JSON.parse(event.data);
+          
+          switch (data.type) {
+            case 'response.audio.delta':
+              playAudioChunk(data.delta);
+              break;
+              
+            case 'response.audio.done':
+              console.log('🔊 AI finished speaking');
+              break;
+              
+            case 'conversation.item.created':
+              if (data.item.role === 'assistant' && data.item.content) {
+                const textContent = data.item.content.find(c => c.type === 'text');
+                if (textContent) {
+                  addMessage('ai', textContent.text);
+                  
+                  // Check if this is the final scorecard
+                  if (awaitingScorecard && (
+                    textContent.text.includes('Fachkompetenz') || 
+                    textContent.text.includes('Scorecard') ||
+                    textContent.text.includes('Bewertung')
+                  )) {
+                    console.log('📊 Scorecard received!');
+                    
+                    // Clear timeout since we got the scorecard
+                    if (scorecardTimeout) {
+                      clearTimeout(scorecardTimeout);
+                      scorecardTimeout = null;
+                    }
+                    
+                    const scorecard = parseScorecard(textContent.text);
+                    finalScorecard = scorecard;
+                    awaitingScorecard = false;
+                    
+                    // Save and redirect immediately
+                    addMessage('ai', '✅ Vielen Dank für das Interview!');
+                    console.log('💾 Saving interview and redirecting...');
+                    saveInterviewToHistory(scorecard);
+                    // saveInterviewToHistory already includes redirect - no need for additional delay
+                    
+                    return; // Don't process further
+                  }
+                  
+                  // Count questions asked by AI (check for question marks)
+                  if (textContent.text.includes('?') && !awaitingScorecard) {
+                    questionCount++;
+                    console.log(`📊 Question ${questionCount} in Phase ${currentPhase + 1}`);
+                    
+                    // Check if we need to advance to next phase
+                    const currentPhaseConfig = interviewPhases[currentPhase];
+                    if (questionCount >= currentPhaseConfig.questionCount) {
+                      // Move to next phase
+                      if (currentPhase < interviewPhases.length - 1) {
+                        setTimeout(() => {
+                          currentPhase++;
+                          questionCount = 0;
+                          updatePhase(currentPhase);
+                          updateSystemPrompt();
+                          console.log(`✅ Advanced to Phase ${currentPhase + 1}: ${interviewPhases[currentPhase].name}`);
+                        }, 1000);
+                      }
+                    }
+                  }
+                }
+              } else if (data.item.role === 'user' && data.item.content) {
+                // User answered - update system prompt for next question
+                if (!awaitingScorecard) {
+                  setTimeout(() => {
+                    updateSystemPrompt();
+                  }, 500);
+                }
+              }
+              break;
+              
+            case 'input_audio_buffer.speech_started':
+              console.log('🎤 User started speaking');
+              break;
+              
+            case 'input_audio_buffer.speech_stopped':
+              console.log('🎤 User stopped speaking');
+              // After user stops speaking, prepare for next question
+              setTimeout(() => {
+                updateSystemPrompt();
+              }, 1000);
+              break;
+              
+            case 'response.done':
+              // AI finished complete response
+              console.log('✅ AI response complete');
+              break;
+              
+            case 'error':
+              console.error('❌ WebSocket error:', data.error);
+              // Ignore ALL errors from the chat - they're mostly internal and not user-relevant
+              // Only log to console for debugging
+              const errorMessage = data.error?.message || '';
+              
+              // List of errors to completely ignore (don't even show in chat)
+              const ignorableErrors = [
+                'no active response',
+                'active response in progress',
+                'already has an active response',
+                'response is already in progress',
+                'missing required parameter',
+                'item_id',
+                'invalid',
+                'conversation',
+                'truncate'
+              ];
+              
+              const shouldIgnore = ignorableErrors.some(err => 
+                errorMessage.toLowerCase().includes(err.toLowerCase())
+              );
+              
+              if (!shouldIgnore) {
+                // Only show truly critical errors
+                console.log('⚠️ Critical error occurred:', errorMessage);
+              } else {
+                console.log('ℹ️ Ignored expected error:', errorMessage);
+              }
+              // NEVER show errors in the chat interface
+              break;
+              
+            default:
+              // Log other message types for debugging
+              if (data.type && !data.type.includes('audio')) {
+                console.log('📨 WebSocket message:', data.type);
+              }
+          }
+        });
+
+        ws.addEventListener('error', (error) => {
+          console.error('❌ WebSocket connection error:', error);
+          statusText.textContent = 'Verbindungsfehler';
+          addMessage('ai', '⚠️ Verbindung zur KI verloren. Bitte lade die Seite neu.');
+        });
+
+        ws.addEventListener('close', () => {
+          console.log('🔌 WebSocket connection closed');
+          statusText.textContent = 'Getrennt';
+        });
+
+        ws.addEventListener('error', (error) => {
+          console.error('WebSocket error:', error);
+          statusText.textContent = 'Verbindungsfehler';
+        });
+
+        ws.addEventListener('close', () => {
+          console.log('WebSocket closed');
+          statusText.textContent = 'Getrennt';
+        });
+
+      } catch (error) {
+        console.error('Failed to connect:', error);
+        statusText.textContent = 'Fehler';
+      }
+    }
+
+    // Audio capture with AudioWorklet
+    async function startAudioCapture() {
+      if (!audioContext) {
+        audioContext = new AudioContext({ sampleRate: 24000 });
+      }
+
+      const source = audioContext.createMediaStreamSource(mediaStream);
+      
+      // Create AudioWorklet for processing
+      await audioContext.audioWorklet.addModule(
+        URL.createObjectURL(new Blob([`
+          class AudioProcessor extends AudioWorkletProcessor {
+            process(inputs, outputs, parameters) {
+              const input = inputs[0];
+              if (input.length > 0) {
+                const channelData = input[0];
+                const pcm16 = new Int16Array(channelData.length);
+                for (let i = 0; i < channelData.length; i++) {
+                  pcm16[i] = Math.max(-32768, Math.min(32767, channelData[i] * 32768));
+                }
+                this.port.postMessage(pcm16.buffer);
+              }
+              return true;
+            }
+          }
+          registerProcessor('audio-processor', AudioProcessor);
+        `], { type: 'application/javascript' }))
+      );
+
+      audioWorklet = new AudioWorkletNode(audioContext, 'audio-processor');
+      source.connect(audioWorklet);
+
+      audioWorklet.port.onmessage = (event) => {
+        if (ws && ws.readyState === WebSocket.OPEN && !isMicMuted && !isPaused) {
+          const base64Audio = btoa(String.fromCharCode(...new Uint8Array(event.data)));
+          ws.send(JSON.stringify({
+            type: 'input_audio_buffer.append',
+            audio: base64Audio
+          }));
+        }
+      };
+    }
+
+    // Play audio chunk with queue
+    function playAudioChunk(base64Audio) {
+      if (!audioContext) {
+        audioContext = new AudioContext({ sampleRate: 24000 });
+      }
+
+      const binaryString = atob(base64Audio);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+
+      const int16Array = new Int16Array(bytes.buffer);
+      const float32Array = new Float32Array(int16Array.length);
+      for (let i = 0; i < int16Array.length; i++) {
+        float32Array[i] = int16Array[i] / 32768.0;
+      }
+
+      audioQueue.push(float32Array);
+      if (!isPlaying) {
+        playNextChunk();
+      }
+    }
+
+    function playNextChunk() {
+      if (audioQueue.length === 0) {
+        isPlaying = false;
+        return;
+      }
+
+      isPlaying = true;
+      const audioData = audioQueue.shift();
+      const audioBuffer = audioContext.createBuffer(1, audioData.length, 24000);
+      audioBuffer.getChannelData(0).set(audioData);
+
+      const source = audioContext.createBufferSource();
+      source.buffer = audioBuffer;
+      source.connect(audioContext.destination);
+
+      const currentTime = audioContext.currentTime;
+      const startTime = Math.max(currentTime, nextStartTime);
+      source.start(startTime);
+      nextStartTime = startTime + audioBuffer.duration;
+
+      source.onended = () => {
+        playNextChunk();
+      };
+    }
+
+    // Start interview
+    async function startInterview() {
+      try {
+        statusText.textContent = 'Verbindung wird hergestellt...';
+        
+        // Update interviewer label
+        document.getElementById('interviewer-label').textContent = 
+          `${interviewConfig.interviewer.name} - ${interviewConfig.interviewer.role}`;
+        
+        // Render phase segments on timeline
+        renderPhaseSegments();
+        
+        // Initialize camera
+        await initCamera();
+        
+        // Connect to Realtime API
+        await connectRealtimeAPI();
+        
+        // Enable chat
+        chatInput.disabled = false;
+        sendBtn.disabled = false;
+        
+        // Start timer
+        startTimer();
+        updatePhase(0);
+        
+      } catch (error) {
+        console.error('Fehler beim Start:', error);
+        statusText.textContent = 'Fehler';
+      }
+    }
+
+    // Stop interview
+    function stopInterview() {
+      audioQueue = [];
+      isPlaying = false;
+      nextStartTime = 0;
+
+      if (audioWorklet) {
+        audioWorklet.disconnect();
+        audioWorklet = null;
+      }
+
+      if (ws) {
+        ws.close();
+        ws = null;
+      }
+
+      if (mediaStream) {
+        mediaStream.getTracks().forEach(track => track.stop());
+        mediaStream = null;
+      }
+
+      if (audioContext) {
+        audioContext.close();
+        audioContext = null;
+      }
+    }
+
+    // Control buttons
+    btnMic.addEventListener('click', () => {
+      isMicMuted = !isMicMuted;
+      btnMic.classList.toggle('active');
+      btnMic.textContent = isMicMuted ? '🔇' : '🎤';
+      
+      if (mediaStream) {
+        mediaStream.getAudioTracks().forEach(track => {
+          track.enabled = !isMicMuted;
+        });
+      }
+    });
+
+    btnCamera.addEventListener('click', () => {
+      isCameraOff = !isCameraOff;
+      btnCamera.classList.toggle('active');
+      btnCamera.textContent = isCameraOff ? '📹❌' : '📹';
+      
+      if (mediaStream) {
+        mediaStream.getVideoTracks().forEach(track => {
+          track.enabled = !isCameraOff;
+        });
+      }
+    });
+
+    btnPause.addEventListener('click', () => {
+      console.log('⏸️ Pause button clicked, isPaused:', isPaused);
+      
+      isPaused = !isPaused;
+      btnPause.textContent = isPaused ? '▶️' : '⏸️';
+      btnPause.title = isPaused ? 'Fortsetzen' : 'Pausieren';
+      statusText.textContent = isPaused ? 'Pausiert' : 'Verbunden';
+      
+      if (isPaused) {
+        console.log('⏸️ Pausing interview...');
+        
+        // Clear audio buffer
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({ type: 'input_audio_buffer.clear' }));
+        }
+        
+        // Stop audio playback
+        audioQueue.length = 0;
+        isPlaying = false;
+        if (audioContext) {
+          try {
+            // Suspend instead of close so we can resume
+            audioContext.suspend();
+          } catch (e) {
+            console.error('Error suspending audio context:', e);
+          }
+        }
+        
+        // Mute microphone during pause
+        if (mediaStream) {
+          mediaStream.getAudioTracks().forEach(track => track.enabled = false);
+        }
+        
+        // Pause timer
+        if (timerInterval) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+        }
+        
+        addMessage('ai', '⏸️ Interview pausiert. Klicke auf ▶️ um fortzufahren.');
+      } else {
+        console.log('▶️ Resuming interview...');
+        
+        // Resume audio context
+        if (audioContext && audioContext.state === 'suspended') {
+          audioContext.resume();
+        }
+        
+        // Resume microphone
+        if (mediaStream) {
+          mediaStream.getAudioTracks().forEach(track => track.enabled = !isMicMuted);
+        }
+        
+        // Resume timer
+        startTimer();
+        
+        // Send resume message to AI
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          ws.send(JSON.stringify({
+            type: 'conversation.item.create',
+            item: {
+              type: 'message',
+              role: 'user',
+              content: [{ 
+                type: 'input_text', 
+                text: 'Setze das Interview fort und stelle die nächste Frage.' 
+              }]
+            }
+          }));
+          
+          // Force AI response
+          ws.send(JSON.stringify({ type: 'response.create' }));
+        }
+        
+        addMessage('ai', '▶️ Interview wird fortgesetzt...');
+      }
+    });
+
+    btnEnd.addEventListener('click', () => {
+      console.log('🛑 End button clicked');
+      
+      if (confirm('Möchtest du das Interview wirklich beenden?')) {
+        console.log('✅ User confirmed end interview');
+        
+        // Stop timer
+        if (timerInterval) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+        }
+        
+        // If WebSocket is connected, get final scorecard
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          endInterviewWithScore();
+        } else {
+          // Just stop everything and redirect
+          console.log('⚠️ WebSocket not connected, stopping immediately');
+          stopInterview();
+          setTimeout(() => {
+            window.location.href = '/interview-config.html';
+          }, 500);
+        }
+      } else {
+        console.log('❌ User cancelled end interview');
+      }
+    });
+
+    // Language/Voice switching (optional feature)
+    function switchLanguage(lang) {
+      const voiceMap = {
+        'de': 'echo',
+        'en': 'alloy',
+        'es': 'nova'
+      };
+      
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify({
+          type: 'session.update',
+          session: {
+            voice: voiceMap[lang] || 'echo'
+          }
+        }));
+        
+        addMessage('ai', `🌍 Sprache gewechselt zu: ${lang.toUpperCase()}`);
+      }
+    }
+
+    // Emergency stop function
+    function emergencyStop() {
+      console.log('🚨 Emergency stop triggered');
+      stopInterview();
+      clearInterval(timerInterval);
+      addMessage('ai', '🛑 Interview wurde notfallmäßig beendet.');
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      // Ctrl+P = Pause/Resume
+      if (e.ctrlKey && e.key === 'p') {
+        e.preventDefault();
+        btnPause.click();
+      }
+      // Ctrl+M = Mute/Unmute
+      if (e.ctrlKey && e.key === 'm') {
+        e.preventDefault();
+        btnMic.click();
+      }
+      // ESC = Emergency stop
+      if (e.key === 'Escape') {
+        if (confirm('Interview sofort beenden?')) {
+          emergencyStop();
+        }
+      }
+    });
+
+    // Chat functionality
+    chatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !sendBtn.disabled) {
+        sendMessage();
+      }
+    });
+
+    sendBtn.addEventListener('click', sendMessage);
+    
+    // Allow Enter key to send message
+    chatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    // Quick Question Buttons
+    document.querySelectorAll('.quick-question-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const question = btn.getAttribute('data-question');
+        chatInput.value = question;
+        sendMessage();
       });
-    </script>
-    <style>
-      .lang-switch {
-        background: transparent !important;
-        border: 1.5px solid var(--border) !important;
-        color: var(--text-secondary) !important;
+    });
+
+    function sendMessage() {
+      const text = chatInput.value.trim();
+      if (!text || !ws || ws.readyState !== WebSocket.OPEN) {
+        if (!ws || ws.readyState !== WebSocket.OPEN) {
+          addMessage('ai', '⚠️ Keine Verbindung zur KI. Bitte warte einen Moment.');
+        }
+        return;
       }
-      .lang-switch:hover {
-        border-color: var(--accent) !important;
-        color: var(--accent) !important;
-        background: rgba(0, 0, 0, 0.05) !important;
+      
+      addMessage('user', text);
+      chatInput.value = '';
+      
+      // Detect question type and add context
+      const lowerText = text.toLowerCase();
+      let systemContext = '';
+      
+      if (lowerText.includes('wiederhol') || lowerText.includes('nochmal') || lowerText.includes('frage noch')) {
+        systemContext = '[CLARIFICATION] Der Kandidat bittet um Wiederholung der letzten Frage. Wiederhole die Frage KURZ in eigenen Worten. ';
+      } else if (lowerText.includes('case') || lowerText.includes('aufgabe') || lowerText.includes('szenario')) {
+        systemContext = '[CLARIFICATION] Der Kandidat hat eine inhaltliche Frage zur Case Study/Aufgabe. Beantworte KURZ und präzise. ';
+      } else if (lowerText.includes('versteh') || lowerText.includes('erklär') || lowerText.includes('was mein')) {
+        systemContext = '[CLARIFICATION] Der Kandidat braucht Klärung. Erkläre den Punkt KURZ und verständlich. ';
+      } else if (lowerText.includes('zeit')) {
+        // Time questions only valid during Case Study phase (Phase 2)
+        if (currentPhase === 1) {
+          const caseStudyDuration = interviewPhases[1].duration;
+          const phaseStartSeconds = interviewPhases[0].duration * 60;
+          const phaseElapsed = elapsedSeconds - phaseStartSeconds;
+          const phaseRemaining = (caseStudyDuration * 60) - phaseElapsed;
+          systemContext = `[CLARIFICATION] Case Study Zeitfrage. Du hast noch etwa ${Math.floor(phaseRemaining / 60)} Minuten für die Case Study. Antworte KURZ. `;
+        } else {
+          systemContext = '[CLARIFICATION] Bei diesem Interview gibt es kein festes Zeitlimit für einzelne Fragen außer in der Case Study Phase. Erkläre das KURZ. ';
+        }
+      } else {
+        systemContext = '[CLARIFICATION] Inhaltliche Frage des Kandidaten. Beantworte KURZ und kehre dann zum Interview zurück. ';
       }
-      .lang-switch.active {
-        background: transparent !important;
-        border: 1.5px solid var(--accent) !important;
-        color: var(--accent) !important;
-        font-weight: 700 !important;
-      }
-    </style>
-  </body>
+      
+      // Send to OpenAI with context - NO response.cancel to allow parallel responses
+      ws.send(JSON.stringify({
+        type: 'conversation.item.create',
+        item: {
+          type: 'message',
+          role: 'user',
+          content: [{ 
+            type: 'input_text', 
+            text: systemContext + text 
+          }]
+        }
+      }));
+      
+      // Request response - OpenAI will queue it if another response is in progress
+      ws.send(JSON.stringify({ 
+        type: 'response.create',
+        response: {
+          modalities: ['text', 'audio'],
+          instructions: 'Beantworte diese Frage KURZ (max. 2-3 Sätze) und kehre dann zum Interview zurück.'
+        }
+      }));
+      
+      console.log('💬 User sent clarification question:', text);
+    }
+
+    // Start interview on load
+    startInterview();
+  </script>
+</body>
 </html>
