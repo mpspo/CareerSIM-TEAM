@@ -857,6 +857,13 @@
     let isPlaying = false;
     let nextStartTime = 0;
     
+    // Token usage tracking
+    let tokenUsage = {
+      input_tokens: 0,
+      output_tokens: 0,
+      model: 'gpt-4o-mini-realtime-preview-2024-12-17'
+    };
+    
     // Timer state
     let interviewStartTime = null;
     let elapsedSeconds = 0;
@@ -1505,7 +1512,12 @@ Verwende GENAU dieses Format!`
           overall: 7
         },
         aiFeedback: scorecard ? scorecard.feedback : 'Keine Bewertung verfügbar.',
-        config: interviewConfig
+        config: interviewConfig,
+        tokenUsage: {
+          input_tokens: tokenUsage.input_tokens,
+          output_tokens: tokenUsage.output_tokens,
+          model: tokenUsage.model
+        }
       };
       
       // Save to sessionStorage for evaluation page
@@ -1752,6 +1764,14 @@ Verwende GENAU dieses Format!`
             case 'response.done':
               // AI finished complete response
               console.log('✅ AI response complete');
+              
+              // Track token usage from response
+              if (data.response && data.response.usage) {
+                const usage = data.response.usage;
+                if (usage.input_tokens) tokenUsage.input_tokens += usage.input_tokens;
+                if (usage.output_tokens) tokenUsage.output_tokens += usage.output_tokens;
+                console.log('📊 Token usage:', tokenUsage);
+              }
               break;
               
             case 'error':

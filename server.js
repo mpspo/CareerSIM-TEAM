@@ -759,6 +759,36 @@ app.post('/api/interviews', async (req, res) => {
       }
       
       console.log('✅ Interview saved to Supabase:', data.id);
+      
+      // Save token usage if provided
+      if (interviewData.tokenUsage && supabaseData.user_id) {
+        try {
+          const tokenData = {
+            user_id: supabaseData.user_id,
+            interview_id: data.id,
+            input_tokens: interviewData.tokenUsage.input_tokens || 0,
+            output_tokens: interviewData.tokenUsage.output_tokens || 0,
+            total_tokens: (interviewData.tokenUsage.input_tokens || 0) + (interviewData.tokenUsage.output_tokens || 0),
+            model: interviewData.tokenUsage.model || 'gpt-4o-mini-realtime-preview-2024-12-17',
+            api_type: 'realtime',
+            duration_seconds: interviewData.duration * 60, // Convert minutes to seconds
+            session_type: 'interview'
+          };
+          
+          const { error: tokenError } = await supabase
+            .from('token_usage')
+            .insert(tokenData);
+          
+          if (tokenError) {
+            console.error('⚠️ Token usage tracking failed:', tokenError);
+          } else {
+            console.log('✅ Token usage tracked:', tokenData.total_tokens, 'tokens');
+          }
+        } catch (tokenErr) {
+          console.error('⚠️ Error tracking tokens:', tokenErr);
+        }
+      }
+      
       return res.json({
         success: true,
         id: data.id,
