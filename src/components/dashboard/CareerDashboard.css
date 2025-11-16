@@ -1,0 +1,313 @@
+/* CareerDashboard.css - OpenAI Style */
+
+.career-dashboard {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.career-dashboard.loading {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* Header */
+.career-header {
+  margin-bottom: 40px;
+}
+
+.career-header h1 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #202123;
+  margin-bottom: 8px;
+}
+
+.career-subtitle {
+  font-size: 16px;
+  color: #8e8ea0;
+}
+
+/* Grid Layout */
+.career-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+/* Cards */
+.career-card {
+  background: white;
+  border: 1px solid #e5e5e6;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.career-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.card-icon {
+  font-size: 24px;
+}
+
+.card-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #202123;
+  margin: 0;
+}
+
+.card-content {
+  color: #565869;
+}
+
+/* Strength List */
+.strength-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.strength-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f7f7f8;
+}
+
+.strength-item:last-child {
+  border-bottom: none;
+}
+
+.check-icon {
+  width: 24px;
+  height: 24px;
+  background: #10a37f;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* Role Cards */
+.role-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.role-card {
+  padding: 16px;
+  background: #f7f7f8;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.role-card:hover {
+  background: #ededf0;
+}
+
+.role-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.role-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #202123;
+  margin: 0;
+}
+
+.match-score {
+  font-size: 14px;
+  font-weight: 600;
+  color: #10a37f;
+}
+
+.role-industry {
+  font-size: 14px;
+  color: #8e8ea0;
+  margin-bottom: 12px;
+}
+
+.role-reasons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.reason-tag {
+  padding: 4px 12px;
+  background: white;
+  border: 1px solid #e5e5e6;
+  border-radius: 20px;
+  font-size: 12px;
+  color: #565869;
+}
+
+/* Skill Cards */
+.skill-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.skill-card {
+  padding: 16px;
+  background: #f7f7f8;
+  border-radius: 8px;
+}
+
+.skill-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.skill-header h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #202123;
+  margin: 0;
+}
+
+.priority-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.priority-badge.high {
+  background: #fef2f2;
+  color: #ef4444;
+}
+
+.priority-badge.medium {
+  background: #fef9c3;
+  color: #eab308;
+}
+
+.priority-badge.low {
+  background: #f0f9ff;
+  color: #3b82f6;
+}
+
+.skill-progress {
+  margin-bottom: 8px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: #e5e5e6;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #10a37f;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 13px;
+  color: #8e8ea0;
+}
+
+.skill-time {
+  font-size: 13px;
+  color: #565869;
+  margin: 0;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.empty-state p {
+  color: #8e8ea0;
+  margin-bottom: 20px;
+}
+
+/* Actions */
+.career-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.btn-primary {
+  background: #10a37f;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #0e8f6f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 163, 127, 0.3);
+}
+
+.btn-secondary {
+  background: white;
+  color: #202123;
+  border: 1px solid #e5e5e6;
+}
+
+.btn-secondary:hover {
+  background: #f7f7f8;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+  .career-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .career-actions {
+    flex-direction: column;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+  }
+}

@@ -40,7 +40,30 @@ export interface InterviewSession {
   endTime?: Date;
   status: 'setup' | 'in_progress' | 'paused' | 'completed' | 'abandoned';
   conversationHistory: Message[];
+  
+  // Career Integration ⭐
+  summary?: string; // AI-generated summary
+  strengths: string[]; // detected strengths
+  weaknesses: string[]; // detected weaknesses
+  overallScore?: number; // 0-100
+  
   metadata?: Record<string, any>;
+}
+
+export interface InterviewStep {
+  id: string;
+  sessionId: string;
+  question: string;
+  answer: string;
+  feedback?: string;
+  analysis?: {
+    completeness: number;
+    clarity: number;
+    relevance: number;
+    structure: 'STAR' | 'unstructured' | 'partial';
+  };
+  askedAt: Date;
+  answeredAt?: Date;
 }
 
 export interface Message {

@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { supabase } from './clients/SupabaseClient';
+import { MainLayout } from './components/common/MainLayout';
+import { CareerDashboard } from './components/dashboard/CareerDashboard';
 
 // Components (will be created in next phases)
 // import Dashboard from './components/dashboard/Dashboard';
@@ -57,54 +59,64 @@ function App() {
             }
           />
 
-          {/* Protected Routes */}
-          <Route
-            path="/"
-            element={
-              isAuthenticated ? (
-                <div>
-                  <h1>CareerSIM - Dashboard</h1>
-                  <p>TypeScript + React Version is ready!</p>
-                  <p>Legacy app still available at /public/index.html</p>
-                </div>
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
+          {/* Protected Routes with Layout */}
+          {isAuthenticated ? (
+            <Route element={<MainLayout children={undefined} />}>
+              <Route path="/" element={<Navigate to="/career" />} />
 
-          <Route
-            path="/interview/setup"
-            element={
-              isAuthenticated ? (
-                <div>Interview Setup (Coming Soon)</div>
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
+              {/* ⭐ Career Coach - Hauptbereich 1 */}
+              <Route path="/career" element={<CareerDashboard />} />
 
-          <Route
-            path="/interview/session/:id"
-            element={
-              isAuthenticated ? (
-                <div>Interview Session (Coming Soon)</div>
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
+              {/* ⭐ Interview Training - Hauptbereich 2 */}
+              <Route
+                path="/interview"
+                element={
+                  <div style={{ padding: '40px' }}>
+                    <h1>Interview-Training</h1>
+                    <p>Coming Soon - wird in nächster Phase implementiert</p>
+                    <p>Legacy: /public/interview.html</p>
+                  </div>
+                }
+              />
 
-          <Route
-            path="/interview/feedback/:id"
-            element={
-              isAuthenticated ? (
-                <div>Feedback View (Coming Soon)</div>
-              ) : (
-                <Navigate to="/login" />
-              )
-            }
-          />
+              <Route
+                path="/interview/setup"
+                element={<div>Interview Setup (Coming Soon)</div>}
+              />
+
+              <Route
+                path="/interview/session/:id"
+                element={<div>Interview Session (Coming Soon)</div>}
+              />
+
+              <Route
+                path="/interview/feedback/:id"
+                element={<div>Feedback View (Coming Soon)</div>}
+              />
+
+              <Route
+                path="/dashboard"
+                element={
+                  <div style={{ padding: '40px' }}>
+                    <h1>Dashboard</h1>
+                    <p>Übersicht über beide Bereiche</p>
+                  </div>
+                }
+              />
+
+              <Route
+                path="/account-settings"
+                element={
+                  <div style={{ padding: '40px' }}>
+                    <h1>Account Settings</h1>
+                    <p>Legacy: /public/account-settings.html</p>
+                  </div>
+                }
+              />
+            </Route>
+          ) : (
+            <Route path="*" element={<Navigate to="/login" />} />
+          )}
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" />} />

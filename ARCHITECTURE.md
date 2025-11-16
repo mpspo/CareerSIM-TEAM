@@ -1,8 +1,29 @@
-# 🏗️ CareerSIM - System-Architektur & Migrations-Plan
+# 🏗️ CareerSIM - KI-Karriereplattform Architektur
 
 **Erstellt:** 16. November 2025  
-**Status:** Planning Phase  
-**Ziel:** Von MVP zu Production-Ready AI Interview Simulator
+**Status:** Phase 1 - Foundation Complete ✅  
+**Ziel:** Integrierte Plattform für Interview-Training + Karriereberatung
+
+---
+
+## 🎯 VISION: Zwei verknüpfte Hauptfunktionen
+
+### 1. **KI-Interview-Simulator**
+- Realistisches Training mit dynamischen Personas
+- Audio-basiert, firmenspezifisch, Case-Interviews
+- Speichert Stärken/Schwächen strukturiert
+
+### 2. **KI-Karriereberatung** ⭐ NEU
+- Nutzt Interview-Ergebnisse + User-Präferenzen + CV
+- Empfiehlt passende Rollen, Skills, Programme
+- Erstellt personalisierten Karriereplan
+- **Eng verzahnt mit Interview-Daten**
+
+**Design-Prinzip:** 
+- **Bestehendes OpenAI-ähnliches UI beibehalten**
+- Clean, minimalistisch, viel Weißraum
+- Komponenten, Buttons, Cards, Fonts wiederverwenden
+- Nur neue Logik/Inhalte, kein Redesign
 
 ---
 
