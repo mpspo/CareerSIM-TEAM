@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Einstellungen | CareerSIM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        .settings-container {
+            min-height: 100vh;
+            padding: 100px 20px 80px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .settings-header {
+            margin-bottom: 40px;
+        }
+
+        .settings-header h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .settings-card {
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 24px;
+        }
+
+        .settings-card h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .cv-upload-area {
+            border: 3px dashed var(--border);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cv-upload-area:hover {
+            border-color: var(--accent);
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .cv-upload-area.dragover {
+            border-color: var(--accent);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .cv-upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .cv-current {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: #f0f9ff;
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+
+        .cv-current-icon {
+            font-size: 32px;
+        }
+
+        .cv-current-info {
+            flex: 1;
+        }
+
+        .cv-current-name {
+            font-weight: 600;
+            color: #1e40af;
+        }
+
+        .cv-current-date {
+            font-size: 13px;
+            color: #64748b;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: #64748b;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+        }
+
+        .success-message,
+        .error-message {
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .success-message {
+            background: #dcfce7;
+            color: #166534;
+            border-left: 4px solid #16a34a;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            border-left: 4px solid #ef4444;
+        }
+
+        .upload-progress {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .upload-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            width: 0;
+            transition: width 0.3s ease;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin: 8px 0;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .usage-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        .usage-table th,
+        .usage-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .usage-table th {
+            font-weight: 600;
+            background: #f8fafc;
+        }
+
+        .cost-amount {
+            font-weight: 600;
+            color: #16a34a;
+        }
+    </style>
+</head>
+<body>
+    <div class="settings-container">
+        <div class="settings-header">
+            <h1>⚙️ Account Einstellungen</h1>
+            <p style="color: var(--text-secondary);">Verwalte dein Profil und deine Daten</p>
+        </div>
+
+        <div id="success-message" class="success-message"></div>
+        <div id="error-message" class="error-message"></div>
+
+        <!-- Profil Informationen -->
+        <div class="settings-card">
+            <h2>👤 Profil Informationen</h2>
+            <form id="profile-form">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="email" disabled>
+                </div>
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="username" placeholder="Dein Name">
+                </div>
+                <div class="form-group">
+                    <label>Studiengang / Beruf</label>
+                    <input type="text" id="study" placeholder="z.B. BWL, Informatik">
+                </div>
+                <div class="form-group">
+                    <label>Zielunternehmen</label>
+                    <input type="text" id="target_company" placeholder="z.B. Google, McKinsey">
+                </div>
+                <button type="submit" class="btn" id="save-profile-btn">
+                    Profil speichern
+                </button>
+            </form>
+        </div>
+
+        <!-- CV Upload -->
+        <div class="settings-card">
+            <h2>📄 Lebenslauf</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                Lade deinen CV hoch, damit die KI dich besser kennenlernen kann.
+            </p>
+
+            <input type="file" id="cv-input" accept=".pdf" style="display: none;">
+            
+            <div class="cv-upload-area" id="cv-upload-area">
+                <div class="cv-upload-icon">📄</div>
+                <h3>Lebenslauf hochladen</h3>
+                <p style="color: var(--text-secondary); margin: 8px 0;">
+                    Klicke hier oder ziehe eine PDF-Datei hierher
+                </p>
+                <p style="color: var(--text-secondary); font-size: 13px;">
+                    Maximal 5 MB
+                </p>
+            </div>
+
+            <div class="upload-progress" id="upload-progress">
+                <div class="upload-progress-bar" id="upload-progress-bar"></div>
+            </div>
+
+            <div id="cv-current" style="display: none;" class="cv-current">
+                <div class="cv-current-icon">✅</div>
+                <div class="cv-current-info">
+                    <div class="cv-current-name" id="cv-filename">CV_Max_Mustermann.pdf</div>
+                    <div class="cv-current-date" id="cv-date">Hochgeladen am 16.11.2025</div>
+                </div>
+                <button class="btn btn-secondary" onclick="downloadCV()">
+                    📥 Download
+                </button>
+                <button class="btn btn-danger" onclick="deleteCV()">
+                    🗑️ Löschen
+                </button>
+            </div>
+        </div>
+
+        <!-- Token Usage & Kosten -->
+        <div class="settings-card">
+            <h2>📊 API Usage & Kosten</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                Dein Token-Verbrauch und OpenAI API Kosten im Überblick
+            </p>
+
+            <div class="stats-grid" id="usage-stats">
+                <div class="stat-card">
+                    <div class="stat-label">Gesamt Tokens</div>
+                    <div class="stat-value" id="total-tokens">-</div>
+                    <div class="stat-label" style="font-size: 12px;">Alle Interviews</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                    <div class="stat-label">Gesamt Kosten</div>
+                    <div class="stat-value" id="total-cost">-</div>
+                    <div class="stat-label" style="font-size: 12px;">USD</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                    <div class="stat-label">Diesen Monat</div>
+                    <div class="stat-value" id="month-tokens">-</div>
+                    <div class="stat-label" style="font-size: 12px;">Tokens</div>
+                </div>
+                <div class="stat-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                    <div class="stat-label">⌀ pro Interview</div>
+                    <div class="stat-value" id="avg-tokens">-</div>
+                    <div class="stat-label" style="font-size: 12px;">Tokens</div>
+                </div>
+            </div>
+
+            <h3 style="margin: 24px 0 12px; font-size: 18px;">Letzte 10 Sessions:</h3>
+            <table class="usage-table" id="usage-table">
+                <thead>
+                    <tr>
+                        <th>Datum</th>
+                        <th>Typ</th>
+                        <th>Tokens</th>
+                        <th>Kosten</th>
+                    </tr>
+                </thead>
+                <tbody id="usage-table-body">
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: var(--text-secondary);">
+                            Lade Daten...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Account -->
+        <div class="settings-card">
+            <h2>🔒 Account & Sicherheit</h2>
+            <button class="btn btn-secondary" onclick="changePassword()">
+                Passwort ändern
+            </button>
+            <button class="btn btn-danger" onclick="logout()" style="margin-left: 12px;">
+                Abmelden
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Supabase
+        const SUPABASE_URL = 'https://guuywztafdxfqupmqmmq.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd1dXl3enRhZmR4ZnF1cG1xbW1xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMzMTA5NjIsImV4cCI6MjA3ODg4Njk2Mn0.FvfJPUpaxCHbhirhpO5etr6At4esxLLvVJSsoe_e6pQ';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentUser = null;
+
+        // Check auth on load
+        checkAuth();
+
+        async function checkAuth() {
+            const { data: { session } } = await supabase.auth.getSession();
+            
+            if (!session) {
+                window.location.href = '/login.html';
+                return;
+            }
+
+            currentUser = session.user;
+            await loadProfile();
+            await loadUsageStats();
+        }
+
+        // Load profile data
+        async function loadProfile() {
+            // Set email (from auth)
+            document.getElementById('email').value = currentUser.email;
+
+            // Load profile from database
+            const { data: profile, error } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', currentUser.id)
+                .single();
+
+            if (profile) {
+                document.getElementById('username').value = profile.username || '';
+                document.getElementById('study').value = profile.study || '';
+                document.getElementById('target_company').value = profile.target_company || '';
+
+                // Show CV if exists
+                if (profile.cv_url) {
+                    showCurrentCV(profile.cv_filename, profile.cv_uploaded_at, profile.cv_url);
+                }
+            }
+        }
+
+        // Save profile
+        document.getElementById('profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const btn = document.getElementById('save-profile-btn');
+            btn.disabled = true;
+            btn.textContent = 'Speichern...';
+
+            const profileData = {
+                username: document.getElementById('username').value,
+                study: document.getElementById('study').value,
+                target_company: document.getElementById('target_company').value
+            };
+
+            const { error } = await supabase
+                .from('profiles')
+                .update(profileData)
+                .eq('id', currentUser.id);
+
+            if (error) {
+                showError('Fehler beim Speichern: ' + error.message);
+            } else {
+                showSuccess('Profil erfolgreich gespeichert!');
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'Profil speichern';
+        });
+
+        // CV Upload
+        const cvInput = document.getElementById('cv-input');
+        const uploadArea = document.getElementById('cv-upload-area');
+
+        uploadArea.addEventListener('click', () => cvInput.click());
+
+        cvInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                uploadCV(e.target.files[0]);
+            }
+        });
+
+        // Drag & Drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            
+            if (e.dataTransfer.files.length > 0) {
+                const file = e.dataTransfer.files[0];
+                if (file.type === 'application/pdf') {
+                    uploadCV(file);
+                } else {
+                    showError('Bitte nur PDF-Dateien hochladen');
+                }
+            }
+        });
+
+        // Upload CV to Supabase Storage
+        async function uploadCV(file) {
+            if (file.size > 5 * 1024 * 1024) {
+                showError('Datei zu groß. Maximal 5 MB erlaubt.');
+                return;
+            }
+
+            const progressBar = document.getElementById('upload-progress-bar');
+            const progress = document.getElementById('upload-progress');
+            progress.style.display = 'block';
+
+            // Simulate progress
+            let percent = 0;
+            const interval = setInterval(() => {
+                percent += 10;
+                progressBar.style.width = percent + '%';
+                if (percent >= 90) clearInterval(interval);
+            }, 100);
+
+            try {
+                // Upload to Supabase Storage
+                const fileName = `${currentUser.id}/cv.pdf`;
+                const { data, error } = await supabase.storage
+                    .from('cvs')
+                    .upload(fileName, file, {
+                        upsert: true, // Überschreibt alte Version
+                        contentType: 'application/pdf'
+                    });
+
+                if (error) throw error;
+
+                // Get public URL
+                const { data: urlData } = supabase.storage
+                    .from('cvs')
+                    .getPublicUrl(fileName);
+
+                // Update profile with CV info
+                const { error: updateError } = await supabase
+                    .from('profiles')
+                    .update({
+                        cv_url: urlData.publicUrl,
+                        cv_filename: file.name,
+                        cv_uploaded_at: new Date().toISOString()
+                    })
+                    .eq('id', currentUser.id);
+
+                if (updateError) throw updateError;
+
+                progressBar.style.width = '100%';
+                clearInterval(interval);
+
+                setTimeout(() => {
+                    progress.style.display = 'none';
+                    progressBar.style.width = '0';
+                    showCurrentCV(file.name, new Date().toISOString(), urlData.publicUrl);
+                    showSuccess('CV erfolgreich hochgeladen!');
+                }, 500);
+
+            } catch (error) {
+                clearInterval(interval);
+                progress.style.display = 'none';
+                showError('Upload fehlgeschlagen: ' + error.message);
+            }
+        }
+
+        // Show current CV
+        function showCurrentCV(filename, date, url) {
+            const cvCurrent = document.getElementById('cv-current');
+            cvCurrent.style.display = 'flex';
+            document.getElementById('cv-filename').textContent = filename;
+            
+            const uploadDate = new Date(date);
+            document.getElementById('cv-date').textContent = 
+                'Hochgeladen am ' + uploadDate.toLocaleDateString('de-DE');
+            
+            cvCurrent.dataset.url = url;
+        }
+
+        // Download CV
+        async function downloadCV() {
+            const url = document.getElementById('cv-current').dataset.url;
+            window.open(url, '_blank');
+        }
+
+        // Delete CV
+        async function deleteCV() {
+            if (!confirm('CV wirklich löschen?')) return;
+
+            try {
+                // Delete from storage
+                const fileName = `${currentUser.id}/cv.pdf`;
+                await supabase.storage.from('cvs').remove([fileName]);
+
+                // Update profile
+                await supabase
+                    .from('profiles')
+                    .update({
+                        cv_url: null,
+                        cv_filename: null,
+                        cv_uploaded_at: null
+                    })
+                    .eq('id', currentUser.id);
+
+                document.getElementById('cv-current').style.display = 'none';
+                showSuccess('CV gelöscht');
+
+            } catch (error) {
+                showError('Löschen fehlgeschlagen: ' + error.message);
+            }
+        }
+
+        // Load Usage Statistics
+        async function loadUsageStats() {
+            try {
+                // Load token usage data
+                const { data: usageData, error } = await supabase
+                    .from('token_usage')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .order('created_at', { ascending: false });
+
+                if (error) {
+                    console.error('Error loading usage:', error);
+                    return;
+                }
+
+                if (!usageData || usageData.length === 0) {
+                    document.getElementById('usage-table-body').innerHTML = `
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: var(--text-secondary);">
+                                Noch keine Interviews - mache dein erstes Interview!
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                // Calculate statistics
+                const totalTokens = usageData.reduce((sum, item) => sum + (item.total_tokens || 0), 0);
+                const totalCost = usageData.reduce((sum, item) => sum + parseFloat(item.total_cost || 0), 0);
+                
+                const currentMonth = new Date().getMonth();
+                const currentYear = new Date().getFullYear();
+                const monthData = usageData.filter(item => {
+                    const itemDate = new Date(item.created_at);
+                    return itemDate.getMonth() === currentMonth && itemDate.getFullYear() === currentYear;
+                });
+                const monthTokens = monthData.reduce((sum, item) => sum + (item.total_tokens || 0), 0);
+                
+                const uniqueInterviews = new Set(usageData.map(item => item.interview_id)).size;
+                const avgTokens = uniqueInterviews > 0 ? Math.round(totalTokens / uniqueInterviews) : 0;
+
+                // Update stats
+                document.getElementById('total-tokens').textContent = formatNumber(totalTokens);
+                document.getElementById('total-cost').textContent = '$' + totalCost.toFixed(4);
+                document.getElementById('month-tokens').textContent = formatNumber(monthTokens);
+                document.getElementById('avg-tokens').textContent = formatNumber(avgTokens);
+
+                // Build table
+                const tbody = document.getElementById('usage-table-body');
+                tbody.innerHTML = usageData.slice(0, 10).map(item => {
+                    const date = new Date(item.created_at).toLocaleDateString('de-DE', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                    const type = item.session_type || 'Interview';
+                    const cost = parseFloat(item.total_cost || 0);
+                    const costEur = (cost * 0.95).toFixed(4); // Ungefähre EUR Umrechnung
+
+                    return `
+                        <tr>
+                            <td>${date}</td>
+                            <td>${type}</td>
+                            <td>${formatNumber(item.total_tokens)} tokens</td>
+                            <td class="cost-amount">$${cost.toFixed(4)} (≈${costEur}€)</td>
+                        </tr>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error('Error loading usage stats:', error);
+            }
+        }
+
+        // Helper: Number formatting
+        function formatNumber(num) {
+            return new Intl.NumberFormat('de-DE').format(num);
+        }
+
+        // Change password
+        async function changePassword() {
+            const newPassword = prompt('Neues Passwort eingeben (min. 8 Zeichen):');
+            
+            if (!newPassword) return;
+            
+            if (newPassword.length < 8) {
+                showError('Passwort muss mindestens 8 Zeichen haben');
+                return;
+            }
+
+            const { error } = await supabase.auth.updateUser({
+                password: newPassword
+            });
+
+            if (error) {
+                showError('Fehler: ' + error.message);
+            } else {
+                showSuccess('Passwort erfolgreich geändert!');
+            }
+        }
+
+        // Logout
+        async function logout() {
+            await supabase.auth.signOut();
+            localStorage.clear();
+            window.location.href = '/login.html';
+        }
+
+        // UI Helpers
+        function showSuccess(message) {
+            const el = document.getElementById('success-message');
+            el.textContent = message;
+            el.style.display = 'block';
+            setTimeout(() => el.style.display = 'none', 5000);
+        }
+
+        function showError(message) {
+            const el = document.getElementById('error-message');
+            el.textContent = message;
+            el.style.display = 'block';
+            setTimeout(() => el.style.display = 'none', 5000);
+        }
+    </script>
+</body>
+</html>
