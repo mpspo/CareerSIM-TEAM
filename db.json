@@ -13,6 +13,20 @@
       "password": "$2a$08$Xv99DRV9f.3.ISmWmCijCeKSoMWkhQu0eIilFBPafLzx06VYjrt5m",
       "study": "bwl",
       "target": "Goldman"
+    },
+    {
+      "id": "26aa6e30-14a9-45d7-b78a-841278fde9cb",
+      "username": "jost ist ein Hund",
+      "password": "$2a$08$P6OFxPWGUcqzFWd4/dzhWuVMHS4zCbblHrGAWgPp6q/q0SU9lfTk2",
+      "study": "BWL",
+      "target": "Mckinsey"
+    },
+    {
+      "id": "5b44ebcc-71a3-4f5b-b2e6-3b5db55efef1",
+      "username": "Jost ist cool",
+      "password": "$2a$08$k5V3i7oTbAEqjZTbt9fLKuEQlYJ6XZwrMIcYjlsEADZyP1bKkQphO",
+      "study": "BWL",
+      "target": "Mckinsey"
     }
   ],
   "sessions": {
@@ -195,6 +209,10 @@
     "52c4cf7f-6c3a-4bfc-be08-bdfdcc4025c0": {
       "username": "meno",
       "created": 1763314514860
+    },
+    "cf7193c5-1c85-4f3f-acc4-e317ddadbc71": {
+      "username": "Jost ist cool",
+      "created": 1763321549281
     }
   },
   "interviews": {
