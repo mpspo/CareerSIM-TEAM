@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { supabase } from './clients/SupabaseClient';
 import { MainLayout } from './components/common/MainLayout';
 import { CareerDashboard } from './components/dashboard/CareerDashboard';
+import { InterviewSetup } from './components/interview/InterviewSetup';
 
 // Components (will be created in next phases)
 // import Dashboard from './components/dashboard/Dashboard';
@@ -73,16 +74,28 @@ function App() {
                 element={
                   <div style={{ padding: '40px' }}>
                     <h1>Interview-Training</h1>
-                    <p>Coming Soon - wird in nächster Phase implementiert</p>
-                    <p>Legacy: /public/interview.html</p>
+                    <p>Starte ein neues Mock-Interview</p>
+                    <button
+                      onClick={() => (window.location.href = '/interview/setup')}
+                      style={{
+                        padding: '12px 24px',
+                        background: '#10a37f',
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '8px',
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        marginTop: '20px',
+                      }}
+                    >
+                      Neues Interview konfigurieren →
+                    </button>
                   </div>
                 }
               />
 
-              <Route
-                path="/interview/setup"
-                element={<div>Interview Setup (Coming Soon)</div>}
-              />
+              <Route path="/interview/setup" element={<InterviewSetup />} />
 
               <Route
                 path="/interview/session/:id"

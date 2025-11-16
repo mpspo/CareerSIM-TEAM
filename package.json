@@ -12,6 +12,7 @@
     "server:build": "tsc -p tsconfig.server.json",
     "start": "node dist/server/server.js",
     "dev:all": "concurrently \"npm run server\" \"npm run dev\"",
+    "embeddings:generate": "tsx scripts/generate-embeddings.ts",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write \"src/**/*.{ts,tsx}\" \"server/**/*.ts\"",
     "type-check": "tsc --noEmit"
