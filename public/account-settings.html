@@ -438,6 +438,76 @@
         flex-shrink: 0;
       }
       
+      /* CV Upload Styles */
+      .cv-upload-zone {
+        border: 2px dashed var(--border);
+        border-radius: 12px;
+        padding: 32px;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      .cv-upload-zone:hover {
+        border-color: var(--accent);
+        background: var(--bg-secondary);
+      }
+      .cv-upload-zone.dragover {
+        border-color: var(--accent);
+        background: rgba(99, 102, 241, 0.05);
+      }
+      .cv-upload-icon {
+        font-size: 48px;
+        margin-bottom: 12px;
+      }
+      .cv-upload-text {
+        color: var(--text-secondary);
+        margin-bottom: 16px;
+      }
+      .cv-status {
+        margin-top: 12px;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 14px;
+      }
+      .cv-status.success {
+        background: #d1fae5;
+        color: #065f46;
+      }
+      .cv-status.error {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .cv-current {
+        margin-top: 12px;
+        padding: 16px;
+        background: var(--bg-secondary);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .cv-icon {
+        color: var(--accent);
+        font-size: 20px;
+      }
+      .cv-name {
+        flex: 1;
+        font-weight: 500;
+      }
+      .btn-danger-small {
+        padding: 6px 12px;
+        background: #dc2626;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .btn-danger-small:hover {
+        background: #b91c1c;
+      }
+      
       @media (max-width: 968px) {
         .settings-layout {
           grid-template-columns: 1fr;
@@ -626,6 +696,25 @@
                         <option value="CH">Schweiz</option>
                         <option value="OTHER">Andere</option>
                       </select>
+                    </div>
+                  </div>
+                  
+                  <div class="form-section">
+                    <h3>Lebenslauf (CV)</h3>
+                    <div id="cv-upload-area" class="form-group">
+                      <label class="form-label">CV hochladen (PDF, max. 5MB)</label>
+                      <div class="cv-upload-zone" id="cv-drop-zone">
+                        <div class="cv-upload-icon">📄</div>
+                        <p class="cv-upload-text">Ziehe dein CV hier hinein oder klicke zum Auswählen</p>
+                        <input type="file" id="cv-file-input" accept=".pdf" style="display: none;">
+                        <button type="button" class="btn-secondary" onclick="document.getElementById('cv-file-input').click()">Datei auswählen</button>
+                      </div>
+                      <div id="cv-status" class="cv-status" style="display: none;"></div>
+                      <div id="cv-current" class="cv-current" style="display: none;">
+                        <span class="cv-icon">✓</span>
+                        <span class="cv-name"></span>
+                        <button type="button" class="btn-danger-small" onclick="deleteCV()">Löschen</button>
+                      </div>
                     </div>
                   </div>
                   
@@ -930,31 +1019,195 @@
       </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-      // Check auth
-      const token = localStorage.getItem('cs_token');
-      if (!token) {
-        window.location.href = '/login.html';
+      // Initialize Supabase
+      const SUPABASE_URL = 'https://guuywztafdxfqupmqmmq.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd1dXl3enRhZmR4ZnF1cG1xbW1xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzE2OTQ0OTEsImV4cCI6MjA0NzI3MDQ5MX0.KUC-F-L2D5aZqIAUF4U_Wz5j0X6oykJ1pSIYSYSKiAc';
+      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+      let currentUser = null;
+
+      // Check auth with Supabase
+      async function checkAuth() {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          window.location.href = '/login.html';
+          return;
+        }
+        currentUser = session.user;
+        loadUserData();
+        checkCurrentCV();
+      }
+
+      checkAuth();
+
+      // Load user data
+      async function loadUserData() {
+        if (!currentUser) return;
+        
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', currentUser.id)
+          .single();
+
+        if (profile) {
+          document.getElementById('profile-name').textContent = profile.username || 'User';
+          document.getElementById('profile-avatar').textContent = (profile.username || 'U').charAt(0).toUpperCase();
+          document.getElementById('study').value = profile.study || '';
+          document.getElementById('target').value = profile.target_company || '';
+          document.getElementById('email').value = currentUser.email || '';
+        }
+      }
+
+      // Check if CV exists
+      async function checkCurrentCV() {
+        if (!currentUser) return;
+
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('cv_file_name, cv_file_path')
+          .eq('id', currentUser.id)
+          .single();
+
+        if (profile && profile.cv_file_name) {
+          document.getElementById('cv-drop-zone').style.display = 'none';
+          document.getElementById('cv-current').style.display = 'flex';
+          document.querySelector('.cv-name').textContent = profile.cv_file_name;
+        }
+      }
+
+      // CV Upload handling
+      const dropZone = document.getElementById('cv-drop-zone');
+      const fileInput = document.getElementById('cv-file-input');
+
+      dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+      });
+
+      dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('dragover');
+      });
+
+      dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+          handleFile(files[0]);
+        }
+      });
+
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+          handleFile(e.target.files[0]);
+        }
+      });
+
+      async function handleFile(file) {
+        const statusDiv = document.getElementById('cv-status');
+        
+        // Validate file
+        if (file.type !== 'application/pdf') {
+          statusDiv.className = 'cv-status error';
+          statusDiv.textContent = '❌ Bitte nur PDF-Dateien hochladen';
+          statusDiv.style.display = 'block';
+          return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+          statusDiv.className = 'cv-status error';
+          statusDiv.textContent = '❌ Datei ist zu groß (max. 5MB)';
+          statusDiv.style.display = 'block';
+          return;
+        }
+
+        // Upload to Supabase Storage
+        statusDiv.className = 'cv-status';
+        statusDiv.textContent = '⏳ Wird hochgeladen...';
+        statusDiv.style.display = 'block';
+
+        const fileName = `${currentUser.id}_${Date.now()}.pdf`;
+        const { data, error } = await supabase.storage
+          .from('cvs')
+          .upload(fileName, file, {
+            cacheControl: '3600',
+            upsert: true
+          });
+
+        if (error) {
+          statusDiv.className = 'cv-status error';
+          statusDiv.textContent = '❌ Fehler beim Hochladen: ' + error.message;
+          return;
+        }
+
+        // Update profile with CV info
+        const { error: updateError } = await supabase
+          .from('profiles')
+          .update({
+            cv_file_name: file.name,
+            cv_file_path: fileName,
+            cv_uploaded_at: new Date().toISOString()
+          })
+          .eq('id', currentUser.id);
+
+        if (updateError) {
+          statusDiv.className = 'cv-status error';
+          statusDiv.textContent = '❌ Fehler beim Speichern: ' + updateError.message;
+          return;
+        }
+
+        statusDiv.className = 'cv-status success';
+        statusDiv.textContent = '✓ CV erfolgreich hochgeladen!';
+        
+        setTimeout(() => {
+          checkCurrentCV();
+          statusDiv.style.display = 'none';
+        }, 2000);
+      }
+
+      // Delete CV
+      async function deleteCV() {
+        if (!confirm('Möchtest du dein CV wirklich löschen?')) return;
+
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('cv_file_path')
+          .eq('id', currentUser.id)
+          .single();
+
+        if (profile && profile.cv_file_path) {
+          // Delete from storage
+          await supabase.storage
+            .from('cvs')
+            .remove([profile.cv_file_path]);
+
+          // Update profile
+          await supabase
+            .from('profiles')
+            .update({
+              cv_file_name: null,
+              cv_file_path: null,
+              cv_uploaded_at: null
+            })
+            .eq('id', currentUser.id);
+
+          document.getElementById('cv-current').style.display = 'none';
+          document.getElementById('cv-drop-zone').style.display = 'block';
+        }
       }
 
       // Logout
-      document.getElementById('logout-btn').addEventListener('click', () => {
+      document.getElementById('logout-btn').addEventListener('click', async () => {
+        await supabase.auth.signOut();
         localStorage.removeItem('cs_token');
         localStorage.removeItem('cs_username');
         localStorage.removeItem('cs_study');
         localStorage.removeItem('cs_target');
         window.location.href = '/';
       });
-
-      // Load user data
-      const username = localStorage.getItem('cs_username') || 'User';
-      const study = localStorage.getItem('cs_study') || '';
-      const target = localStorage.getItem('cs_target') || '';
-      
-      document.getElementById('profile-name').textContent = username;
-      document.getElementById('profile-avatar').textContent = username.charAt(0).toUpperCase();
-      document.getElementById('study').value = study;
-      document.getElementById('target').value = target;
 
       // Section navigation
       document.querySelectorAll('.settings-nav-item').forEach(item => {
@@ -975,15 +1228,29 @@
       });
 
       // Profile form
-      document.getElementById('profile-form').addEventListener('submit', (e) => {
+      document.getElementById('profile-form').addEventListener('submit', async (e) => {
         e.preventDefault();
+        
+        if (!currentUser) return;
+
         const study = document.getElementById('study').value;
         const target = document.getElementById('target').value;
         
-        localStorage.setItem('cs_study', study);
-        localStorage.setItem('cs_target', target);
-        
-        alert('✓ Profil wurde erfolgreich aktualisiert!');
+        const { error } = await supabase
+          .from('profiles')
+          .update({
+            study: study,
+            target_company: target
+          })
+          .eq('id', currentUser.id);
+
+        if (error) {
+          alert('❌ Fehler beim Speichern: ' + error.message);
+        } else {
+          localStorage.setItem('cs_study', study);
+          localStorage.setItem('cs_target', target);
+          alert('✓ Profil wurde erfolgreich aktualisiert!');
+        }
       });
 
       // Personal data form
