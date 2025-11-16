@@ -6,6 +6,7 @@
     <title>Dashboard - CareerSIM</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
       .dashboard-container {
         min-height: 100vh;
@@ -600,34 +601,92 @@
     </div>
 
     <script>
-      // Check auth
-      const token = localStorage.getItem('cs_token');
-      if (!token) {
+      // Initialize Supabase
+      const SUPABASE_URL = 'https://guuywztafdxfqupmqmmq.supabase.co';
+      const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd1dXl3enRhZmR4ZnF1cG1xbW1xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMzMTA5NjIsImV4cCI6MjA3ODg4Njk2Mn0.FvfJPUpaxCHbhirhpO5etr6At4esxLLvVJSsoe_e6pQ';
+      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+      let currentUser = null;
+
+      // Check authentication on page load
+      async function checkAuth() {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (!session) {
+          // No session - redirect to login
+          window.location.href = '/login.html';
+          return false;
+        }
+
+        currentUser = session.user;
+        localStorage.setItem('userId', currentUser.id);
+        localStorage.setItem('userEmail', currentUser.email);
+        
+        console.log('✅ User authenticated:', currentUser.email);
+        return true;
+      }
+
+      // Logout function
+      async function logout() {
+        await supabase.auth.signOut();
+        localStorage.clear();
         window.location.href = '/login.html';
       }
 
-      // API helper
-      const api = (path, opts = {}) => fetch('/api' + path, opts).then(r => r.json());
-
-      // Logout
-      document.getElementById('logout-btn').addEventListener('click', () => {
-        localStorage.removeItem('cs_token');
-        localStorage.removeItem('cs_username');
-        localStorage.removeItem('cs_study');
-        localStorage.removeItem('cs_target');
-        window.location.href = '/';
-      });
+      // Attach logout to button
+      document.getElementById('logout-btn')?.addEventListener('click', logout);
 
       // Load dashboard data
       async function loadDashboard() {
+        // Check auth first
+        const isAuthenticated = await checkAuth();
+        if (!isAuthenticated) return;
+
         try {
-          // Get data from localStorage
-          const username = localStorage.getItem('cs_username') || 'User';
-          const study = localStorage.getItem('cs_study') || '—';
-          const target = localStorage.getItem('cs_target') || '—';
+          // Get user info
+          const username = currentUser.user_metadata?.name || currentUser.email.split('@')[0];
+          const userId = currentUser.id;
           
-          // Get interview history from localStorage
-          const interviewHistory = JSON.parse(localStorage.getItem('interviewHistory') || '[]');
+          let interviewHistory = [];
+          
+          // Load interviews from Supabase for this user
+          try {
+            const { data: interviews, error } = await supabase
+              .from('interviews')
+              .select('*')
+              .eq('user_id', userId)
+              .order('created_at', { ascending: false })
+              .limit(50);
+
+            if (error) throw error;
+
+            // Transform Supabase data to match frontend format
+            interviewHistory = interviews.map(i => ({
+              id: i.id,
+              date: i.created_at,
+              userId: i.user_id,
+              company: i.company,
+              companyId: i.company_id,
+              industry: i.industry,
+              duration: i.duration,
+              completedPhases: i.completed_phases,
+              scores: i.scores,
+              aiFeedback: i.ai_feedback,
+              transcript: i.transcript,
+              config: i.config
+            }));
+
+            console.log('✅ Interviews von Supabase geladen:', interviewHistory.length);
+            
+            // Backup to localStorage
+            localStorage.setItem('interviewHistory', JSON.stringify(interviewHistory));
+
+          } catch (dbError) {
+            // Fallback to localStorage if Supabase fails
+            console.warn('⚠️ Supabase nicht erreichbar, nutze localStorage:', dbError);
+            interviewHistory = JSON.parse(localStorage.getItem('interviewHistory') || '[]')
+              .filter(i => i.userId === userId); // Only user's interviews
+          }
           
           // Calculate stats
           const totalInterviews = interviewHistory.length;
@@ -637,8 +696,6 @@
           
           const data = {
             username,
-            study,
-            target,
             stats: {
               totalInterviews,
               averageScore

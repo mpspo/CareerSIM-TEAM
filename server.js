@@ -8,8 +8,15 @@ const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 const OpenAI = require('openai');
 const multer = require('multer');
+const { createClient } = require('@supabase/supabase-js');
 
 const DB_PATH = path.join(__dirname, 'db.json');
+
+// Initialize Supabase (optional - falls später migrieren willst)
+const supabase = process.env.SUPABASE_URL ? createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_KEY
+) : null;
 
 // Configure multer for file uploads
 const upload = multer({
@@ -707,9 +714,190 @@ app.post('/api/realtime/session', async (req, res) => {
   }
 });
 
+// ============================================
+// INTERVIEW HISTORY API
+// ============================================
+
+// Save interview to history
+app.post('/api/interviews', async (req, res) => {
+  try {
+    const interviewData = req.body;
+    
+    // Add unique ID and timestamp
+    interviewData.id = Date.now();
+    interviewData.savedAt = new Date().toISOString();
+    
+    // Option 1: Supabase (wenn konfiguriert)
+    if (supabase) {
+      console.log('💾 Saving to Supabase...');
+      
+      // Prepare data for Supabase
+      const supabaseData = {
+        user_id: interviewData.userId === 'guest' ? null : interviewData.userId,
+        company: interviewData.company,
+        company_id: interviewData.companyId || null,
+        industry: interviewData.industry || null,
+        duration: interviewData.duration || 0,
+        completed_phases: interviewData.completedPhases || 0,
+        scores: interviewData.scores || {},
+        ai_feedback: interviewData.aiFeedback || '',
+        transcript: interviewData.transcript || null,
+        config: interviewData.config || {}
+      };
+      
+      console.log('📤 Sending to Supabase:', supabaseData);
+      
+      const { data, error } = await supabase
+        .from('interviews')
+        .insert(supabaseData)
+        .select()
+        .single();
+      
+      if (error) {
+        console.error('❌ Supabase error:', error);
+        throw error;
+      }
+      
+      console.log('✅ Interview saved to Supabase:', data.id);
+      return res.json({
+        success: true,
+        id: data.id,
+        message: 'Interview erfolgreich in Supabase gespeichert',
+        storage: 'supabase'
+      });
+    }
+    
+    // Option 2: Fallback zu db.json (wenn Supabase nicht konfiguriert)
+    console.log('💾 Saving to db.json (Supabase not configured)...');
+    const db = readDb();
+    
+    // Initialize interviews array if it doesn't exist
+    if (!db.interviews) {
+      db.interviews = [];
+    }
+    
+    // Add to beginning of array
+    db.interviews.unshift(interviewData);
+    
+    // Keep only last 100 interviews per user
+    if (interviewData.userId) {
+      const userInterviews = db.interviews.filter(i => i.userId === interviewData.userId);
+      if (userInterviews.length > 100) {
+        // Remove oldest interviews
+        const toRemove = userInterviews.slice(100);
+        db.interviews = db.interviews.filter(i => !toRemove.includes(i));
+      }
+    }
+    
+    writeDb(db);
+    
+    console.log('✅ Interview gespeichert:', {
+      id: interviewData.id,
+      company: interviewData.company,
+      score: interviewData.scores?.overall
+    });
+    
+    return res.json({
+      success: true,
+      id: interviewData.id,
+      message: 'Interview erfolgreich gespeichert'
+    });
+  } catch (error) {
+    console.error('❌ Fehler beim Speichern des Interviews:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'Fehler beim Speichern'
+    });
+  }
+});
+
+// Get interview history for a user
+app.get('/api/interviews/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    
+    // Option 1: Supabase (wenn konfiguriert)
+    if (supabase) {
+      console.log(`📊 Loading from Supabase for user: ${userId}`);
+      
+      let query = supabase
+        .from('interviews')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(50);
+      
+      // Filter by user if not guest
+      if (userId !== 'guest') {
+        query = query.eq('user_id', userId);
+      }
+      
+      const { data, error } = await query;
+      
+      if (error) {
+        console.error('❌ Supabase error:', error);
+        throw error;
+      }
+      
+      console.log(`✅ ${data.length} interviews loaded from Supabase`);
+      return res.json({ 
+        interviews: data,
+        storage: 'supabase'
+      });
+    }
+    
+    // Option 2: Fallback zu db.json
+    console.log(`📊 Loading from db.json for user: ${userId}`);
+    const db = readDb();
+    
+    if (!db.interviews) {
+      return res.json({ interviews: [] });
+    }
+    
+    // Filter interviews by userId or return all if userId is 'guest'
+    const interviews = userId === 'guest' 
+      ? db.interviews.filter(i => !i.userId || i.userId === 'guest').slice(0, 20)
+      : db.interviews.filter(i => i.userId === userId);
+    
+    console.log(`📊 ${interviews.length} Interviews abgerufen für User: ${userId}`);
+    
+    return res.json({ interviews });
+  } catch (error) {
+    console.error('❌ Fehler beim Abrufen der Interviews:', error);
+    return res.status(500).json({
+      success: false,
+      error: 'Fehler beim Abrufen'
+    });
+  }
+});
+
+// Get single interview by ID
+app.get('/api/interviews/detail/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    const db = readDb();
+    
+    if (!db.interviews) {
+      return res.status(404).json({ error: 'Interview nicht gefunden' });
+    }
+    
+    const interview = db.interviews.find(i => i.id === parseInt(id));
+    
+    if (!interview) {
+      return res.status(404).json({ error: 'Interview nicht gefunden' });
+    }
+    
+    return res.json({ interview });
+  } catch (error) {
+    console.error('❌ Fehler beim Abrufen des Interviews:', error);
+    return res.status(500).json({ error: 'Fehler beim Abrufen' });
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 CareerSIM Server läuft auf http://localhost:${PORT}`);
   console.log(`📡 OpenAI Integration: ${openai ? '✅ Aktiviert' : '❌ Nicht konfiguriert'}`);
   console.log(`🎤 Realtime API: ${openai ? '✅ Bereit' : '❌ Nicht verfügbar'}`);
+  console.log(`💾 Datenbank: ${supabase ? '✅ Supabase verbunden' : '⚠️  db.json (lokal)'}`);
+  console.log(`📊 Interview-Historie: ✅ Aktiviert`);
 });

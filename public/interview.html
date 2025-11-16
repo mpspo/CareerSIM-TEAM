@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KI Interview - CareerSIM</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * {
       margin: 0;
@@ -776,6 +777,35 @@
      * API-MODELL: gpt-4o-mini-realtime-preview-2024-12-17
      */
 
+    // Initialize Supabase
+    const SUPABASE_URL = 'https://guuywztafdxfqupmqmmq.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd1dXl3enRhZmR4ZnF1cG1xbW1xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjMzMTA5NjIsImV4cCI6MjA3ODg4Njk2Mn0.FvfJPUpaxCHbhirhpO5etr6At4esxLLvVJSsoe_e6pQ';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let currentUser = null;
+
+    // Check authentication
+    async function checkAuth() {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      
+      if (!session) {
+        alert('Bitte melde dich zuerst an!');
+        window.location.href = '/login.html';
+        return false;
+      }
+
+      currentUser = session.user;
+      localStorage.setItem('userId', currentUser.id);
+      console.log('✅ User authenticated:', currentUser.email);
+      return true;
+    }
+
+    // Check auth immediately
+    checkAuth().then(isAuth => {
+      if (!isAuth) return;
+      // Continue with interview initialization...
+    });
+
     // Load interview configuration
     const interviewConfig = JSON.parse(sessionStorage.getItem('interviewConfig') || '{}');
     if (!interviewConfig.company) {
@@ -1451,13 +1481,17 @@ Verwende GENAU dieses Format!`
       return { scores, feedback };
     }
 
-    // Save interview to history with scorecard
+    // Save interview to history
     function saveInterviewToHistory(scorecard) {
       const actualDuration = Math.floor(elapsedSeconds / 60);
+      
+      // Get userId from currentUser (authenticated)
+      const userId = currentUser ? currentUser.id : 'guest';
       
       const evaluationData = {
         id: Date.now(),
         date: new Date().toISOString(),
+        userId: userId,
         company: interviewConfig.company.name,
         companyId: interviewConfig.company.id,
         industry: interviewConfig.industry,
@@ -1477,19 +1511,27 @@ Verwende GENAU dieses Format!`
       // Save to sessionStorage for evaluation page
       sessionStorage.setItem('interviewEvaluation', JSON.stringify(evaluationData));
       
-      // Get existing history
+      // Save to localStorage (Backup/Offline)
       let history = JSON.parse(localStorage.getItem('interviewHistory') || '[]');
-      
-      // Add this interview
       history.unshift(evaluationData);
-      
-      // Keep only last 20 interviews
       if (history.length > 20) history = history.slice(0, 20);
-      
-      // Save back to localStorage
       localStorage.setItem('interviewHistory', JSON.stringify(history));
       
-      console.log('✅ Interview saved to history:', evaluationData);
+      console.log('✅ Interview saved to localStorage:', evaluationData);
+      
+      // Save to server (db.json)
+      fetch('/api/interviews', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(evaluationData)
+      })
+      .then(res => res.json())
+      .then(data => {
+        console.log('✅ Interview saved to server:', data);
+      })
+      .catch(err => {
+        console.warn('⚠️ Server speichern fehlgeschlagen (Offline?), aber localStorage funktioniert:', err);
+      });
       
       // Redirect to evaluation page
       setTimeout(() => {
