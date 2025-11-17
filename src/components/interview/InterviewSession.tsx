@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { InterviewService } from '../../services/InterviewService';
+import { useRealtime } from '../../hooks/useRealtime';
 import './InterviewSession.css';
 
 interface InterviewConfig {
@@ -41,10 +42,21 @@ export function InterviewSession() {
   const [timeElapsed, setTimeElapsed] = useState(0);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [voiceMode, setVoiceMode] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const startTimeRef = useRef<number>(Date.now());
   const timerRef = useRef<NodeJS.Timeout>();
+
+  // OpenAI Realtime API integration
+  const realtime = useRealtime({
+    apiKey: import.meta.env.VITE_OPENAI_API_KEY || '',
+    voice: 'alloy',
+    instructions: `You are a professional interview coach conducting a mock interview for the position of ${config?.role} at ${config?.company}. 
+    Ask thoughtful questions, provide constructive feedback, and help the candidate improve their interview skills.
+    Keep your questions concise and professional.`,
+    autoConnect: false,
+  });
 
   // Initialize interview
   useEffect(() => {
@@ -294,16 +306,29 @@ Bereit? Dann starten wir!`;
     setMessages((prev) => [...prev, newMessage]);
   };
 
-  const toggleRecording = () => {
-    // TODO: Implement voice recording with OpenAI Realtime API
-    setIsRecording(!isRecording);
-    
-    if (!isRecording) {
-      // Start recording
-      console.log('Start recording...');
+  const toggleRecording = async () => {
+    if (!voiceMode) {
+      // First time: switch to voice mode and connect
+      setVoiceMode(true);
+      
+      try {
+        await realtime.connect();
+        await realtime.startRecording();
+        setIsRecording(true);
+      } catch (error) {
+        console.error('Failed to start voice mode:', error);
+        alert('Fehler beim Starten der Spracheingabe. Bitte Browser-Mikrofonzugriff erlauben.');
+        setVoiceMode(false);
+      }
     } else {
-      // Stop recording and transcribe
-      console.log('Stop recording...');
+      // Toggle recording
+      if (isRecording) {
+        realtime.stopRecording();
+        setIsRecording(false);
+      } else {
+        await realtime.startRecording();
+        setIsRecording(true);
+      }
     }
   };
 
@@ -346,6 +371,28 @@ Bereit? Dann starten wir!`;
             <span className="stat-label">Fragen</span>
             <span className="stat-value">{questionIndex}/5</span>
           </div>
+        </div>
+        
+        {/* Voice Mode Toggle */}
+        <div className="voice-mode-toggle">
+          <button
+            className={`toggle-btn ${voiceMode ? 'active' : ''}`}
+            onClick={() => {
+              if (voiceMode) {
+                realtime.disconnect();
+                setVoiceMode(false);
+                setIsRecording(false);
+              }
+            }}
+            title={voiceMode ? 'Voice Mode aktiv' : 'Voice Mode aktivieren'}
+          >
+            {voiceMode ? '🎤 Voice' : '⌨️ Text'}
+          </button>
+          {voiceMode && realtime.isConnected && (
+            <span className="voice-status">
+              {realtime.isSpeaking ? '🗣️ Sprichst...' : '👂 Hört zu...'}
+            </span>
+          )}
         </div>
       </div>
 
@@ -416,9 +463,9 @@ Bereit? Dann starten wir!`;
                 className={`btn-voice ${isRecording ? 'recording' : ''}`}
                 onClick={toggleRecording}
                 disabled={isProcessing || phase === 'intro'}
-                title="Spracheingabe (Coming Soon)"
+                title={voiceMode ? 'Sprachmodus aktiv' : 'Sprachmodus aktivieren (OpenAI Realtime API)'}
               >
-                {isRecording ? '⏹️ Stop' : '🎤 Sprechen'}
+                {isRecording ? '⏹️ Stop' : voiceMode ? '🎤 Aufnahme' : '🎤 Voice Mode'}
               </button>
               <button
                 className="btn-send"
