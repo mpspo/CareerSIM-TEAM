@@ -25,34 +25,49 @@ export interface Education {
 }
 
 export interface CareerProfile {
-  id: string;
+  id?: string;
   userId: string;
+  currentRole?: string;
+  currentCompany?: string;
+  yearsExperience?: number;
+  targetRole?: string;
+  targetIndustries?: string[];
+  careerGoals?: string;
   aggregatedStrengths: string[]; // from all interviews
   aggregatedWeaknesses: string[]; // from all interviews
   recommendedRoles: RoleRecommendation[];
   recommendedSkills: SkillRecommendation[];
-  recommendedEducationOptions: EducationRecommendation[];
+  recommendedEducationOptions?: EducationRecommendation[];
   lastUpdated: Date;
-  interviewCount: number;
+  interviewCount?: number;
+  totalInterviews?: number;
+  averageScore?: number;
 }
 
 export interface RoleRecommendation {
   title: string; // e.g., "Junior Consultant"
-  industry: string; // e.g., "Consulting", "Tech", "Finance"
+  industry?: string; // e.g., "Consulting", "Tech", "Finance"
+  company?: string;
   matchScore: number; // 0-100
-  reasons: string[]; // why this role fits
+  reasons?: string[]; // why this role fits
   requiredSkills: string[];
+  description?: string;
+  salary?: string;
   salaryRange?: string; // e.g., "45k-65k EUR"
+  location?: string;
   companies?: string[]; // example companies
 }
 
 export interface SkillRecommendation {
-  name: string; // e.g., "Python", "Case Interview Skills"
-  category: 'technical' | 'soft' | 'language' | 'business';
-  currentLevel: 'none' | 'beginner' | 'intermediate' | 'advanced';
-  targetLevel: 'beginner' | 'intermediate' | 'advanced' | 'expert';
+  name?: string; // e.g., "Python", "Case Interview Skills"
+  skill?: string;
+  category?: 'technical' | 'soft' | 'language' | 'business';
+  currentLevel?: 'none' | 'beginner' | 'intermediate' | 'advanced';
+  targetLevel?: 'beginner' | 'intermediate' | 'advanced' | 'expert';
   priority: 'high' | 'medium' | 'low';
-  howToLearn: LearningResource[];
+  reason?: string;
+  resources?: { title: string; url: string; type: string }[];
+  howToLearn?: LearningResource[];
   estimatedTime: string; // e.g., "3 months"
 }
 

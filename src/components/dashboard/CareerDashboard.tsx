@@ -1,18 +1,31 @@
 import { useState, useEffect } from 'react';
-import type { CareerProfile, RoleRecommendation, SkillRecommendation } from '@types/career.types';
+import { useNavigate } from 'react-router-dom';
+import { CareerProfileService } from '../../services/CareerProfileService';
+import type { CareerProfile, RoleRecommendation, SkillRecommendation } from '../../types/career.types';
 import './CareerDashboard.css';
 
 export const CareerDashboard = () => {
+  const navigate = useNavigate();
   const [profile, setProfile] = useState<CareerProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     loadCareerProfile();
   }, []);
 
   const loadCareerProfile = async () => {
-    // TODO: Fetch from API
-    setLoading(false);
+    try {
+      setLoading(true);
+      setError(null);
+      const profileData = await CareerProfileService.getCompleteProfile();
+      setProfile(profileData);
+    } catch (err) {
+      console.error('Error loading career profile:', err);
+      setError('Fehler beim Laden des Karriereprofils');
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (loading) {
@@ -20,6 +33,17 @@ export const CareerDashboard = () => {
       <div className="career-dashboard loading">
         <div className="spinner"></div>
         <p>Lade dein Karriereprofil...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="career-dashboard error">
+        <p>{error}</p>
+        <button onClick={loadCareerProfile} className="btn-primary">
+          Erneut versuchen
+        </button>
       </div>
     );
   }
@@ -55,7 +79,12 @@ export const CareerDashboard = () => {
             ) : (
               <div className="empty-state">
                 <p>Absolviere Interviews, um deine Stärken zu identifizieren</p>
-                <button className="btn-primary">Erstes Interview starten</button>
+                <button 
+                  className="btn-primary"
+                  onClick={() => navigate('/interview/setup')}
+                >
+                  Erstes Interview starten
+                </button>
               </div>
             )}
           </div>
@@ -122,13 +151,37 @@ export const CareerDashboard = () => {
 
       {/* Actions */}
       <div className="career-actions">
-        <button className="btn-primary">
-          Neues Karriere-Assessment starten
+        <button 
+          className="btn-primary"
+          onClick={() => navigate('/interview/setup')}
+        >
+          Neues Interview starten
         </button>
-        <button className="btn-secondary">
-          Analyse auf Basis letzter Interviews
+        <button 
+          className="btn-secondary"
+          onClick={loadCareerProfile}
+        >
+          Profil aktualisieren
         </button>
       </div>
+
+      {/* Stats */}
+      {profile && (profile.totalInterviews || 0) > 0 && (
+        <div className="career-stats">
+          <div className="stat-card">
+            <span className="stat-value">{profile.totalInterviews || 0}</span>
+            <span className="stat-label">Absolvierte Interviews</span>
+          </div>
+          <div className="stat-card">
+            <span className="stat-value">{Math.round(profile.averageScore || 0)}</span>
+            <span className="stat-label">Durchschnittlicher Score</span>
+          </div>
+          <div className="stat-card">
+            <span className="stat-value">{profile.aggregatedStrengths.length}</span>
+            <span className="stat-label">Identifizierte Stärken</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -140,11 +193,16 @@ const RoleCard = ({ role }: { role: RoleRecommendation }) => (
       <h3>{role.title}</h3>
       <span className="match-score">{role.matchScore}% Match</span>
     </div>
-    <p className="role-industry">{role.industry}</p>
-    <div className="role-reasons">
-      {role.reasons.slice(0, 2).map((reason, i) => (
-        <span key={i} className="reason-tag">
-          {reason}
+    <p className="role-company">{role.company}</p>
+    <p className="role-description">{role.description}</p>
+    <div className="role-details">
+      <span className="role-salary">{role.salary}</span>
+      <span className="role-location">📍 {role.location}</span>
+    </div>
+    <div className="role-skills">
+      {role.requiredSkills.slice(0, 3).map((skill, i) => (
+        <span key={i} className="skill-tag">
+          {skill}
         </span>
       ))}
     </div>
@@ -154,17 +212,21 @@ const RoleCard = ({ role }: { role: RoleRecommendation }) => (
 const SkillCard = ({ skill }: { skill: SkillRecommendation }) => (
   <div className="skill-card">
     <div className="skill-header">
-      <h4>{skill.name}</h4>
-      <span className={`priority-badge ${skill.priority}`}>{skill.priority}</span>
-    </div>
-    <div className="skill-progress">
-      <div className="progress-bar">
-        <div className="progress-fill" style={{ width: '30%' }}></div>
-      </div>
-      <span className="progress-text">
-        {skill.currentLevel} → {skill.targetLevel}
+      <h4>{skill.skill}</h4>
+      <span className={`priority-badge ${skill.priority}`}>
+        {skill.priority === 'high' ? 'Hoch' : skill.priority === 'medium' ? 'Mittel' : 'Niedrig'}
       </span>
     </div>
-    <p className="skill-time">{skill.estimatedTime}</p>
+    <p className="skill-reason">{skill.reason}</p>
+    <p className="skill-time">⏱️ {skill.estimatedTime}</p>
+    {skill.resources && skill.resources.length > 0 && (
+      <div className="skill-resources">
+        {skill.resources.slice(0, 2).map((resource, i) => (
+          <a key={i} href={resource.url} className="resource-link" target="_blank" rel="noopener noreferrer">
+            {resource.type === 'course' ? '📚' : resource.type === 'video' ? '🎥' : '📄'} {resource.title}
+          </a>
+        ))}
+      </div>
+    )}
   </div>
 );

@@ -151,6 +151,51 @@
   margin-bottom: 12px;
 }
 
+.role-company {
+  font-size: 14px;
+  color: #8e8ea0;
+  margin-bottom: 8px;
+}
+
+.role-description {
+  font-size: 13px;
+  color: #565869;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.role-details {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: #565869;
+}
+
+.role-salary {
+  font-weight: 600;
+  color: #10a37f;
+}
+
+.role-location {
+  color: #8e8ea0;
+}
+
+.role-skills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.skill-tag {
+  padding: 4px 10px;
+  background: white;
+  border: 1px solid #e5e5e6;
+  border-radius: 16px;
+  font-size: 11px;
+  color: #565869;
+}
+
 .role-reasons {
   display: flex;
   gap: 8px;
@@ -244,6 +289,38 @@
   font-size: 13px;
   color: #565869;
   margin: 0;
+  margin-bottom: 8px;
+}
+
+.skill-reason {
+  font-size: 13px;
+  color: #565869;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.skill-resources {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.resource-link {
+  font-size: 12px;
+  color: #10a37f;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  background: white;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.resource-link:hover {
+  background: #ededf0;
 }
 
 /* Empty State */
@@ -262,6 +339,7 @@
   display: flex;
   gap: 16px;
   justify-content: center;
+  margin-bottom: 40px;
 }
 
 .btn-primary,
@@ -278,6 +356,67 @@
 .btn-primary {
   background: #10a37f;
   color: white;
+}
+
+.btn-primary:hover {
+  background: #0d8f6f;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 163, 127, 0.3);
+}
+
+.btn-secondary {
+  background: white;
+  color: #202123;
+  border: 1px solid #d1d1d6;
+}
+
+.btn-secondary:hover {
+  background: #f7f7f8;
+}
+
+/* Stats */
+.career-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.stat-card {
+  background: white;
+  border: 1px solid #e5e5e6;
+  border-radius: 12px;
+  padding: 24px;
+  text-align: center;
+}
+
+.stat-value {
+  display: block;
+  font-size: 32px;
+  font-weight: 700;
+  color: #10a37f;
+  margin-bottom: 8px;
+}
+
+.stat-label {
+  display: block;
+  font-size: 14px;
+  color: #8e8ea0;
+}
+
+/* Error State */
+.career-dashboard.error {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.career-dashboard.error p {
+  color: #ef4444;
+  font-size: 16px;
 }
 
 .btn-primary:hover {
