@@ -1,11 +1,19 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { RealtimeService, RealtimeEventHandlers, TranscriptionEvent } from '../services/RealtimeService';
 
-interface UseRealtimeOptions {
+export interface RealtimeMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  timestamp: number;
+}
+
+export interface UseRealtimeOptions {
   apiKey: string;
   voice?: 'alloy' | 'echo' | 'fable' | 'onyx' | 'nova' | 'shimmer';
   instructions?: string;
   autoConnect?: boolean;
+  onTranscript?: (text: string, timestamp: number) => void; // NEW: Callback for transcripts
 }
 
 export interface RealtimeMessage {
@@ -46,12 +54,18 @@ export function useRealtime(options: UseRealtimeOptions) {
       onTranscript: (event: TranscriptionEvent) => {
         if (event.type === 'transcript') {
           // User's complete transcript
-          addMessage({
+          const message = {
             id: `user-${Date.now()}`,
-            role: 'user',
+            role: 'user' as const,
             content: event.text,
             timestamp: event.timestamp,
-          });
+          };
+          addMessage(message);
+          
+          // Call external transcript callback
+          if (options.onTranscript) {
+            options.onTranscript(event.text, event.timestamp);
+          }
         } else if (event.type === 'audio_transcript') {
           // Assistant's partial transcript (streaming)
           currentMessageRef.current += event.text;

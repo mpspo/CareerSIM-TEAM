@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { InterviewService } from '../../services/InterviewService';
 import { useRealtime } from '../../hooks/useRealtime';
+import { voiceAnalyticsService, VoiceMetrics } from '../../services/VoiceAnalyticsService';
+import { VoiceAnalyticsDisplay } from './VoiceAnalyticsDisplay';
 import './InterviewSession.css';
 
 interface InterviewConfig {
@@ -43,10 +45,21 @@ export function InterviewSession() {
   const [questionIndex, setQuestionIndex] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
   const [voiceMode, setVoiceMode] = useState(false);
+  const [showAnalytics, setShowAnalytics] = useState(false);
+  const [voiceMetrics, setVoiceMetrics] = useState<VoiceMetrics>({
+    speechPace: 0,
+    fillerWords: 0,
+    pauseDuration: 0,
+    toneConfidence: 0,
+    clarity: 0,
+  });
+  const [overallScore, setOverallScore] = useState(0);
+  const [realtimeFeedback, setRealtimeFeedback] = useState<string | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const startTimeRef = useRef<number>(Date.now());
   const timerRef = useRef<NodeJS.Timeout>();
+  const analyticsIntervalRef = useRef<NodeJS.Timeout>();
 
   // OpenAI Realtime API integration
   const realtime = useRealtime({
@@ -56,6 +69,10 @@ export function InterviewSession() {
     Ask thoughtful questions, provide constructive feedback, and help the candidate improve their interview skills.
     Keep your questions concise and professional.`,
     autoConnect: false,
+    onTranscript: (text: string, timestamp: number) => {
+      // Analyze transcript for voice metrics
+      voiceAnalyticsService.analyzeTranscript(text, timestamp);
+    },
   });
 
   // Initialize interview
@@ -81,6 +98,9 @@ export function InterviewSession() {
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
+      }
+      if (analyticsIntervalRef.current) {
+        clearInterval(analyticsIntervalRef.current);
       }
     };
   }, []);
@@ -310,6 +330,18 @@ Bereit? Dann starten wir!`;
     if (!voiceMode) {
       // First time: switch to voice mode and connect
       setVoiceMode(true);
+      setShowAnalytics(true);
+      
+      // Initialize voice analytics
+      voiceAnalyticsService.startSession();
+      
+      // Start periodic analytics updates
+      analyticsIntervalRef.current = setInterval(() => {
+        const analytics = voiceAnalyticsService.getAnalytics();
+        setVoiceMetrics(analytics.metrics);
+        setOverallScore(analytics.overallScore);
+        setRealtimeFeedback(voiceAnalyticsService.getRealtimeFeedback());
+      }, 2000); // Update every 2 seconds
       
       try {
         await realtime.connect();
@@ -319,6 +351,10 @@ Bereit? Dann starten wir!`;
         console.error('Failed to start voice mode:', error);
         alert('Fehler beim Starten der Spracheingabe. Bitte Browser-Mikrofonzugriff erlauben.');
         setVoiceMode(false);
+        setShowAnalytics(false);
+        if (analyticsIntervalRef.current) {
+          clearInterval(analyticsIntervalRef.current);
+        }
       }
     } else {
       // Toggle recording
@@ -400,6 +436,14 @@ Bereit? Dann starten wir!`;
       <div className="progress-container">
         <div className="progress-bar" style={{ width: `${getProgressPercentage()}%` }}></div>
       </div>
+
+      {/* Voice Analytics Display */}
+      <VoiceAnalyticsDisplay
+        metrics={voiceMetrics}
+        overallScore={overallScore}
+        realtimeFeedback={realtimeFeedback}
+        isVisible={showAnalytics && voiceMode}
+      />
 
       {/* Messages */}
       <div className="messages-container">
