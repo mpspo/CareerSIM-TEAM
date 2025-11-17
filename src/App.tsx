@@ -7,6 +7,7 @@ import { InterviewSetup } from './components/interview/InterviewSetup';
 import { InterviewSession } from './components/interview/InterviewSession';
 import { FeedbackView } from './components/interview/FeedbackView';
 import { CareerRecommendations } from './components/career/CareerRecommendations';
+import { ProgressDashboard } from './components/progress/ProgressDashboard';
 
 // Components (will be created in next phases)
 // import Dashboard from './components/dashboard/Dashboard';
@@ -104,12 +105,7 @@ function App() {
 
               <Route
                 path="/dashboard"
-                element={
-                  <div style={{ padding: '40px' }}>
-                    <h1>Dashboard</h1>
-                    <p>Übersicht über beide Bereiche</p>
-                  </div>
-                }
+                element={<ProgressDashboard />}
               />
 
               <Route
