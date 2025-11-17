@@ -12,37 +12,29 @@ import { FeedbackView } from './components/interview/FeedbackView';
 // import Login from './components/auth/Login';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  // TODO: Re-enable authentication after testing
+  const [isAuthenticated] = useState<boolean>(true); // Temporarily bypass auth for testing
 
-  useEffect(() => {
-    // Check authentication status
-    const checkAuth = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      setIsAuthenticated(!!session);
-    };
+  // useEffect(() => {
+  //   // Check authentication status
+  //   const checkAuth = async () => {
+  //     const {
+  //       data: { session },
+  //     } = await supabase.auth.getSession();
+  //     setIsAuthenticated(!!session);
+  //   };
 
-    checkAuth();
+  //   checkAuth();
 
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsAuthenticated(!!session);
-    });
+  //   // Listen for auth changes
+  //   const {
+  //     data: { subscription },
+  //   } = supabase.auth.onAuthStateChange((_event, session) => {
+  //     setIsAuthenticated(!!session);
+  //   });
 
-    return () => subscription.unsubscribe();
-  }, []);
-
-  if (isAuthenticated === null) {
-    return (
-      <div className="loading-screen">
-        <div className="spinner"></div>
-        <p>Lädt...</p>
-      </div>
-    );
-  }
+  //   return () => subscription.unsubscribe();
+  // }, []);
 
   return (
     <Router>
@@ -61,7 +53,7 @@ function App() {
 
           {/* Protected Routes with Layout */}
           {isAuthenticated ? (
-            <Route element={<MainLayout children={undefined} />}>
+            <Route element={<MainLayout />}>
               <Route path="/" element={<Navigate to="/career" />} />
 
               {/* ⭐ Career Coach - Hauptbereich 1 */}

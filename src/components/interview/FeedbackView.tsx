@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useParams, useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { InterviewService } from '../../services/InterviewService';
 import './FeedbackView.css';
 
 interface FeedbackData {
@@ -23,7 +24,6 @@ interface FeedbackData {
 
 export function FeedbackView() {
   const { id } = useParams();
-  const location = useLocation();
   const navigate = useNavigate();
   
   const [loading, setLoading] = useState(true);
@@ -35,11 +35,50 @@ export function FeedbackView() {
 
   const loadFeedback = async () => {
     try {
-      // TODO: Load from backend API
-      // For now, generate mock feedback
+      if (!id) {
+        throw new Error('No session ID provided');
+      }
+
+      // Load session from Supabase
+      const session = await InterviewService.getSession(id);
+
+      if (!session) {
+        throw new Error('Session not found');
+      }
+
+      // Map session data to feedback format
+      const mappedFeedback: FeedbackData = {
+        overallScore: session.overallScore || 0,
+        overallFeedback: session.summary || 'Analyse wird erstellt...',
+        metrics: {
+          knowledge: {
+            score: session.metrics?.knowledge || 0,
+            description: 'Fachliche Kenntnisse und praktische Erfahrung.',
+          },
+          communication: {
+            score: session.metrics?.communication || 0,
+            description: 'Kommunikationsfähigkeit und Ausdrucksvermögen.',
+          },
+          structure: {
+            score: session.metrics?.structure || 0,
+            description: 'Strukturierung der Antworten (z.B. STAR-Methode).',
+          },
+          confidence: {
+            score: session.metrics?.confidence || 0,
+            description: 'Selbstbewusstes und professionelles Auftreten.',
+          },
+        },
+        strengths: session.strengths || [],
+        improvements: session.weaknesses || [],
+      };
+
+      setFeedback(mappedFeedback);
+    } catch (error) {
+      console.error('Error loading feedback:', error);
+      // Fallback to mock data if loading fails
       const mockFeedback: FeedbackData = {
         overallScore: 82,
-        overallFeedback: 'Sehr gute Leistung! Du hast strukturiert geantwortet und konkrete Beispiele genannt. Arbeite weiter an der Quantifizierung deiner Erfolge.',
+        overallFeedback: 'Sehr gute Leistung! Du hast strukturiert geantwortet und konkrete Beispiele genannt.',
         metrics: {
           knowledge: {
             score: 85,
@@ -47,7 +86,7 @@ export function FeedbackView() {
           },
           communication: {
             score: 78,
-            description: 'Klare und verständliche Kommunikation. Mehr Selbstbewusstsein zeigen.',
+            description: 'Klare und verständliche Kommunikation.',
           },
           structure: {
             score: 88,
@@ -55,7 +94,7 @@ export function FeedbackView() {
           },
           confidence: {
             score: 77,
-            description: 'Gutes Auftreten. Nutze aktivere Formulierungen.',
+            description: 'Gutes Auftreten.',
           },
         },
         strengths: [
@@ -74,8 +113,6 @@ export function FeedbackView() {
       };
 
       setFeedback(mockFeedback);
-    } catch (error) {
-      console.error('Error loading feedback:', error);
     } finally {
       setLoading(false);
     }

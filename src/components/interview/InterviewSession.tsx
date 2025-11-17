@@ -1,9 +1,15 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { InterviewService } from '../../services/InterviewService';
 import './InterviewSession.css';
 
 interface InterviewConfig {
-  personaId?: string;
+  persona?: {
+    id: string;
+    name: string;
+    type: string;
+    difficulty: number;
+  };
   company: string;
   role: string;
   duration: number;
@@ -26,7 +32,7 @@ export function InterviewSession() {
   const navigate = useNavigate();
   const config = location.state?.config as InterviewConfig;
 
-  const [sessionId] = useState<string>(() => `session-${Date.now()}`);
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const [phase, setPhase] = useState<InterviewPhase>('intro');
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentQuestion, setCurrentQuestion] = useState<string>('');
@@ -73,14 +79,39 @@ export function InterviewSession() {
   }, [messages]);
 
   const startInterview = async () => {
-    // Add welcome message
-    addMessage('interviewer', getWelcomeMessage());
+    try {
+      // Create session in Supabase
+      const session = await InterviewService.createSession({
+        persona: config.persona,
+        company: config.company,
+        role: config.role,
+        duration: config.duration,
+        difficulty: config.difficulty,
+        focusAreas: config.focusAreas,
+      });
 
-    // Wait 2 seconds, then start first question
-    setTimeout(() => {
-      setPhase('questions');
-      askNextQuestion();
-    }, 2000);
+      setSessionId(session.id);
+
+      // Start the session
+      await InterviewService.startSession(session.id);
+
+      // Add welcome message
+      const welcomeMsg = getWelcomeMessage();
+      addMessage('interviewer', welcomeMsg);
+
+      // Save welcome message as question
+      await InterviewService.addQuestion(session.id, welcomeMsg);
+
+      // Wait 2 seconds, then start first question
+      setTimeout(() => {
+        setPhase('questions');
+        askNextQuestion();
+      }, 2000);
+    } catch (error) {
+      console.error('Error starting interview:', error);
+      alert('Fehler beim Starten des Interviews. Bitte versuche es erneut.');
+      navigate('/interview/setup');
+    }
   };
 
   const getWelcomeMessage = (): string => {
@@ -92,6 +123,8 @@ Bereit? Dann starten wir!`;
   };
 
   const askNextQuestion = async () => {
+    if (!sessionId) return;
+
     setIsProcessing(true);
 
     try {
@@ -108,6 +141,10 @@ Bereit? Dann starten wir!`;
       const question = questions[questionIndex] || 'Hast du noch Fragen an mich?';
       setCurrentQuestion(question);
       addMessage('interviewer', question);
+
+      // Save question to Supabase
+      await InterviewService.addQuestion(sessionId, question);
+
       setQuestionIndex(questionIndex + 1);
 
       // Check if this is the last question
@@ -125,7 +162,7 @@ Bereit? Dann starten wir!`;
   };
 
   const handleSubmitAnswer = async () => {
-    if (!userAnswer.trim()) return;
+    if (!userAnswer.trim() || !sessionId) return;
 
     setIsProcessing(true);
     const answer = userAnswer.trim();
@@ -135,6 +172,13 @@ Bereit? Dann starten wir!`;
     addMessage('candidate', answer);
 
     try {
+      // Save response to Supabase
+      await InterviewService.addResponse(sessionId, {
+        questionId: currentQuestion,
+        question: currentQuestion,
+        answer: answer,
+      });
+
       // Get feedback from backend
       const response = await fetch('http://localhost:3000/api/interview/respond', {
         method: 'POST',
@@ -183,21 +227,59 @@ Bereit? Dann starten wir!`;
     }
   };
 
-  const handleEndInterview = () => {
+  const handleEndInterview = async () => {
+    if (!sessionId) return;
+
     setPhase('completed');
     
     if (timerRef.current) {
       clearInterval(timerRef.current);
     }
 
-    addMessage('interviewer', `Vielen Dank für das Gespräch! Das war's für heute. Ich leite dich jetzt zur detaillierten Auswertung weiter.`);
+    addMessage('interviewer', `Vielen Dank für das Gespräch! Das war's für heute. Ich analysiere jetzt deine Performance...`);
 
-    // Navigate to feedback after 3 seconds
-    setTimeout(() => {
+    try {
+      // Generate mock feedback (TODO: Get real feedback from AI)
+      const feedback = {
+        summary: `Gutes Interview! Du hast strukturiert geantwortet und deine Erfahrungen klar dargestellt. Besonders beeindruckend waren deine Beispiele zu Teamarbeit und Problemlösung.`,
+        strengths: [
+          'Strukturierte Antworten nach STAR-Methode',
+          'Gute Vorbereitung auf das Unternehmen',
+          'Selbstbewusstes Auftreten',
+          'Konkrete Beispiele aus der Praxis',
+          'Klare Kommunikation',
+        ],
+        weaknesses: [
+          'Könnte mehr Zahlen und Metriken verwenden',
+          'Antworten teilweise etwas zu lang',
+          'Mehr auf non-verbale Kommunikation achten',
+          'Follow-up Fragen antizipieren',
+        ],
+        overallScore: 82,
+        metrics: {
+          knowledge: 85,
+          communication: 78,
+          structure: 88,
+          confidence: 77,
+        },
+      };
+
+      // Save completion with feedback to Supabase
+      await InterviewService.completeSession(sessionId, feedback);
+
+      // Navigate to feedback after 2 seconds
+      setTimeout(() => {
+        navigate(`/interview/feedback/${sessionId}`, {
+          state: { config, messages, timeElapsed },
+        });
+      }, 2000);
+    } catch (error) {
+      console.error('Error completing interview:', error);
+      // Navigate anyway
       navigate(`/interview/feedback/${sessionId}`, {
         state: { config, messages, timeElapsed },
       });
-    }, 3000);
+    }
   };
 
   const addMessage = (role: 'interviewer' | 'candidate', content: string, feedback?: string) => {

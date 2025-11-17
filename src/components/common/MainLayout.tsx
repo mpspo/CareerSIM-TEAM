@@ -1,9 +1,9 @@
 import { ReactNode } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, Outlet } from 'react-router-dom';
 import './MainLayout.css';
 
 interface MainLayoutProps {
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 export const MainLayout = ({ children }: MainLayoutProps) => {
@@ -67,7 +67,9 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
       </nav>
 
       {/* Main Content */}
-      <main className="main-content">{children}</main>
+      <main className="main-content">
+        {children || <Outlet />}
+      </main>
     </div>
   );
 };
