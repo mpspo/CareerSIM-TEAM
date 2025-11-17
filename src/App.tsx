@@ -8,50 +8,58 @@ import { InterviewSession } from './components/interview/InterviewSession';
 import { FeedbackView } from './components/interview/FeedbackView';
 import { CareerRecommendations } from './components/career/CareerRecommendations';
 import { ProgressDashboard } from './components/progress/ProgressDashboard';
-
-// Components (will be created in next phases)
-// import Dashboard from './components/dashboard/Dashboard';
-// import Login from './components/auth/Login';
+import { Login } from './components/auth/Login';
+import { Register } from './components/auth/Register';
+import { Profile } from './components/auth/Profile';
 
 function App() {
-  // TODO: Re-enable authentication after testing
-  const [isAuthenticated] = useState<boolean>(true); // Temporarily bypass auth for testing
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  // useEffect(() => {
-  //   // Check authentication status
-  //   const checkAuth = async () => {
-  //     const {
-  //       data: { session },
-  //     } = await supabase.auth.getSession();
-  //     setIsAuthenticated(!!session);
-  //   };
+  useEffect(() => {
+    // Check authentication status
+    const checkAuth = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      setIsAuthenticated(!!session);
+      setLoading(false);
+    };
 
-  //   checkAuth();
+    checkAuth();
 
-  //   // Listen for auth changes
-  //   const {
-  //     data: { subscription },
-  //   } = supabase.auth.onAuthStateChange((_event, session) => {
-  //     setIsAuthenticated(!!session);
-  //   });
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(!!session);
+    });
 
-  //   return () => subscription.unsubscribe();
-  // }, []);
+    return () => subscription.unsubscribe();
+  }, []);
+
+  if (loading) {
+    return (
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+        fontSize: '18px',
+        color: '#667eea'
+      }}>
+        Wird geladen...
+      </div>
+    );
+  }
 
   return (
     <Router>
       <div className="app">
         <Routes>
           {/* Public Routes */}
-          <Route
-            path="/login"
-            element={
-              <div>
-                <h1>Login Page (Coming Soon)</h1>
-                <p>Legacy login still available at /public/login.html</p>
-              </div>
-            }
-          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
           {/* Protected Routes with Layout */}
           {isAuthenticated ? (
@@ -109,13 +117,13 @@ function App() {
               />
 
               <Route
+                path="/profile"
+                element={<Profile />}
+              />
+
+              <Route
                 path="/account-settings"
-                element={
-                  <div style={{ padding: '40px' }}>
-                    <h1>Account Settings</h1>
-                    <p>Legacy: /public/account-settings.html</p>
-                  </div>
-                }
+                element={<Profile />}
               />
             </Route>
           ) : (
