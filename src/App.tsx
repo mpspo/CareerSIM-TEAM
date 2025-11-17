@@ -6,6 +6,7 @@ import { CareerDashboard } from './components/dashboard/CareerDashboard';
 import { InterviewSetup } from './components/interview/InterviewSetup';
 import { InterviewSession } from './components/interview/InterviewSession';
 import { FeedbackView } from './components/interview/FeedbackView';
+import { CareerRecommendations } from './components/career/CareerRecommendations';
 
 // Components (will be created in next phases)
 // import Dashboard from './components/dashboard/Dashboard';
@@ -58,6 +59,7 @@ function App() {
 
               {/* ⭐ Career Coach - Hauptbereich 1 */}
               <Route path="/career" element={<CareerDashboard />} />
+              <Route path="/career/recommendations" element={<CareerRecommendations />} />
 
               {/* ⭐ Interview Training - Hauptbereich 2 */}
               <Route
