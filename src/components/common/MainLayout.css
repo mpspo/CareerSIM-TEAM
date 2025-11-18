@@ -1,67 +1,168 @@
-/* MainLayout.css - OpenAI-ähnliches Design */
+/* MainLayout.css - OpenAI Platform Design */
 
 .main-layout {
   display: flex;
+  flex-direction: column;
   min-height: 100vh;
   background: #f7f7f8;
 }
 
 /* ============================================
-   LEFT NAVIGATION
+   TOP NAVIGATION - OpenAI Style
+   ============================================ */
+
+/* Top Navigation Bar */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #f7f7f8;
+  border-bottom: 1px solid var(--color-neutral-200);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--spacing-6);
+  z-index: 1000;
+}
+
+.top-nav-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+}
+
+.top-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.top-nav-logo-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.top-nav-logo {
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  color: var(--color-neutral-900);
+  letter-spacing: -0.02em;
+}
+
+.top-nav-user {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-neutral-900);
+  padding: var(--spacing-2) var(--spacing-4);
+  background: var(--color-neutral-200);
+  border-radius: var(--radius-full);
+}
+
+.top-nav-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.top-nav-link {
+  padding: var(--spacing-2) var(--spacing-4);
+  color: var(--color-neutral-500);
+  text-decoration: none !important;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  border-radius: var(--radius-md);
+  transition: color var(--transition-fast);
+}
+
+.top-nav-link:hover {
+  color: var(--color-neutral-700);
+  text-decoration: none !important;
+}
+
+.top-nav-link.active {
+  color: var(--color-neutral-900);
+  text-decoration: none !important;
+}
+
+.top-nav-icon-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2);
+  color: var(--color-neutral-600);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.top-nav-icon-link:hover {
+  color: var(--color-neutral-900);
+  background: var(--color-neutral-200);
+}
+
+/* ============================================
+   LEFT NAVIGATION - OpenAI Style with Curve
    ============================================ */
 
 .main-nav {
-  width: 260px;
-  background: white;
-  border-right: 1px solid #e5e5e6;
+  width: 240px;
+  background: #f7f7f8;
+  border-right: 1px solid #e5e5e5;
   display: flex;
   flex-direction: column;
-  padding: 24px 0;
+  padding: var(--spacing-6) 0;
+  position: fixed;
+  top: 60px;
+  left: 0;
+  bottom: 0;
+  overflow-y: auto;
 }
 
-.nav-header {
-  padding: 0 20px 24px;
-  border-bottom: 1px solid #e5e5e6;
+/* Curved connection between sidebar and top nav */
+.main-nav::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -1px;
+  width: 20px;
+  height: 60px;
+  background: transparent;
+  border-bottom-right-radius: 20px;
+  box-shadow: 0 20px 0 0 #f7f7f8;
 }
 
-.nav-logo {
-  font-size: 24px;
-  font-weight: 700;
-  color: #202123;
-  margin-bottom: 4px;
+.main-nav::after {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -1px;
+  width: 1px;
+  height: 40px;
+  background: #e5e5e5;
 }
 
-.nav-subtitle {
-  font-size: 13px;
-  color: #8e8ea0;
-}
-
-.nav-section {
-  padding: 20px 12px 0;
-}
-
-.nav-section-title {
-  font-size: 11px;
-  font-weight: 600;
-  color: #8e8ea0;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 0 8px 8px;
-  margin: 0;
+.nav-content {
+  flex: 1;
+  padding: 0 var(--spacing-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
 }
 
 .nav-link {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 12px;
-  margin-bottom: 4px;
-  border-radius: 8px;
+  gap: var(--spacing-3);
+  padding: var(--spacing-2) var(--spacing-3);
+  margin: 0;
+  border-radius: var(--radius-md);
   text-decoration: none;
-  color: #202123;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.2s ease;
+  color: var(--color-neutral-700);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
+  transition: all var(--transition-fast);
   cursor: pointer;
   background: none;
   border: none;
@@ -69,32 +170,105 @@
   text-align: left;
 }
 
+.nav-link svg {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
 .nav-link:hover {
-  background: #f7f7f8;
+  background: var(--color-neutral-200);
+  color: var(--color-neutral-900);
+}
+
+.nav-link:hover svg {
+  opacity: 1;
 }
 
 .nav-link.active {
-  background: #10a37f;
-  color: white;
+  background: var(--color-neutral-200);
+  color: var(--color-neutral-900);
+  font-weight: var(--font-weight-medium);
 }
 
-.nav-icon {
-  font-size: 18px;
-  flex-shrink: 0;
+.nav-link.active svg {
+  opacity: 1;
 }
 
 .nav-footer {
   margin-top: auto;
-  padding: 20px 12px;
-  border-top: 1px solid #e5e5e6;
+  padding: var(--spacing-4);
+  border-top: 1px solid #e5e5e5;
 }
 
 .logout-btn {
-  color: #ef4444;
+  color: var(--color-error-600);
+  font-weight: var(--font-weight-medium);
 }
 
 .logout-btn:hover {
-  background: #fef2f2;
+  background: var(--color-error-50);
+  color: var(--color-error-700);
+}
+
+.logout-btn svg {
+  color: var(--color-error-600);
+}
+
+.logout-btn:hover svg {
+  color: var(--color-error-700);
+}
+
+/* ============================================
+   MAIN CONTENT
+   ============================================ */
+
+.main-content {
+  flex: 1;
+  margin-top: 60px;
+  margin-left: 240px;
+  padding: var(--spacing-10) var(--spacing-12);
+  overflow-y: auto;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 968px) {
+  .top-nav {
+    padding: 0 var(--spacing-4) 0 80px;
+  }
+
+  .main-nav {
+    width: 80px;
+  }
+
+  .main-nav::before,
+  .main-nav::after {
+    display: none;
+  }
+
+  .nav-content {
+    padding: 0 var(--spacing-2);
+  }
+
+  .nav-link {
+    padding: var(--spacing-3) var(--spacing-2);
+    justify-content: center;
+  }
+
+  .nav-link span:last-child {
+    display: none;
+  }
+
+  .nav-footer {
+    padding: var(--spacing-2);
+  }
+
+  .main-content {
+    margin-left: 80px;
+    padding: var(--spacing-6) var(--spacing-4);
+  }
 }
 
 /* ============================================

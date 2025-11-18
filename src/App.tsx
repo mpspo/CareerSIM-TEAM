@@ -11,6 +11,7 @@ import { ProgressDashboard } from './components/progress/ProgressDashboard';
 import { Login } from './components/auth/Login';
 import { Register } from './components/auth/Register';
 import { Profile } from './components/auth/Profile';
+import { LandingPage } from './pages/LandingPage';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -57,14 +58,17 @@ function App() {
     <Router>
       <div className="app">
         <Routes>
-          {/* Public Routes */}
+          {/* Landing Page - Public */}
+          <Route path="/" element={<LandingPage />} />
+
+          {/* Auth Routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
           {/* Protected Routes with Layout */}
           {isAuthenticated ? (
             <Route element={<MainLayout />}>
-              <Route path="/" element={<Navigate to="/career" />} />
+              <Route path="/app" element={<Navigate to="/career" />} />
 
               {/* ⭐ Career Coach - Hauptbereich 1 */}
               <Route path="/career" element={<CareerDashboard />} />

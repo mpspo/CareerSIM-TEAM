@@ -63,7 +63,12 @@ export const CareerDashboard = () => {
         {/* Deine Stärken */}
         <div className="career-card">
           <div className="card-header">
-            <span className="card-icon">💪</span>
+            <svg className="card-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
             <h2>Deine Stärken</h2>
           </div>
           <div className="card-content">
@@ -71,7 +76,9 @@ export const CareerDashboard = () => {
               <ul className="strength-list">
                 {profile.aggregatedStrengths.map((strength, i) => (
                   <li key={i} className="strength-item">
-                    <span className="check-icon">✓</span>
+                    <svg className="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
                     {strength}
                   </li>
                 ))}
@@ -93,7 +100,11 @@ export const CareerDashboard = () => {
         {/* Empfohlene Rollen */}
         <div className="career-card">
           <div className="card-header">
-            <span className="card-icon">🎯</span>
+            <svg className="card-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              <polyline points="3.29 7 12 12 20.71 7"/>
+              <line x1="12" x2="12" y1="22" y2="12"/>
+            </svg>
             <h2>Empfohlene Rollen</h2>
           </div>
           <div className="card-content">
@@ -114,7 +125,9 @@ export const CareerDashboard = () => {
         {/* Fehlende Skills */}
         <div className="career-card">
           <div className="card-header">
-            <span className="card-icon">📚</span>
+            <svg className="card-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
             <h2>Fehlende Skills</h2>
           </div>
           <div className="card-content">
@@ -138,7 +151,10 @@ export const CareerDashboard = () => {
         {/* Empfohlene Programme */}
         <div className="career-card">
           <div className="card-header">
-            <span className="card-icon">🎓</span>
+            <svg className="card-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+            </svg>
             <h2>Empfohlene Programme</h2>
           </div>
           <div className="card-content">
